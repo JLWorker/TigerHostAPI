@@ -1,9 +1,9 @@
 package tgc.plus.authservice.api;
 
-import auth.tgc.plus.authservice.dto.DeviceTokens;
-import auth.tgc.plus.authservice.entity.User;
+import tgc.plus.authservice.dto.DeviceTokens;
+import tgc.plus.authservice.entity.User;
 //import auth.tgc.plus.authservice.producer.MailProducer;
-import auth.tgc.plus.authservice.repository.UserRepository;
+import tgc.plus.authservice.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
