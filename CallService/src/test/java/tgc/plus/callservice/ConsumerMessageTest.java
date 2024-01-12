@@ -45,13 +45,27 @@ public class ConsumerMessageTest {
 //                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
 //            Assert.isTrue(!result, "failed!");
 
-            MessageData messageData = new MessageData("email", "http://asdce/send");
-            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", messageData);
+            MessageData baseMessageData = new MessageData(UUID.randomUUID().toString(), "4357480@bk.ru", null, null);
+            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
             String userCode = UUID.randomUUID().toString();
-            record.headers().add("user_code", userCode.getBytes());
+            record.headers().add("method", "save".getBytes());
 
             kafkaTemplate.send(record);
             System.out.println(userCode + " - code ");
         }
     }
+
+
+    @Test
+    public void sendMessageToChangePhone() {
+
+
+            MessageData baseMessageData = new MessageData("a08d47f0-837e-450c-9ae8-968d50d4d6fc", null, "89244273168", null);
+            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
+            String userCode = UUID.randomUUID().toString();
+            record.headers().add("method", "save_ph".getBytes());
+
+            kafkaTemplate.send(record);
+            System.out.println(userCode + " - code ");
+        }
 }
