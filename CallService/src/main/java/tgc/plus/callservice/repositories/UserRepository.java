@@ -10,9 +10,12 @@ import tgc.plus.callservice.entity.User;
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
     Mono<User> getUserByUserCode(String userCode);
-
     @Modifying
     @Query("UPDATE user_communicate SET phone = :phone WHERE user_code = :userCode")
     Mono<Void> updatePhoneUser(String userCode, String phone);
+
+    @Modifying
+    @Query("UPDATE user_communicate SET email = :email WHERE user_code = :userCode")
+    Mono<Void> updateEmailUser(String userCode, String email);
 
 }

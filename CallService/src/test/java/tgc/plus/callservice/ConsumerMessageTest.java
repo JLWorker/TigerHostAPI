@@ -40,14 +40,14 @@ public class ConsumerMessageTest {
     public void sendMessageToTopic() {
 
         int i = 10;
-        while (i-- > 8) {
+        while (i-- > 9) {
 //            boolean result = kafkaTemplate.send("call_service",
 //                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
 //            Assert.isTrue(!result, "failed!");
 
-            MessageData baseMessageData = new MessageData(UUID.randomUUID().toString(), "4357480@bk.ru", null, null);
-            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
             String userCode = UUID.randomUUID().toString();
+            MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", "4357480@bk.ru", null);
+            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
             record.headers().add("method", "save".getBytes());
 
             kafkaTemplate.send(record);
@@ -58,14 +58,40 @@ public class ConsumerMessageTest {
 
     @Test
     public void sendMessageToChangePhone() {
-
-
-            MessageData baseMessageData = new MessageData("a08d47f0-837e-450c-9ae8-968d50d4d6fc", null, "89244273168", null);
-            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
             String userCode = UUID.randomUUID().toString();
-            record.headers().add("method", "save_ph".getBytes());
+            MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", null, "89244273168");
+            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
+            record.headers().add("method", "update_ph".getBytes());
 
             kafkaTemplate.send(record);
             System.out.println(userCode + " - code ");
         }
+
+
+
+    @Test
+    public void sendMessageToChangeEmail() {
+        String userCode = UUID.randomUUID().toString();
+        MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", "567842bm@bk.ru", null);
+        ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
+        record.headers().add("method", "update_em".getBytes());
+
+        kafkaTemplate.send(record);
+        System.out.println(userCode + " - code ");
+    }
+
+
+    @Test
+    public void sendMessageToEmail() {
+        HashMap<String, String> testMap = new HashMap<>();
+        testMap.put("subject", "Привет, это Тайгерхост!");
+        testMap.put("text", "Это тестовое сообщение!");
+
+        MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", testMap);
+        ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
+        record.headers().add("method", "send_em".getBytes());
+
+        kafkaTemplate.send(record);
+//        System.out.println(userCode + " - code ");
+    }
 }
