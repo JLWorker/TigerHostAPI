@@ -14,6 +14,7 @@ import org.springframework.kafka.support.DefaultKafkaHeaderMapper;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +29,8 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.consumer.group-id}")
     String group;
 
-//    @Bean
-//    public JsonDeserializer<TestJson> customDeserializer(){
-//        JsonDeserializer<TestJson> testJsonDeserializer = new JsonDeserializer<>();
-//        testJsonDeserializer.addTrustedPackages("com.example.entity.TestJson");
-//        return testJsonDeserializer;
-//    }
+    @Value("spring.kafka.listener.concurrency")
+    String concurrency;
 
     @Bean
     public ConsumerFactory<Long, String> consumerFactory(){
@@ -50,11 +47,12 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
+
     @Bean
     public ConcurrentKafkaListenerContainerFactory<Long, String> concurrentFactory(){
         ConcurrentKafkaListenerContainerFactory<Long, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(1);
+        factory.setConcurrency(Integer.getInteger(concurrency));
         factory.setBatchListener(true);
         factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
         return factory;

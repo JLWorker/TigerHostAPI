@@ -46,7 +46,7 @@ public class ConsumerMessageTest {
 //            Assert.isTrue(!result, "failed!");
 
             String userCode = UUID.randomUUID().toString();
-            MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", "4357480@bk.ru", null);
+            MessageData baseMessageData = new MessageData(userCode, "flowix@bk.ru", null);
             ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
             record.headers().add("method", "save".getBytes());
 
@@ -87,7 +87,7 @@ public class ConsumerMessageTest {
         testMap.put("subject", "Привет, это Тайгерхост!");
         testMap.put("text", "Это тестовое сообщение!");
 
-        MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", testMap);
+        MessageData baseMessageData = new MessageData("5e4eef15-8b94-4724-a7ba-87087a92a169", testMap);
         ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
         record.headers().add("method", "send_em".getBytes());
 

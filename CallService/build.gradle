@@ -43,6 +43,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '3.2.1'
+
 
 
 
