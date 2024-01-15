@@ -1,13 +1,14 @@
 package tgc.plus.callservice.services;
 
-import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import jakarta.mail.MessagingException;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,49 +17,63 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import tgc.plus.callservice.configs.FreeMarkerConfig;
+import tgc.plus.callservice.services.utils.EmailSenderCommands;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
 public class EmailSender {
 
     @Value("${spring.mail.username}")
-    String senderEmail;
+    private String senderEmail;
 
     @Autowired
-    FreeMarkerConfig freeMarkerConfig;
+    private FreeMarkerConfig freeMarkerConfig;
 
-    private final JavaMailSender javaMailSender;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
-    public EmailSender(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+    private HashMap<String, EmailSenderCommands> senderCommands = new HashMap<>();
 
-    public void sendMessage(HashMap<String, String> data, String email){
-        try {
-            Template template = freeMarkerConfig.freeMarkerConfigurationFactory().createConfiguration().getTemplate("tiger_template.ftl");
-            String htmlText = FreeMarkerTemplateUtils.processTemplateIntoString(template, data);
-
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(email);
-            messageHelper.setSubject(data.get("subject"));
-            messageHelper.setText(htmlText, true);
-            messageHelper.addInline("tiger_logo", new File("/home/makar/IdeaProjects/TigerHost/TigerHostApi/CallService/src/main/resources/templates/freemarker/images/tiger_logo.jpg"));
-            javaMailSender.send(message);
-        } catch (Exception e) {
-            log.error(e.getMessage());
+    @PostConstruct
+    void init(){
+        for (EmailSenderCommands command: EmailSenderCommands.values()){
+            senderCommands.put(command.getName(), command);
         }
-
     }
 
+    public void sendMessage(Map<String, String> data, String email, String method){
+
+        if(senderCommands.containsKey(method)){
+
+            EmailSenderCommands emailSenderCommands = senderCommands.get(method);
+
+            try {
+                Template template = freeMarkerConfig.freeMarkerConfigurationFactory().createConfiguration().getTemplate(emailSenderCommands.getTemplate());
+                String htmlText = FreeMarkerTemplateUtils.processTemplateIntoString(template, data);
+
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
+
+                messageHelper.setFrom(senderEmail);
+                messageHelper.setTo(email);
+
+                messageHelper.setSubject(emailSenderCommands.getSubject());
+                messageHelper.setText(htmlText, true);
+
+                messageHelper.addInline("tiger_logo", new ClassPathResource("/templates/freemarker/images/tiger_logo_one.png"));
+
+                javaMailSender.send(message);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        else
+            log.error("Command with name - " + method + " not found! ::EmailSender");
+
+    }
 }

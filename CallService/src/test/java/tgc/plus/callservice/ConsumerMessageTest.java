@@ -1,6 +1,6 @@
 package tgc.plus.callservice;
 
-import tgc.plus.callservice.dto.MessageData;
+import tgc.plus.callservice.dto.MessageElement;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.LongSerializer;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import tgc.plus.callservice.dto.message_payloads.UserData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ConsumerMessageTest {
 //    @Value("${spring.kafka.bootstrap-servers}")
 //    public static String server;
 
-    public static KafkaTemplate<Long, MessageData> kafkaTemplate;
+    public static KafkaTemplate<Long, MessageElement> kafkaTemplate;
 
     @BeforeAll
     public static void initTestProducer(){
@@ -46,8 +47,8 @@ public class ConsumerMessageTest {
 //            Assert.isTrue(!result, "failed!");
 
             String userCode = UUID.randomUUID().toString();
-            MessageData baseMessageData = new MessageData(userCode, "flowix@bk.ru", null);
-            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
+            MessageElement baseMessageElement = new MessageElement(userCode, new UserData("4357480@bk.ru", "ASdas@sd42q"));
+            ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
             record.headers().add("method", "save".getBytes());
 
             kafkaTemplate.send(record);
@@ -55,43 +56,43 @@ public class ConsumerMessageTest {
         }
     }
 
-
-    @Test
-    public void sendMessageToChangePhone() {
-            String userCode = UUID.randomUUID().toString();
-            MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", null, "89244273168");
-            ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
-            record.headers().add("method", "update_ph".getBytes());
-
-            kafkaTemplate.send(record);
-            System.out.println(userCode + " - code ");
-        }
-
-
-
-    @Test
-    public void sendMessageToChangeEmail() {
-        String userCode = UUID.randomUUID().toString();
-        MessageData baseMessageData = new MessageData("04e4c7b5-9e62-4df6-b10f-a88249742e3", "567842bm@bk.ru", null);
-        ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
-        record.headers().add("method", "update_em".getBytes());
-
-        kafkaTemplate.send(record);
-        System.out.println(userCode + " - code ");
-    }
-
-
-    @Test
-    public void sendMessageToEmail() {
-        HashMap<String, String> testMap = new HashMap<>();
-        testMap.put("subject", "Привет, это Тайгерхост!");
-        testMap.put("text", "Это тестовое сообщение!");
-
-        MessageData baseMessageData = new MessageData("5e4eef15-8b94-4724-a7ba-87087a92a169", testMap);
-        ProducerRecord<Long, MessageData> record = new ProducerRecord<>("call_service", baseMessageData);
-        record.headers().add("method", "send_em".getBytes());
-
-        kafkaTemplate.send(record);
+//
+//    @Test
+//    public void sendMessageToChangePhone() {
+//            String userCode = UUID.randomUUID().toString();
+//            MessageElement baseMessageElement = new MessageElement("04e4c7b5-9e62-4df6-b10f-a88249742e3", null, "89244273168");
+//            ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
+//            record.headers().add("method", "update_ph".getBytes());
+//
+//            kafkaTemplate.send(record);
+//            System.out.println(userCode + " - code ");
+//        }
+//
+//
+//
+//    @Test
+//    public void sendMessageToChangeEmail() {
+//        String userCode = UUID.randomUUID().toString();
+//        MessageElement baseMessageElement = new MessageElement("04e4c7b5-9e62-4df6-b10f-a88249742e3", "567842bm@bk.ru", null);
+//        ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
+//        record.headers().add("method", "update_em".getBytes());
+//
+//        kafkaTemplate.send(record);
 //        System.out.println(userCode + " - code ");
-    }
+//    }
+//
+//
+//    @Test
+//    public void sendMessageToEmail() {
+//        HashMap<String, String> testMap = new HashMap<>();
+//        testMap.put("subject", "Привет, это Тайгерхост!");
+//        testMap.put("text", "Это тестовое сообщение!");
+//
+//        MessageElement baseMessageElement = new MessageElement("04e4c7b5-9e62-4df6-b10f-a88249742e3f", testMap);
+//        ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
+//        record.headers().add("method", "send_em".getBytes());
+//
+//        kafkaTemplate.send(record);
+////        System.out.println(userCode + " - code ");
+//    }
 }

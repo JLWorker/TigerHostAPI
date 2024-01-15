@@ -1,8 +1,7 @@
 package tgc.plus.callservice.listeners;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import tgc.plus.callservice.dto.MessageData;
+import tgc.plus.callservice.dto.MessageElement;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ public class MessageListener {
     CommandsDispatcher commandsDispatcher;
 
     @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "concurrentFactory")
-    public void listen(List<Message<MessageData>> messages){
+    public void listen(List<Message<MessageElement>> messages){
         messages.forEach(el -> commandsDispatcher.execute(
                 new String((byte[]) Objects.requireNonNull(el.getHeaders().get("method")), StandardCharsets.UTF_8), el.getPayload()));
     }

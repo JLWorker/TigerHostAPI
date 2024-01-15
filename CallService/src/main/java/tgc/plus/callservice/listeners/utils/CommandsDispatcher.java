@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tgc.plus.callservice.dto.MessageData;
+import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
 import tgc.plus.callservice.listeners.utils.commands.EditPhone;
@@ -32,23 +32,21 @@ public class CommandsDispatcher {
 
     @PostConstruct
     void init(){
-        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, checkTools));
+        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, checkTools, emailSender));
         commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository, checkTools));
         commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository, checkTools));
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public void execute(String method, MessageData messageData){
-        try{
-            if(commandMap.containsKey(method)){
-                commandMap.get(method).execution(messageData);
+    public void execute(String method, MessageElement messageElement){
+            if (method.startsWith("send")){
+                commandMap.get("send_em").executionForSender(method, messageElement);
+            }
+            else if(commandMap.containsKey(method)){
+                commandMap.get(method).execution(messageElement);
             }
             else
-                throw new CommandNotFound("Command with name - " + method + " not found");
+                log.error("Command with name - " + method + " not found ::CommandsDispatcher");
         }
-        catch (RuntimeException e){
-            log.error(e.getMessage());
-        }
-    }
 
 }

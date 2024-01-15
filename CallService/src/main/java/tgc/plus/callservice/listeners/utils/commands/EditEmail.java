@@ -3,7 +3,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.scheduler.Schedulers;
-import tgc.plus.callservice.dto.MessageData;
+import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.UserNotFound;
 import tgc.plus.callservice.listeners.utils.CheckTools;
 import tgc.plus.callservice.listeners.utils.Command;
@@ -23,16 +23,16 @@ public class EditEmail implements Command {
     }
 
     @Override
-    public void execution(MessageData messageData) {
-        checkTools.checkUserByCode(messageData.getUser_code())
+    public void execution(MessageElement messageElement) {
+        checkTools.checkUserByCode(messageElement.getUser_code())
                 .publishOn(Schedulers.boundedElastic())
                 .doOnSuccess(result -> {
                     if(!result)
-                        throw new UserNotFound("User with code - " + messageData.getUser_code() + " not found");
+                        throw new UserNotFound("User with code - " + messageElement.getUser_code() + " not found");
 
                     else {
-                        userRepository.updateEmailUser(messageData.getUser_code(), messageData.getEmail())
-                                .doOnSuccess(success -> log.info("Email for user with code - " + messageData.getUser_code() + " was updated"))
+                        userRepository.updateEmailUser(messageElement.getUser_code(), messageElement.getPayload().getData().get("email"))
+                                .doOnSuccess(success -> log.info("Email for user with code - " + messageElement.getUser_code() + " was updated"))
                                 .doOnError(error -> log.error(error.getMessage()))
                                 .subscribe();
                     }
@@ -40,4 +40,10 @@ public class EditEmail implements Command {
                 .doOnError(error -> log.error(error.getMessage()))
                 .subscribe();
     }
+
+    @Override
+    public void executionForSender(String method, MessageElement messageElement) {
+
+    }
+
 }

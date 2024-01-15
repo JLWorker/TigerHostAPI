@@ -4,6 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
+import tgc.plus.callservice.services.utils.EmailSenderCommands;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class FreeMarkerConfig{
@@ -14,5 +18,6 @@ public class FreeMarkerConfig{
         factory.setTemplateLoaderPath("classpath:/templates/freemarker/");
         return factory;
     }
+
 
 }

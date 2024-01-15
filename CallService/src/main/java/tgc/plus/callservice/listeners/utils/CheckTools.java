@@ -1,13 +1,8 @@
 package tgc.plus.callservice.listeners.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
-import tgc.plus.callservice.dto.MessageData;
-import tgc.plus.callservice.entity.User;
 import tgc.plus.callservice.repositories.UserRepository;
 
 import java.util.Objects;
