@@ -12,11 +12,11 @@ public enum EmailSenderCommands {
 
     SEND_NEW_VIRTUAL_MACHINE("send_vm_cr", "Данные новой виртуальной машины", "tiger_create_vm_template.ftl"),
 
-    SEND_RECOVERY_CODE("send_rec", "Изменение пароля", "tiger_recovery_template.ftl"),
+    SEND_RECOVERY_CODE("send_rest", "Изменение пароля", "tiger_restore_password_template.ftl"),
 
-    SEND_DATA_EXPIRE_VIRTUAL_MACHINE("send_vm_ex", "Срок предоставляемой услуги вышел!", "tiger_expired_template.ftl"),
+    SEND_DATA_EXPIRE_VIRTUAL_MACHINE("send_vm_ex", "Срок предоставляемой услуги истек!", "tiger_error_vm_template.ftl"),
 
-    SEND_DATA_WARNING_VIRTUAL_MACHINE("send_vm_wn", "Срок предоставляемой услуги скоро истечет!", "tiger_warning_template.ftl");
+    SEND_DATA_WARNING_VIRTUAL_MACHINE("send_vm_wn", "Срок предоставляемой услуги скоро истечет!", "tiger_warning_vm_template.ftl");
 
     private final String name;
     private final String subject;

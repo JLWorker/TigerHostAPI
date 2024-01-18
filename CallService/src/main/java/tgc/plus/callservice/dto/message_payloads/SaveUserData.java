@@ -12,12 +12,12 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @JsonTypeName(value = "UserData")
-public class UserData implements Payload{
+public class SaveUserData implements Payload{
 
     String email;
     String password;
 
-    public UserData(String email, String password) {
+    public SaveUserData(String email, String password) {
         this.email = email;
         this.password = password;
     }

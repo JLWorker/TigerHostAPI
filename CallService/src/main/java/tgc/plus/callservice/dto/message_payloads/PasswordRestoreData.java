@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tgc.plus.callservice.listeners.utils.Command;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +13,11 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeName(value = "PasswordRecoveryData")
 @NoArgsConstructor
-public class PasswordRecoveryData implements Payload {
+public class PasswordRestoreData implements Payload {
 
     String url;
 
-    public PasswordRecoveryData(String url) {
+    public PasswordRestoreData(String url) {
         this.url = url;
     }
 

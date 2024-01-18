@@ -16,10 +16,10 @@ import java.util.Map;
 public class VirtualMachineExpireData implements Payload{
 
     Integer vmId;
-    Date expiredDate;
+    String expiredDate;
     Double price;
 
-    public VirtualMachineExpireData(Integer vmId, Date expiredDate, Double price) {
+    public VirtualMachineExpireData(Integer vmId, String expiredDate, Double price) {
         this.vmId = vmId;
         this.expiredDate = expiredDate;
         this.price = price;
@@ -29,7 +29,7 @@ public class VirtualMachineExpireData implements Payload{
     public Map<String, String> getData() {
         Map<String, String> map = new HashMap<>();
         map.put("vm_id", this.getVmId().toString());
-        map.put("expired_date", this.getExpiredDate().toString());
+        map.put("expired_date", this.getExpiredDate());
         map.put("price", this.getPrice().toString());
         return map;
     }

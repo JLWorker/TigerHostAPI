@@ -31,11 +31,11 @@ public class VirtualMachineCreateData implements Payload{
     @Override
     public Map<String, String> getData() {
         Map<String, String> map = new HashMap<>();
-        map.put("vmId", this.getPort().toString());
+        map.put("vm_id", this.getPort().toString());
         map.put("ip", this.getIp());
         map.put("port", this.getPort().toString());
-        map.put("username", this.getPort().toString());
-        map.put("password", this.getPort().toString());
+        map.put("username", this.getUsername());
+        map.put("password", this.getPassword());
         return map;
     }
 }

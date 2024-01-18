@@ -61,7 +61,6 @@ public class EmailSender {
 
                 messageHelper.setFrom(senderEmail);
                 messageHelper.setTo(email);
-
                 messageHelper.setSubject(emailSenderCommands.getSubject());
                 messageHelper.setText(htmlText, true);
 
