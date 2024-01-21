@@ -8,8 +8,6 @@ import tgc.plus.callservice.listeners.utils.Command;
 import tgc.plus.callservice.repositories.UserRepository;
 import tgc.plus.callservice.services.EmailSender;
 
-import java.util.Map;
-
 @Component
 @Slf4j
 public class SendMail implements Command {
@@ -29,13 +27,13 @@ public class SendMail implements Command {
 
     @Override
     public void executionForSender(String method, MessageElement messageElement) {
-        userRepository.getUserByUserCode(messageElement.getUser_code())
+        userRepository.getUserByUserCode(messageElement.getUserCode())
                 .doOnSuccess(user -> {
                     if(user!=null){
                         emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method);
                     }
                     else
-                        throw new UserNotFound("User with code - " + messageElement.getUser_code() + " not found");
+                        throw new UserNotFound("User with code - " + messageElement.getUserCode() + " not found");
                 })
                 .doOnError(error -> log.error(error.getMessage()))
                 .subscribe();

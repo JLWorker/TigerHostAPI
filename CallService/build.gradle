@@ -30,6 +30,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.jetbrains:annotations:24.0.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
@@ -42,8 +43,13 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '3.2.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
+
+
+
 
 
 

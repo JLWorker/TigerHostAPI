@@ -1,9 +1,11 @@
 package tgc.plus.callservice.listeners.utils;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@Validated
 public class CommandsDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
 
@@ -25,20 +28,17 @@ public class CommandsDispatcher {
     UserRepository userRepository;
 
     @Autowired
-    CheckTools checkTools;
-
-    @Autowired
     EmailSender emailSender;
 
     @PostConstruct
     void init(){
-        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, checkTools, emailSender));
-        commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository, checkTools));
-        commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository, checkTools));
+        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender));
+        commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository));
+        commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public void execute(String method, MessageElement messageElement){
+    public void execute(String method, @Valid MessageElement messageElement){
             if (method.startsWith("send")){
                 commandMap.get("send_em").executionForSender(method, messageElement);
             }

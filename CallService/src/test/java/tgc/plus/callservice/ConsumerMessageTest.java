@@ -1,5 +1,6 @@
 package tgc.plus.callservice;
 
+import org.springframework.scheduling.annotation.Async;
 import tgc.plus.callservice.dto.MessageElement;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -9,10 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import tgc.plus.callservice.dto.message_payloads.PasswordRestoreData;
-import tgc.plus.callservice.dto.message_payloads.SaveUserData;
-import tgc.plus.callservice.dto.message_payloads.VirtualMachineCreateData;
-import tgc.plus.callservice.dto.message_payloads.VirtualMachineExpireData;
+import tgc.plus.callservice.dto.message_payloads.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,8 +36,8 @@ public class ConsumerMessageTest {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "31.200.225.93:9199");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "testProducer");
         props.put(ProducerConfig.ACKS_CONFIG, "1");
-        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 10240);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+//        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 10240);
+//        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         kafkaTemplate = new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(props));
@@ -55,7 +53,7 @@ public class ConsumerMessageTest {
 //            Assert.isTrue(!result, "failed!");
 
             String userCode = UUID.randomUUID().toString();
-            MessageElement baseMessageElement = new MessageElement(userCode, new SaveUserData("4357480@bk.ru", "ASdas@sd42q"));
+            MessageElement baseMessageElement = new MessageElement(userCode, new SaveUserData("4357480@bk.ru", "asdsadkKS"));
             ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
             record.headers().add("method", "save".getBytes());
 
@@ -67,7 +65,7 @@ public class ConsumerMessageTest {
         @Test
         public void sendMessageToCreateVM() {
             String userCode = UUID.randomUUID().toString();
-            MessageElement messageElement = new MessageElement("80fb59a4-1d81-462a-b6d8-5c414746f53f",new VirtualMachineCreateData(993, "root", "ghtydjJS8732", 2313, "192.168.64.33"));
+            MessageElement messageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new VirtualMachineCreateData(993, "root", "ghtydjJS8732", 2313, "192.168.64.33"));
             ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", messageElement);
             record.headers().add("method", "send_vm_cr".getBytes());
 
@@ -78,7 +76,7 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageWarningVM() {
         String userCode = UUID.randomUUID().toString();
-        MessageElement messageElement = new MessageElement("80fb59a4-1d81-462a-b6d8-5c414746f53f",new VirtualMachineExpireData(3422, "2024-02-10 12:32", 150.00));
+        MessageElement messageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new VirtualMachineExpireData(3422, "2024-02-10 12:32", 150.00));
         ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", messageElement);
         record.headers().add("method", "send_vm_wn".getBytes());
 
@@ -89,7 +87,7 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageErrorVM() {
         String userCode = UUID.randomUUID().toString();
-        MessageElement messageElement = new MessageElement("80fb59a4-1d81-462a-b6d8-5c414746f53f",new VirtualMachineExpireData(3422, "2024-02-10 12:32", 150.00));
+        MessageElement messageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new VirtualMachineExpireData(3422, "2024-02-10 12:32", 150.00));
         ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", messageElement);
         record.headers().add("method", "send_vm_ex".getBytes());
 
@@ -100,7 +98,7 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageRestorePassword() {
         String userCode = UUID.randomUUID().toString();
-        MessageElement messageElement = new MessageElement("80fb59a4-1d81-462a-b6d8-5c414746f53f",new PasswordRestoreData("http://192.168.90.103/restore"));
+        MessageElement messageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new PasswordRestoreData("http://192.168.90.103/restore"));
         ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", messageElement);
         record.headers().add("method", "send_rest".getBytes());
 
@@ -108,31 +106,41 @@ public class ConsumerMessageTest {
         System.out.println(userCode + " - code ");
     }
 
+    @Test
+    public void sendMessageTwoAuthCode() {
+        String userCode = UUID.randomUUID().toString();
+        MessageElement messageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new TwoAuthCode(987775));
+        ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", messageElement);
+        record.headers().add("method", "send_2th_code".getBytes());
+
+        kafkaTemplate.send(record);
+        System.out.println(userCode + " - code ");
+    }
+
+
+    @Test
+    public void sendMessageToChangePhone() {
+            String userCode = UUID.randomUUID().toString();
+            MessageElement baseMessageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312",new EditPhoneData("89244273168"));
+            ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
+            record.headers().add("method", "update_ph".getBytes());
+
+            kafkaTemplate.send(record);
+            System.out.println(userCode + " - code ");
+        }
 
 //
-//    @Test
-//    public void sendMessageToChangePhone() {
-//            String userCode = UUID.randomUUID().toString();
-//            MessageElement baseMessageElement = new MessageElement("04e4c7b5-9e62-4df6-b10f-a88249742e3", null, "89244273168");
-//            ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
-//            record.headers().add("method", "update_ph".getBytes());
 //
-//            kafkaTemplate.send(record);
-//            System.out.println(userCode + " - code ");
-//        }
-//
-//
-//
-//    @Test
-//    public void sendMessageToChangeEmail() {
-//        String userCode = UUID.randomUUID().toString();
-//        MessageElement baseMessageElement = new MessageElement("04e4c7b5-9e62-4df6-b10f-a88249742e3", "567842bm@bk.ru", null);
-//        ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
-//        record.headers().add("method", "update_em".getBytes());
-//
-//        kafkaTemplate.send(record);
-//        System.out.println(userCode + " - code ");
-//    }
+    @Test
+    public void sendMessageToChangeEmail() {
+        String userCode = UUID.randomUUID().toString();
+        MessageElement baseMessageElement = new MessageElement("0d19ec91-ae22-4859-8b8d-8895eecee312", new EditEmailData("4357480@bk.ru"));
+        ProducerRecord<Long, MessageElement> record = new ProducerRecord<>("call_service", baseMessageElement);
+        record.headers().add("method", "update_em".getBytes());
+
+        kafkaTemplate.send(record);
+        System.out.println(userCode + " - code ");
+    }
 //
 //
 //    @Test

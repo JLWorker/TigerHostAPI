@@ -2,6 +2,9 @@ package tgc.plus.callservice.dto.message_payloads;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+//import jakarta.validation.constraints.Email;
+//import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +18,7 @@ import java.util.Map;
 public class SaveUserData implements Payload{
 
     String email;
+
     String password;
 
     public SaveUserData(String email, String password) {

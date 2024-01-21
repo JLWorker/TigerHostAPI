@@ -2,6 +2,8 @@ package tgc.plus.callservice.dto.message_payloads;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+//import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +17,13 @@ import java.util.Map;
 public class VirtualMachineCreateData implements Payload{
 
     Integer vmId;
+
     String username;
+
     String password;
+
     Integer port;
+
     String ip;
 
     public VirtualMachineCreateData(Integer vmId, String username, String password, Integer port, String ip) {

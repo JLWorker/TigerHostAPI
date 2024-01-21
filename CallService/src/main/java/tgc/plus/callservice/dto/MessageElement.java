@@ -1,8 +1,13 @@
 package tgc.plus.callservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import tgc.plus.callservice.dto.message_payloads.Payload;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -10,12 +15,14 @@ import tgc.plus.callservice.dto.message_payloads.Payload;
 @Getter
 public class MessageElement {
 
-    private String user_code;
+    @Pattern(regexp = "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$",
+            message = "UserCode does`t match regex")
+    private String userCode;
 
     private Payload payload;
 
-    public MessageElement(String user_code, Payload payload) {
-        this.user_code = user_code;
+    public MessageElement(String userCode, Payload payload) {
+        this.userCode = userCode;
         this.payload = payload;
     }
 

@@ -1,31 +1,29 @@
 package tgc.plus.callservice.dto.message_payloads;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-//import jakarta.validation.constraints.NotBlank;
-//import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeName(value = "PasswordRecoveryData")
+@JsonTypeName(value = "TwoAuthCode")
+@Getter
 @NoArgsConstructor
-public class PasswordRestoreData implements Payload {
-    String url;
+public class TwoAuthCode implements Payload {
 
-    public PasswordRestoreData(String url) {
-        this.url = url;
+    private Integer code;
+
+    public TwoAuthCode(Integer code) {
+        this.code = code;
     }
 
     @Override
     public Map<String, String> getData() {
         Map<String, String> map = new HashMap<>();
-        map.put("url", this.getUrl());
+        map.put("code", this.code.toString());
         return map;
     }
 }

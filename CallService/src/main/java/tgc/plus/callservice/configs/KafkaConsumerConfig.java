@@ -1,27 +1,49 @@
 package tgc.plus.callservice.configs;
 
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.annotation.KafkaListenerConfigurer;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistrar;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.KafkaListenerErrorHandler;
+import org.springframework.kafka.listener.ListenerExecutionFailedException;
+import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.support.DefaultKafkaHeaderMapper;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.HandlerMethod;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
+import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
+import org.springframework.messaging.handler.invocation.InvocableHandlerMethod;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
+import org.springframework.util.ErrorHandler;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.exceptions.CommandNotFound;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaConsumerConfig {
+@Slf4j
+public class KafkaConsumerConfig implements KafkaListenerConfigurer{
 
     @Value("${spring.kafka.bootstrap-servers}")
     String server;
@@ -48,22 +70,30 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<Long, String> concurrentFactory(){
+    public ConcurrentKafkaListenerContainerFactory<Long, String> concurrentFactory() {
         ConcurrentKafkaListenerContainerFactory<Long, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(Integer.getInteger(concurrency));
-        factory.setBatchListener(true);
-        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
+        factory.setBatchListener(false);
+        factory.setRecordMessageConverter(new JsonMessageConverter());
+//        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
         return factory;
     }
 
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<Long, TestJson> batchFactory(){
-//        ConcurrentKafkaListenerContainerFactory<Long, TestJson> factory = new ConcurrentKafkaListenerContainerFactory<>();
-//        factory.setConsumerFactory(consumerFactory());
-//        factory.setBatchListener(true);
-//        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new StringJsonMessageConverter()));
-//        return factory;
-//    }
 
+    @Autowired
+    private LocalValidatorFactoryBean validator;
+
+    @Override
+    public void configureKafkaListeners(KafkaListenerEndpointRegistrar registrar) {
+        registrar.setValidator(this.validator);
+    }
+
+    @Bean
+    public KafkaListenerErrorHandler handlerError(){
+        return (m,e) -> {
+            log.error("Error in message with payload: " + m.getPayload() + "was error: " + e.getMessage());
+            return null;
+        };
+    }
 }

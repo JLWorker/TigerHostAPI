@@ -1,25 +1,28 @@
 package tgc.plus.callservice.listeners;
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.validation.annotation.Validated;
 import tgc.plus.callservice.dto.MessageElement;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import tgc.plus.callservice.listeners.utils.CommandsDispatcher;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
+//import tgc.plus.callservice.listeners.utils.validations.annotations.MessageValid;
 
 @Component
+@Slf4j
+@Validated
 public class MessageListener {
 
     @Autowired
     CommandsDispatcher commandsDispatcher;
 
-    @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "concurrentFactory")
-    public void listen(List<Message<MessageElement>> messages){
-        messages.forEach(el -> commandsDispatcher.execute(
-                new String((byte[]) Objects.requireNonNull(el.getHeaders().get("method")), StandardCharsets.UTF_8), el.getPayload()));
+    @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "concurrentFactory", errorHandler = "handlerError")
+    public void listen(@Payload @Valid MessageElement messages, @Header(name = "method") String header){
+        commandsDispatcher.execute(header, messages);
     }
+
 }
