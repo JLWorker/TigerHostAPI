@@ -5,6 +5,8 @@ package tgc.plus.callservice.entity;
 //import jakarta.validation.constraints.NotBlank;
 //import jakarta.validation.constraints.NotEmpty;
 //import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,16 +28,12 @@ public class User {
     Long id;
 
     @Column(value = "user_code")
-//    @NotEmpty(message = "UserCode field must`t be null")
     String userCode;
 
     @Column(value = "email")
-//    @Email
     String email;
 
     @Column(value = "phone")
-//    @Pattern(regexp = "^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$",
-//    message = "Incorrect phone format")
     String phone;
 
     public User(String userCode, String email) {

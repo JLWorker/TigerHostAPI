@@ -1,13 +1,13 @@
-package tgc.plus.callservice.dto.message_payloads;
+package tgc.plus.callservice;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import java.util.Map;
+import tgc.plus.callservice.dto.SaveUserDataTest;
+import tgc.plus.callservice.dto.message_payloads.*;
 
 @JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SaveUserData.class, name = "SaveUserData"),
+        @JsonSubTypes.Type(value = SaveUserDataTest.class, name = "SaveUserData"),
         @JsonSubTypes.Type(value = VirtualMachineCreateData.class, name = "VirtualMachineCreateData"),
         @JsonSubTypes.Type(value = VirtualMachineExpireData.class, name = "VirtualMachineExpireData"),
         @JsonSubTypes.Type(value = PasswordRestoreData.class, name = "PasswordRecoveryData"),
@@ -15,6 +15,6 @@ import java.util.Map;
         @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData"),
         @JsonSubTypes.Type(value = TwoAuthData.class, name = "TwoAuthData")
 })
-public interface Payload {
-    Map<String, String> getData();
+public interface PayloadTest {
+
 }

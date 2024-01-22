@@ -24,6 +24,7 @@ import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.support.DefaultKafkaHeaderMapper;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.HandlerMethod;
@@ -92,7 +93,7 @@ public class KafkaConsumerConfig implements KafkaListenerConfigurer{
     @Bean
     public KafkaListenerErrorHandler handlerError(){
         return (m,e) -> {
-            log.error("Error in message with payload: " + m.getPayload() + "was error: " + e.getMessage());
+            log.error("Error cause: " + e.getCause());
             return null;
         };
     }

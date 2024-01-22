@@ -1,9 +1,6 @@
 package tgc.plus.callservice.services.utils;
 
 import lombok.Getter;
-import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
 
 @Getter
 public enum EmailSenderCommands {

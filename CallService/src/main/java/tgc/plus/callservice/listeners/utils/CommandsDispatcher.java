@@ -1,13 +1,11 @@
 package tgc.plus.callservice.listeners.utils;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import tgc.plus.callservice.dto.MessageElement;
-import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
 import tgc.plus.callservice.listeners.utils.commands.EditPhone;
 import tgc.plus.callservice.listeners.utils.commands.SaveUser;
@@ -27,6 +25,7 @@ public class CommandsDispatcher {
     @Autowired
     UserRepository userRepository;
 
+
     @Autowired
     EmailSender emailSender;
 
@@ -38,7 +37,7 @@ public class CommandsDispatcher {
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public void execute(String method, @Valid MessageElement messageElement){
+    public void execute(String method, MessageElement messageElement){
             if (method.startsWith("send")){
                 commandMap.get("send_em").executionForSender(method, messageElement);
             }

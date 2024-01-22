@@ -8,6 +8,7 @@ import tgc.plus.callservice.entity.User;
 import tgc.plus.callservice.exceptions.UserAlreadyExist;
 import tgc.plus.callservice.listeners.utils.Command;
 import tgc.plus.callservice.repositories.UserRepository;
+//import tgc.plus.callservice.services.CustomValidator;
 import tgc.plus.callservice.services.EmailSender;
 
 import java.util.Objects;
@@ -20,9 +21,12 @@ public class SaveUser implements Command {
     final UserRepository userRepository;
     final EmailSender emailSender;
 
+//    final CustomValidator customValidator;
+
     public SaveUser(UserRepository userRepository, EmailSender emailSender) {
         this.userRepository = userRepository;
         this.emailSender = emailSender;
+//        this.customValidator = customValidator;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class SaveUser implements Command {
                     if (result)
                         throw new UserAlreadyExist("User with code - " + messageElement.getUserCode() + " already exist");
 
-                    else
+//                    else if (customValidator.validateEmail(messageElement.getPayload().getData().get("email")))
                         userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                 .doOnSuccess(userBd -> {
                                     log.info("User with code - " + userBd.getUserCode() + " was save");

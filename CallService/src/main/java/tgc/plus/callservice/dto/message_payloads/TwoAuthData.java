@@ -1,22 +1,24 @@
 package tgc.plus.callservice.dto.message_payloads;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeName(value = "TwoAuthCode")
+@JsonTypeName(value = "TwoAuthData")
+@Setter
 @Getter
 @NoArgsConstructor
-public class TwoAuthCode implements Payload {
+public class TwoAuthData implements Payload {
 
+    @JsonProperty
     private Integer code;
 
-    public TwoAuthCode(Integer code) {
+    public TwoAuthData(Integer code) {
         this.code = code;
     }
 
