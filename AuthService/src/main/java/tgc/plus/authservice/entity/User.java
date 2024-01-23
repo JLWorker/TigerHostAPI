@@ -58,11 +58,5 @@ public class User {
         this.codeExpiredDate = codeExpiredDate;
     }
 
-//    @Override
-//    public boolean isNew() {
-//        boolean result = Objects.isNull(this.getId());
-//        result ? this.setId(UUID.randomUUID()) : ;
-//    }
-
 
 }

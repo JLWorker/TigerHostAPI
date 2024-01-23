@@ -49,6 +49,7 @@ dependencies {
     //testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
 }
 
 dependencyManagement {

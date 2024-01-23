@@ -38,7 +38,7 @@ public class SaveUser implements Command {
                     if (result)
                         throw new UserAlreadyExist("User with code - " + messageElement.getUserCode() + " already exist");
 
-//                    else if (customValidator.validateEmail(messageElement.getPayload().getData().get("email")))
+                    else
                         userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                 .doOnSuccess(userBd -> {
                                     log.info("User with code - " + userBd.getUserCode() + " was save");
