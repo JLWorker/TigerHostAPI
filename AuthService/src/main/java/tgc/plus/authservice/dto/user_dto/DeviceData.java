@@ -1,4 +1,4 @@
-package tgc.plus.authservice.dto.account_controller_dto;
+package tgc.plus.authservice.dto.user_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DeviceDataDto {
+public class DeviceData {
 
     @JsonProperty
     private String name;
@@ -16,7 +16,7 @@ public class DeviceDataDto {
     @JsonProperty("application_type")
     private String applicationType;
 
-    public DeviceDataDto(String name, String applicationType) {
+    public DeviceData(String name, String applicationType) {
         this.name = name;
         this.applicationType = applicationType;
     }

@@ -1,4 +1,4 @@
-package tgc.plus.authservice.api.mobile;
+package tgc.plus.authservice.exceptions;
 
 
 import lombok.extern.slf4j.Slf4j;
