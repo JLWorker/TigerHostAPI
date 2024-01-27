@@ -10,5 +10,4 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserById(int userId);
 
      Mono<User> getUserByEmail(String email);
-
 }

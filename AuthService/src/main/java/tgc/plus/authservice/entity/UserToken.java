@@ -8,6 +8,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Component
@@ -36,15 +37,15 @@ public class UserToken {
     private String refreshToken;
 
     @Column("expired_date")
-    private Date expiredDate;
+    private Instant expiredDate;
 
     @Column("active_date")
-    private Date activeDate;
+    private Instant activeDate;
 
     @Transient
     private TokenMeta meta;
 
-    public UserToken(String tokenId, Long userId, String refreshToken, Date expiredDate, Date activeDate) {
+    public UserToken(String tokenId, Long userId, String refreshToken, Instant expiredDate, Instant activeDate) {
         this.tokenId = tokenId;
         this.userId = userId;
         this.refreshToken = refreshToken;

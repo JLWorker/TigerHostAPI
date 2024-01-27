@@ -2,6 +2,8 @@ package tgc.plus.authservice.dto.user_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,16 +16,19 @@ public class UserData {
     public interface RegistrationData {}
     public interface LoginData {}
 
-    @JsonProperty
-//    @JsonView({RegistrationData.class, LoginData.class})
+    @JsonProperty()
+    @Email
+    @JsonView({RegistrationData.class, LoginData.class})
     String email;
 
-    @JsonProperty
-//    @JsonView({RegistrationData.class, LoginData.class})
+    @JsonProperty()
+    @JsonView({RegistrationData.class, LoginData.class})
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$")
     String password;
 
     @JsonProperty("password_confirm")
-//    @JsonView(RegistrationData.class)
+    @JsonView(RegistrationData.class)
+    @Pattern(regexp = "^^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$")
     String passwordConfirm;
 
     public UserData(String email, String password, String passwordConfirm) {

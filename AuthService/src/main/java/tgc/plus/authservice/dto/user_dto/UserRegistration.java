@@ -14,7 +14,7 @@ public class UserRegistration {
 
     @Valid
     @JsonProperty("user_data")
-//    @JsonView(UserData.RegistrationData.class)
+    @JsonView(UserData.RegistrationData.class)
     private UserData userData;
 
     @Valid

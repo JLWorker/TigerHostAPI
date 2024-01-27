@@ -8,6 +8,8 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class User {
     private String recoveryCode;
 
     @Column("code_expired_date")
-    private Date codeExpiredDate;
+    private Instant codeExpiredDate;
 
     @Transient
     private List<UserToken> refreshTokens;

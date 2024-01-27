@@ -5,6 +5,8 @@ import io.netty.util.internal.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.exceptions.AccessTokenException;
@@ -12,13 +14,18 @@ import tgc.plus.authservice.repository.UserTokenRepository;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class TokenService {
 
     @Value("${jwt.token.expired}")
-    public Long expireDate;
+    public Long accessExpireDate;
+
+    @Value("${jwt.refresh.expired}")
+    public Long refreshExpireDate;
+
 
     @Autowired
     UserTokenRepository userTokenRepository;
@@ -29,9 +36,8 @@ public class TokenService {
     public Mono<String> createAccessToken(String userCode, String role) {
         return Mono.defer(() -> {
             Instant now = Instant.now();
-            Instant expirationDate = now.plusMillis(expireDate);
-            Claims claims = Jwts.claims().subject(userCode).build();
-            claims.put("role", role);
+            Instant expirationDate = now.plusMillis(accessExpireDate);
+            Claims claims = Jwts.claims().add(Map.of("user_code", userCode, "role", role)).build();
             String accessToken = Jwts.builder()
                     .claims(claims)
                     .expiration(Date.from(expirationDate))
@@ -46,8 +52,8 @@ public class TokenService {
             return generateTokenId().flatMap(tokenId -> {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
-                Instant finishDate = startDate.plusMillis(expireDate);
-                return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, Date.from(startDate), Date.from(finishDate)));
+                Instant finishDate = startDate.plusMillis(refreshExpireDate);
+                return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, startDate, finishDate));
             });
         }
 

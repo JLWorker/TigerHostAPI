@@ -1,6 +1,7 @@
 package tgc.plus.authservice.api.mobile;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -26,9 +27,8 @@ public class UserController {
     UserFacade userFacade;
 
     @PostMapping("/reg")
-    public Mono<RegistrationTokens> registration(@RequestBody UserRegistration regData, ServerHttpRequest serverHttpRequest) {
-        return userFacade.registerAccount(regData, Objects.requireNonNull(serverHttpRequest.getLocalAddress()).toString());
-
+    public Mono<RegistrationTokens> registration(@RequestBody @Valid UserRegistration regData, ServerHttpRequest serverHttpRequest) {
+        return userFacade.registerAccount(regData, Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).getAddress().getHostAddress());
     }
 
 }
