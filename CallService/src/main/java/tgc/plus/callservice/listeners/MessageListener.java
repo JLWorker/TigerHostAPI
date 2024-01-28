@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
+import reactor.core.publisher.Mono;
 import tgc.plus.callservice.dto.MessageElement;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class MessageListener {
 
     @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "concurrentFactory", errorHandler = "handlerError")
     public void listen(@Payload @Valid MessageElement message, @Header(name = "method") String header){
-            commandsDispatcher.execute(header, message);
+        commandsDispatcher.execute(header, message).subscribe();
     }
 
 }

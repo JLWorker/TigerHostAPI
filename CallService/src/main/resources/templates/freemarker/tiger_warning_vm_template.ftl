@@ -14,11 +14,12 @@
         border-color: #e30512;
         border-width: 3px;
         border-style: solid;
-        max-width: 500px">
+        max-width: 500px;
+        text-align: center">
 
-            <h4 style="margin-left: 5%">Виртуальная машина №${vm_id}</h4>
-            <h4 style="margin-left: 5%">Дата окончания услуги - <mark style="color: black; background-color: yellow">${expired_date}</mark></h4>
-            <h4 style="margin-left: 5%">Стоимость - ${price}Р</h4>
+            <h4>Виртуальная машина №${vm_id}</h4>
+            <h4>Дата окончания услуги - <mark style="color: black; background-color: yellow">${expired_date}</mark></h4>
+            <h4>Стоимость - ${price}Р</h4>
             <p style="color: #e30512; font-weight: bolder; text-align: center">Продлите услугу, в противном случае работа виртуальной машины будет приостановлена!</p>
         </div>
     </div>

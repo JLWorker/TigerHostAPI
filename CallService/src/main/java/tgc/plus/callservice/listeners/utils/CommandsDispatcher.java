@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Mono;
 import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
 import tgc.plus.callservice.listeners.utils.commands.EditPhone;
 import tgc.plus.callservice.listeners.utils.commands.SaveUser;
@@ -25,7 +27,6 @@ public class CommandsDispatcher {
     @Autowired
     UserRepository userRepository;
 
-
     @Autowired
     EmailSender emailSender;
 
@@ -37,15 +38,14 @@ public class CommandsDispatcher {
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public void execute(String method, MessageElement messageElement){
-            if (method.startsWith("send")){
-                commandMap.get("send_em").executionForSender(method, messageElement);
-            }
-            else if(commandMap.containsKey(method)){
-                commandMap.get(method).execution(messageElement);
-            }
-            else
-                log.error("Command with name - " + method + " not found ::CommandsDispatcher");
-        }
-
+    public Mono<Void> execute(String method, MessageElement messageElement){
+        return Mono.defer(()-> {
+            if (method.startsWith("send")) {
+                return commandMap.get("send_em").executionForSender(method, messageElement);
+            } else if (commandMap.containsKey(method)) {
+                return commandMap.get(method).execution(messageElement);
+            } else
+                return Mono.error(new CommandNotFound(String.format("Command with name - %s not found ::CommandsDispatcher", method)));
+        }).doOnError(error -> log.error(error.getMessage()));
+    }
 }

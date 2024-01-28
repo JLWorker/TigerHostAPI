@@ -2,6 +2,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.UserNotFound;
@@ -20,30 +21,24 @@ public class EditPhone implements Command {
     }
 
     @Override
-    public void execution(MessageElement messageElement) {
+    public Mono<Void> execution(MessageElement messageElement) {
 
-        userRepository.getUserByUserCode(messageElement.getUserCode()).map(Objects::nonNull)
+        return userRepository.getUserByUserCode(messageElement.getUserCode()).map(Objects::nonNull)
                 .defaultIfEmpty(false)
-                .publishOn(Schedulers.boundedElastic())
-                .doOnSuccess(result -> {
+                .flatMap(result -> {
                     if(!result)
-                        throw new UserNotFound("User with code - " + messageElement.getUserCode() + " not found");
-
+                        return Mono.error(new UserNotFound(String.format("User with code - %s not found",  messageElement.getUserCode())));
                     else {
-                        userRepository.updatePhoneUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("phone"))
-                                .doOnSuccess(success -> log.info("Phone number for user with code - " + messageElement.getUserCode() + " was updated"))
-                                .doOnError(error -> log.error(error.getMessage()))
-                                .subscribe();
+                        return userRepository.updatePhoneUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("phone"))
+                                .doOnSuccess(success -> log.info("Phone number for user with code - " + messageElement.getUserCode() + " was updated"));
                     }
-                })
-                .doOnError(error -> log.error(error.getMessage()))
-                .subscribe();
+                }).doOnError(error -> log.error(error.getMessage()));
 
     }
 
     @Override
-    public void executionForSender(String method, MessageElement messageElement) {
-
+    public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+        return Mono.empty();
     }
 
 }

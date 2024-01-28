@@ -2,6 +2,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.UserNotFound;
 import tgc.plus.callservice.listeners.utils.Command;
@@ -22,21 +23,21 @@ public class SendMail implements Command {
     }
 
     @Override
-    public void execution(MessageElement messageElement) {
+    public Mono<Void> execution(MessageElement messageElement) {
+        return Mono.empty();
     }
 
     @Override
-    public void executionForSender(String method, MessageElement messageElement) {
-        userRepository.getUserByUserCode(messageElement.getUserCode())
-                .doOnSuccess(user -> {
+    public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+        return userRepository.getUserByUserCode(messageElement.getUserCode())
+                .flatMap(user -> {
                     if(user!=null){
-                        emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method);
+                        return emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method);
                     }
                     else
-                        throw new UserNotFound("User with code - " + messageElement.getUserCode() + " not found");
+                        return Mono.error(new UserNotFound(String.format("User with code - %s not found", messageElement.getUserCode())));
                 })
-                .doOnError(error -> log.error(error.getMessage()))
-                .subscribe();
+                .doOnError(error -> log.error(error.getMessage()));
 
     }
 

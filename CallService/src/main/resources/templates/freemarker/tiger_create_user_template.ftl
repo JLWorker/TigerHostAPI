@@ -17,11 +17,12 @@
         border-color: #e30512;
         border-width: 3px;
         border-style: solid;
-        max-width: 500px">
+        max-width: 500px;
+        text-align: center">
 
-            <h4 style="margin-left: 5%">Ваши данные для входа:</h4>
-            <h4 style="margin-left: 5%">Ваш логин - ${email}</h4>
-            <h4 style="margin-left: 5%">Ваш пароль - ${password}</h4>
+            <h4>Ваши данные для входа:</h4>
+            <h4>Ваш логин - ${email}</h4>
+            <h4>Ваш пароль - ${password}</h4>
             <p style="color: grey; text-align: center; font-weight: bolder">Чтобы защитить аккаунт, воспользуйтесь двухфакторной аутентификацией в профиле приложения!</p>
     </div>
 </div>

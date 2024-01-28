@@ -2,6 +2,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.entity.User;
@@ -21,38 +22,30 @@ public class SaveUser implements Command {
     final UserRepository userRepository;
     final EmailSender emailSender;
 
-//    final CustomValidator customValidator;
-
     public SaveUser(UserRepository userRepository, EmailSender emailSender) {
         this.userRepository = userRepository;
         this.emailSender = emailSender;
-//        this.customValidator = customValidator;
     }
 
     @Override
-    public void execution(MessageElement messageElement) {
-        userRepository.getUserByUserCode(messageElement.getUserCode()).map(Objects::nonNull)
+    public Mono<Void> execution(MessageElement messageElement) {
+        return userRepository.getUserByUserCode(messageElement.getUserCode()).map(Objects::nonNull)
                 .defaultIfEmpty(false)
-                .publishOn(Schedulers.boundedElastic())
-                .doOnSuccess(result -> {
+                .flatMap(result -> {
                     if (result)
-                        throw new UserAlreadyExist("User with code - " + messageElement.getUserCode() + " already exist");
-
+                        return Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode())));
                     else
-                        userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
-                                .doOnSuccess(userBd -> {
-                                    log.info("User with code - " + userBd.getUserCode() + " was save");
-                                    emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");})
-                                .doOnError(error -> log.error(error.getMessage()))
-                                .subscribe();
-                })
-                .doOnError(error -> log.error(error.getMessage()))
-                .subscribe();
+                       return userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
+                                .flatMap(userBd -> {
+                                    log.info(String.format("User with code - %s was save", userBd.getUserCode()));
+                                    return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
+                                });
+                    }).doOnError(error -> log.error(error.getMessage()));
     }
 
     @Override
-    public void executionForSender(String method, MessageElement messageElement) {
-
+    public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+        return Mono.empty();
     }
 
 }

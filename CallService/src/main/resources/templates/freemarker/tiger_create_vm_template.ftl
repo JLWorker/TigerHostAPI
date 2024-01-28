@@ -16,13 +16,14 @@
         border-color: #e30512;
         border-width: 3px;
         border-style: solid;
-        max-width: 500px">
+        max-width: 500px;
+        text-align: center">
 
-        <h4 style="margin-left: 5%">Ваши данные для подключения:</h4>
-        <h4 style="margin-left: 5%">IP адресс - ${ip}</h4>
-        <h4 style="margin-left: 5%">Порт - ${port}</h4>
-        <h4 style="margin-left: 5%">Имя пользователя - ${username}</h4>
-        <h4 style="margin-left: 5%">Пароль - ${password}</h4>
+        <h4>Ваши данные для подключения:</h4>
+        <h4>IP адресс - ${ip}</h4>
+        <h4>Порт - ${port}</h4>
+        <h4>Имя пользователя - ${username}</h4>
+        <h4>Пароль - ${password}</h4>
         <p style="color: #e30512; text-align:center; font-weight: bolder">После входа обязательно создайте нового пользователя в системе!</p>
     </div>
 </div>

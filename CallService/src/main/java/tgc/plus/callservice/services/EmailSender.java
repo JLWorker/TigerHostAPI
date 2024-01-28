@@ -16,7 +16,10 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import reactor.core.publisher.Mono;
 import tgc.plus.callservice.configs.FreeMarkerConfig;
+import tgc.plus.callservice.exceptions.CommandNotFound;
+import tgc.plus.callservice.exceptions.EmailSenderException;
 import tgc.plus.callservice.services.utils.EmailSenderCommands;
 
 import java.nio.charset.StandardCharsets;
@@ -37,7 +40,7 @@ public class EmailSender {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    private HashMap<String, EmailSenderCommands> senderCommands = new HashMap<>();
+    private final HashMap<String, EmailSenderCommands> senderCommands = new HashMap<>();
 
     @PostConstruct
     void init(){
@@ -46,8 +49,8 @@ public class EmailSender {
         }
     }
 
-    public void sendMessage(Map<String, String> data, String email, String method){
-
+    public Mono<Void> sendMessage(Map<String, String> data, String email, String method){
+    return Mono.defer(()->{
         if(senderCommands.containsKey(method)){
 
             EmailSenderCommands emailSenderCommands = senderCommands.get(method);
@@ -67,12 +70,15 @@ public class EmailSender {
                 messageHelper.addInline("tiger_logo", new ClassPathResource("/templates/freemarker/images/tiger_logo_one.png"));
 
                 javaMailSender.send(message);
-            } catch (Exception e) {
-                log.error(e.getMessage());
+                return Mono.empty();
+
+            }
+            catch (Exception e) {
+                return Mono.error(e);
             }
         }
         else
-            log.error("Command with name - " + method + " not found! ::EmailSender");
-
+            return Mono.error(new CommandNotFound(String.format("Command with name %s not found!", method)));
+        });
     }
 }
