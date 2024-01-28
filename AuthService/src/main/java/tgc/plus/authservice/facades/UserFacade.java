@@ -4,15 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
-import tgc.plus.authservice.dto.user_dto.DeviceData;
-import tgc.plus.authservice.dto.user_dto.UserRegistration;
-import tgc.plus.authservice.dto.user_dto.RegistrationTokens;
-import tgc.plus.authservice.dto.user_dto.UserData;
+import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.entity.User;
+import tgc.plus.authservice.exceptions.exceptions_clases.AccessDataTokenException;
+import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.services.TokenService;
@@ -35,7 +33,7 @@ public class UserFacade {
     TokenMetaService tokenMetaService;
 
     @Transactional
-    public Mono<RegistrationTokens> registerAccount(UserRegistration userRegistration, String ipAddr){
+    public Mono<RegistrationTokens> registerUser(UserRegistration userRegistration, String ipAddr){
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
         if(userData.getPassword().equals(userData.getPasswordConfirm()))
@@ -52,6 +50,38 @@ public class UserFacade {
              }});
         else
             return Mono.error(new InvalidRequestException("Passwords mismatch"));
+    }
+
+
+    @Transactional
+    public Mono<RegistrationTokens> loginUser(UserLogin userLogin, String ipAddr){
+        UserData userData = userLogin.getUserData();
+        DeviceData deviceData = userLogin.getDeviceData();
+            return userRepository.getUserByEmail(userData.getEmail()).defaultIfEmpty(new User()).flatMap(result -> {
+                if (result.getId()==null)
+                    return Mono.error(new InvalidRequestException(String.format("User with email %s not found", userData.getEmail())));
+                else {
+                    return tokenService.createAccessToken(result.getUserCode(), result.getRole())
+                            .zipWith(tokenService.createRefToken(result.getId()))
+                            .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
+                                    .flatMap(tokenMeta -> Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                            result.getVersion(), tokenMeta.getVersion(), tokens.getT2().getVersion()))));
+                }
+        });
+    }
+
+    public Mono<Long> changePhone(UserChange userChange, String accessToken){
+        return tokenService.getUserCode(accessToken.substring(8)).flatMap(userCode ->
+             userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User()).flatMap(user -> {
+                if(user.getUserCode()==null){
+                    return Mono.error(new AccessDataTokenException("Access token is damaged"));
+                }
+                else if (!user.getVersion().equals(userChange.getVersion()))
+                    return Mono.error(new VersionException(user.getVersion(), "Version incorrect"));
+
+                else
+                    return userRepository.changePhone(user.getPhone(), userCode).flatMap(newUser -> Mono.just(newUser.getVersion()));
+        }));
     }
 }
 //

@@ -2,14 +2,16 @@ package tgc.plus.authservice.services;
 
 import io.jsonwebtoken.*;
 import io.netty.util.internal.ThreadLocalRandom;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
-import tgc.plus.authservice.exceptions.AccessTokenException;
+import tgc.plus.authservice.entity.UserDetail;
+import tgc.plus.authservice.exceptions.exceptions_clases.AccessTokenExpiredException;
 import tgc.plus.authservice.repository.UserTokenRepository;
 
 import java.time.Instant;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class TokenService {
 
     @Value("${jwt.token.expired}")
@@ -65,13 +68,24 @@ public class TokenService {
     }
 
 
-    public Mono<Boolean> checkAccessToken(String token) throws AccessTokenException {
+    public Mono<Boolean> checkAccessToken(String token) throws AccessTokenExpiredException {
         return Mono.defer(() -> {
             try {
                 Jws<Claims> claims = Jwts.parser().decryptWith(springSecurityConfig.getSecretKey()).build().parseSignedClaims(token);
                 return Mono.just(claims.getPayload().getExpiration().after(Date.from(Instant.now())));
             } catch (JwtException e) {
-                return Mono.error(new AccessTokenException("Invalid access token"));
+                return Mono.error(new InvalidRequestException("Invalid access token"));
+            }
+        });
+    }
+
+    public Mono<String> getUserCode(String token){
+        return Mono.defer(() -> {
+            try{
+            Jws<Claims> claims = Jwts.parser().verifyWith(springSecurityConfig.getSecretKey()).build().parseSignedClaims(token);
+            return Mono.just(claims.getPayload().get("user_code", String.class));
+        } catch (JwtException e) {
+                return Mono.error(new JwtException(e.getMessage()));
             }
         });
     }

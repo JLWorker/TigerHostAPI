@@ -17,19 +17,21 @@ public class UserData {
     public interface LoginData {}
 
     @JsonProperty()
-    @Email
+    @Email(message = "Email invalid")
     @JsonView({RegistrationData.class, LoginData.class})
-    String email;
+    private String email;
 
     @JsonProperty()
     @JsonView({RegistrationData.class, LoginData.class})
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$")
-    String password;
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
+            message = "Password invalid")
+    private String password;
 
     @JsonProperty("password_confirm")
     @JsonView(RegistrationData.class)
-    @Pattern(regexp = "^^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$")
-    String passwordConfirm;
+    @Pattern(regexp = "^^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
+            message = "Password invalid")
+    private String passwordConfirm;
 
     public UserData(String email, String password, String passwordConfirm) {
         this.email = email;
