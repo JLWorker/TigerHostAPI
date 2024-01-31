@@ -44,7 +44,7 @@ public class ConsumerMessageTest {
 //            boolean result = kafkaTemplate.send("call_service",
 //                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
 //            Assert.isTrue(!result, "failed!");
-        Flux<Void> res = Flux.range(1, 50).flatMap(el->{
+        Flux<Void> res = Flux.range(1, 2).flatMap(el->{
                 String userCode = UUID.randomUUID().toString();
                 MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest("4357480@bk.ru", "sadasASD"));
                 ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("call_service", baseMessageTest);
@@ -128,7 +128,7 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToChangeEmail() {
         String userCode = UUID.randomUUID().toString();
-        MessageTest baseMessageTest = new MessageTest("f3fc21e3-4619-4a7f-aff7-b43ff419a88e", new EditEmailDataTest("567842@bk.ru"));
+        MessageTest baseMessageTest = new MessageTest("27ccff25-d955-4b97-9d7a-1b7b0f15c896", new EditEmailDataTest("53422346@bk.ru"));
         ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("call_service", baseMessageTest);
         record.headers().add("method", "update_em".getBytes());
 

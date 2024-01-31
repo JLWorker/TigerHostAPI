@@ -1,22 +1,32 @@
 package tgc.plus.authservice.facades;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
+import tgc.plus.authservice.configs.SpringSecurityConfig;
+import tgc.plus.authservice.configs.utils.LoginReactiveAuthenticationManager;
+import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.exceptions.exceptions_clases.AccessDataTokenException;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
-import tgc.plus.authservice.services.TokenService;
+import tgc.plus.authservice.configs.utils.TokenProvider;
 import tgc.plus.authservice.services.UserService;
 
-@Component
+import java.util.List;
+import java.util.Map;
+
+@Service
 @Slf4j
 public class UserFacade {
 
@@ -24,7 +34,7 @@ public class UserFacade {
     UserRepository userRepository;
 
     @Autowired
-    TokenService tokenService;
+    TokenProvider tokenProvider;
 
     @Autowired
     UserService userService;
@@ -32,56 +42,65 @@ public class UserFacade {
     @Autowired
     TokenMetaService tokenMetaService;
 
+    @Autowired
+    UserFacadeUtils userFacadeUtils;
+
+    @Autowired
+    SpringSecurityConfig springSecurityConfig;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Transactional
-    public Mono<RegistrationTokens> registerUser(UserRegistration userRegistration, String ipAddr){
+    public Mono<RegistrationTokens> registerUser(UserRegistration userRegistration, String ipAddr) {
+        return Mono.defer(()->{
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
-        if(userData.getPassword().equals(userData.getPasswordConfirm()))
-         return  userRepository.getUserByEmail(userData.getEmail()).defaultIfEmpty(new User()).flatMap(result -> {
-             if (result.getId()!=null) {
-                return Mono.error(new InvalidRequestException(String.format("User with email %s already exist", userData.getEmail())));
-            }
-             else {
-                 return userService.save(userData).flatMap(savedUser -> tokenService.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
-                         .zipWith(tokenService.createRefToken(savedUser.getId()))
-                         .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
-                                 .flatMap(tokenMeta -> Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
-                                         savedUser.getVersion(), tokenMeta.getVersion(), tokens.getT2().getVersion())))));
-             }});
+        if (userData.getPassword().equals(userData.getPasswordConfirm()))
+            return userFacadeUtils.getUserByEmailReg(userData.getEmail())
+                    .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
+                            .zipWith(tokenProvider.createRefToken(savedUser.getId()))
+                            .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
+                                    .flatMap(tokenMeta -> {
+                                        log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
+                                        return Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                                Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
+                                                        VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
+                                                        VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
+                                    }))));
         else
             return Mono.error(new InvalidRequestException("Passwords mismatch"));
+        }).doOnError(e -> log.error(e.getMessage()));
     }
 
 
     @Transactional
-    public Mono<RegistrationTokens> loginUser(UserLogin userLogin, String ipAddr){
+    public Mono<RegistrationTokens> loginUser(UserLogin userLogin, String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
-            return userRepository.getUserByEmail(userData.getEmail()).defaultIfEmpty(new User()).flatMap(result -> {
-                if (result.getId()==null)
-                    return Mono.error(new InvalidRequestException(String.format("User with email %s not found", userData.getEmail())));
-                else {
-                    return tokenService.createAccessToken(result.getUserCode(), result.getRole())
-                            .zipWith(tokenService.createRefToken(result.getId()))
-                            .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
-                                    .flatMap(tokenMeta -> Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
-                                            result.getVersion(), tokenMeta.getVersion(), tokens.getT2().getVersion()))));
-                }
-        });
+        return userFacadeUtils.getUserByEmailLog(userData.getEmail())
+                .flatMap(user -> userFacadeUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
+                        .then(tokenProvider.createAccessToken(user.getUserCode(), user.getRole())
+                                    .zipWith(tokenProvider.createRefToken(user.getId()))
+                                    .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
+                                            .flatMap(tokenMeta -> {
+                                                log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
+                                                return Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                                        Map.of(VersionsTypes.USER_VERSION.getName(), user.getVersion(),
+                                                                VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
+                                                                VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
+                                            })))).doOnError(e -> log.error(e.getMessage()));
+
     }
 
-    public Mono<Long> changePhone(UserChange userChange, String accessToken){
-        return tokenService.getUserCode(accessToken.substring(8)).flatMap(userCode ->
-             userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User()).flatMap(user -> {
-                if(user.getUserCode()==null){
-                    return Mono.error(new AccessDataTokenException("Access token is damaged"));
-                }
-                else if (!user.getVersion().equals(userChange.getVersion()))
-                    return Mono.error(new VersionException(user.getVersion(), "Version incorrect"));
-
-                else
-                    return userRepository.changePhone(user.getPhone(), userCode).flatMap(newUser -> Mono.just(newUser.getVersion()));
-        }));
+    @Transactional
+    public Mono<NewVersion> changePhone(UserChangeContacts userChangeContacts) {
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+                String userCode = securityContext.getAuthentication().getPrincipal().toString();
+                return userFacadeUtils.getUserByCode(userCode, userChangeContacts.getVersion())
+                        .then(userRepository.changePhone(userChangeContacts.getPhone(), userCode)
+                                .then(Mono.defer(() -> userRepository.getUserByUserCode(userCode)
+                                        .map(user -> new NewVersion(Map.of(VersionsTypes.USER_VERSION.getName(), user.getVersion()))))));
+                });
     }
 }
 //

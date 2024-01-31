@@ -3,6 +3,7 @@ package tgc.plus.authservice.services;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,28 +40,42 @@ public class UserService implements ReactiveUserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    SpringSecurityConfig springSecurityConfig;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public Mono<User> save(UserData userData){
+    public Mono<User> save(UserData userData) {
         String userCode = UUID.randomUUID().toString();
-        String password = springSecurityConfig.bCryptPasswordEncoder().encode(userData.getPassword());
-        return userRepository.save(new User(userCode, userData.getEmail(), password, RoleList.USER.getName()));
+        String password = bCryptPasswordEncoder.encode(userData.getPassword());
+        return userRepository.save(new User(userCode, userData.getEmail(), password, RoleList.USER.name()));
     }
 
     @Override
     public Mono<UserDetails> findByUsername(String userCode) {
-        return userRepository.getUserByUserCode(userCode).flatMap(user->{
-            if (user==null)
+        return userRepository.getUserByUserCode(userCode).flatMap(user -> {
+            if (user == null)
                 return Mono.error(new UsernameNotFoundException(String.format("User with code %s not found", userCode)));
             else
-                return Mono.just(new UserDetail(List.of(new SimpleGrantedAuthority(RoleList.USER.getName())), user.getUserCode(),
+                return Mono.just(new UserDetail(List.of(new SimpleGrantedAuthority(RoleList.USER.name())), user.getUserCode(),
                         user.getPassword(), user.getActive()));
         });
     }
 
-    public Mono<UsernamePasswordAuthenticationToken> authenticateUser(String userCode) { //этот метод сработает только если есть у пользователя токен
-        return findByUsername(userCode).flatMap(userDetail ->
-                Mono.just(new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities())));
+    public Mono<User> checkUserByEmail(String email) {
+        return userRepository.getUserByEmail(email).defaultIfEmpty(new User()).flatMap(result -> {
+            if (result.getId() != null) {
+                return Mono.empty()
+                        .then(Mono.error(new InvalidRequestException(String.format("User with email %s already exist", email))));
+            } else
+                return Mono.just(result);
+        });
+    }
+
+    public Mono<User> checkPasswords(String email) {
+        return userRepository.getUserByEmail(email).defaultIfEmpty(new User()).flatMap(result -> {
+            if (result.getId() != null) {
+                return Mono.empty()
+                        .then(Mono.error(new InvalidRequestException(String.format("User with email %s already exist", email))));
+            } else
+                return Mono.just(result);
+        });
     }
 }

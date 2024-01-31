@@ -7,12 +7,6 @@ import lombok.ToString;
 @Getter
 public enum RoleList {
 
-    USER("user"),
-    ADMIN("admin");
-
-    private String name;
-
-    RoleList(String name) {
-        this.name = name;
-    }
+    USER,
+    ADMIN
 }

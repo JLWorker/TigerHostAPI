@@ -35,8 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/phone")
-    public Mono<Long> changePhone(@RequestBody @JsonView(value = UserChange.ChangePhone.class) @Valid UserChange userChange, ServerHttpRequest serverHttpRequest){
-        return userFacade.changePhone(userChange, String.valueOf(serverHttpRequest.getHeaders().get("Authorization")));
+    public Mono<NewVersion> changePhone(@RequestBody @Valid UserChangeContacts userChangeContacts){
+        return userFacade.changePhone(userChangeContacts);
     }
 
 }

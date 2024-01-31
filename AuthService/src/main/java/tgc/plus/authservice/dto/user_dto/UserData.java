@@ -29,7 +29,7 @@ public class UserData {
 
     @JsonProperty("password_confirm")
     @JsonView(RegistrationData.class)
-    @Pattern(regexp = "^^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
             message = "Password invalid")
     private String passwordConfirm;
 

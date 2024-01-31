@@ -2,8 +2,7 @@ package tgc.plus.authservice.dto.user_dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Getter
-public class UserChange {
+public class UserChangeContacts {
 
     public interface ChangePhone{}
     public interface ChangeEmail{}
@@ -28,7 +27,7 @@ public class UserChange {
 
     private Long version;
 
-    public UserChange(String phone, String email, Long version) {
+    public UserChangeContacts(String phone, String email, Long version) {
         this.phone = phone;
         this.email = email;
         this.version = version;
