@@ -6,6 +6,8 @@ build/
 !**/src/test/**/build/
 /src/main/resources/application.properties
 /src/main/resources/log4j2-spring.xml
+call_service*
+
 ### STS ###
 .apt_generated
 .classpath

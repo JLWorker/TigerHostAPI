@@ -6,18 +6,13 @@ import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
-import tgc.plus.authservice.configs.utils.LoginReactiveAuthenticationManager;
 import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.configs.utils.TokenProvider;
@@ -51,7 +46,7 @@ public class UserFacade {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
-    public Mono<RegistrationTokens> registerUser(UserRegistration userRegistration, String ipAddr) {
+    public Mono<TokensResponse> registerUser(UserRegistration userRegistration, String ipAddr) {
         return Mono.defer(()->{
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
@@ -62,7 +57,7 @@ public class UserFacade {
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
                                     .flatMap(tokenMeta -> {
                                         log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
-                                        return Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                        return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
                                                 Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
                                                         VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
                                                         VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
@@ -74,7 +69,7 @@ public class UserFacade {
 
 
     @Transactional
-    public Mono<RegistrationTokens> loginUser(UserLogin userLogin, String ipAddr) {
+    public Mono<TokensResponse> loginUser(UserLogin userLogin, String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
         return userFacadeUtils.getUserByEmailLog(userData.getEmail())
@@ -84,7 +79,7 @@ public class UserFacade {
                                     .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
                                             .flatMap(tokenMeta -> {
                                                 log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
-                                                return Mono.just(new RegistrationTokens(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                                return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
                                                         Map.of(VersionsTypes.USER_VERSION.getName(), user.getVersion(),
                                                                 VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
                                                                 VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
@@ -93,15 +88,28 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<NewVersion> changePhone(UserChangeContacts userChangeContacts) {
+    public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                 String userCode = securityContext.getAuthentication().getPrincipal().toString();
-                return userFacadeUtils.getUserByCode(userCode, userChangeContacts.getVersion())
-                        .then(userRepository.changePhone(userChangeContacts.getPhone(), userCode)
-                                .then(Mono.defer(() -> userRepository.getUserByUserCode(userCode)
-                                        .map(user -> new NewVersion(Map.of(VersionsTypes.USER_VERSION.getName(), user.getVersion()))))));
-                });
+                return userRepository.getUserByUserCode(userCode)
+                        .flatMap(user -> userFacadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, userChangeContacts.getVersion(), user));
+                }).doOnError(e->log.error(e.getMessage()));
     }
+
+    @Transactional
+    public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts) {
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+            String userCode = securityContext.getAuthentication().getPrincipal().toString();
+            return userRepository.getUserByUserCode(userCode)
+                    .flatMap(user -> userFacadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, userChangeContacts.getVersion(), user));
+        }).doOnError(e->log.error(e.getMessage()));
+    }
+
+//    public Mono<UserInfoResponse> getInfoAboutAccount(){
+//
+//    }
+
+
 }
 //
 //if (result!=null) {

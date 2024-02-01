@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -28,12 +30,12 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         http
-                .httpBasic().disable()
-                .csrf().disable()
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
                                 .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/create", "/account/check").permitAll()
-                                .pathMatchers("/account/phone").authenticated()
+                                .pathMatchers("/account/phone", "/account/email").authenticated()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
@@ -53,7 +55,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public ReactiveAuthenticationManager reactiveLoginAuthenticationManager(){
-        return new LoginReactiveAuthenticationManager(userService);
+        return new LoginReactiveAuthenticationManager(userService, bCryptPasswordEncoder());
     }
 
     @Bean

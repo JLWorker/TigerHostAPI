@@ -1,22 +1,22 @@
 package tgc.plus.authservice.dto.user_dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
+import java.util.Objects;
 
-@NoArgsConstructor
 @Getter
-public class NewVersion {
+@NoArgsConstructor
+public class UserChangeContactResponse {
 
-    private Map<String, Long> versions;
+    private Map<String, Object> data;
 
-    public NewVersion(Map<String, Long> versions) {
-        this.versions = versions;
+    public UserChangeContactResponse(Map<String, Object> data) {
+        this.data = data;
     }
 }
 

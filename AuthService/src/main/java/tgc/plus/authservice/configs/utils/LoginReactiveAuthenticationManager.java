@@ -15,11 +15,12 @@ import tgc.plus.authservice.services.UserService;
 @Slf4j
 public class LoginReactiveAuthenticationManager implements ReactiveAuthenticationManager {
     private final UserService userService;
-    public LoginReactiveAuthenticationManager(UserService userService) {
-        this.userService = userService;
-    }
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    public LoginReactiveAuthenticationManager(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

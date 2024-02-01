@@ -1,38 +1,42 @@
 package tgc.plus.authservice;
 
-import io.netty.util.internal.ThreadLocalRandom;
-import org.apache.kafka.common.protocol.types.Field;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.dto.ChangePhone;
+import tgc.plus.authservice.dto.ChangeResponse;
 
-import java.security.SecureRandom;
-import java.time.Instant;
-import java.time.temporal.TemporalField;
-import java.util.Date;
-import java.util.UUID;
+import java.util.logging.Logger;
 
-//@SpringBootTest()
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthServiceApplicationTests {
 
+    Logger logger = Logger.getLogger(this.getClass().getName());
+
+    private final WebClient webClient = WebClient.create("http://localhost:8081/account/phone");
     @Test
-    void contextLoads() {
-        SecureRandom secureRandom = new SecureRandom();
-        int all = 10;
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Instant.now().getNano());
-        }
+    public void testTransactionals(){
+        Flux<ChangeResponse> el = Flux.range(0,3)
+                .flatMap(nm -> {
+                    System.out.println(nm);
+                    return sendRequest()
+                            .doOnSuccess(res -> logger.info(res.getVersion().toString() + "Success - " + nm.toString()))
+                            .doOnError(e -> logger.warning(e.getMessage()));
+                });
+
+        el.subscribe();
+    }
+    private Mono<ChangeResponse> sendRequest(){
+        return webClient.put()
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiJlNjMwMmY1NC02MGJmLTQ3YWYtOGNlMi0xZTJjOTgxOTBjZjkiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwNjc5Mjc5NCwiaWF0IjoxNzA2NzYwNDUyfQ.eRr4qbaT-jq51Xwz7ZmfS3M6hBWd_pUVdHR27ui2ffw")
+                .body(Mono.just(new ChangePhone("89244272269", 7)), ChangePhone.class)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve().bodyToMono(ChangeResponse.class);
+
 
     }
 
-    @Test
-    void generateTokenId() {
-        for (int i = 0; i < 10; i++) {
-            int randInt = ThreadLocalRandom.current().nextInt(1000, 10000);
-            System.out.println(String.valueOf(Instant.now().getNano()) + randInt);
-        }
-    }
 }

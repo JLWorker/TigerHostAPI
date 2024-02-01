@@ -25,18 +25,33 @@ public class UserController {
     UserFacade userFacade;
 
     @PostMapping("/reg")
-    public Mono<RegistrationTokens> registration(@RequestBody @Valid UserRegistration regData, ServerHttpRequest serverHttpRequest) {
+    public Mono<TokensResponse> registration(@RequestBody @Valid UserRegistration regData, ServerHttpRequest serverHttpRequest) {
         return userFacade.registerUser(regData, Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).getAddress().getHostAddress());
     }
 
     @PostMapping("/login")
-    public Mono<RegistrationTokens> login(@RequestBody @Valid UserLogin logData, ServerHttpRequest serverHttpRequest) {
+    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerHttpRequest serverHttpRequest) {
         return userFacade.loginUser(logData, Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).getAddress().getHostAddress());
     }
 
     @PutMapping("/phone")
-    public Mono<NewVersion> changePhone(@RequestBody @Valid UserChangeContacts userChangeContacts){
+    public Mono<UserChangeContactResponse> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts){
         return userFacade.changePhone(userChangeContacts);
     }
+
+    @PutMapping("/email")
+    public Mono<UserChangeContactResponse> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts){
+        return userFacade.changeEmail(userChangeContacts);
+    }
+
+//    @GetMapping("/info")
+//    public Mono<UserInfoResponse> userInfoResponseMono(){
+//        return userFacade.getInfoAboutAccount();
+//    }
+
+//    @PutMapping("/recovery")
+//    public Mono<Void> createRecoveryCode(@RequestParam("email") @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts){
+////        return userFacade.changeEmail(userChangeContacts);
+//    }
 
 }

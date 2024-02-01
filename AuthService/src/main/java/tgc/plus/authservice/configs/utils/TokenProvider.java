@@ -82,30 +82,6 @@ public class TokenProvider {
        });
     }
 
-
-    public Mono<Boolean> checkAccessToken(String token) throws AccessTokenExpiredException {
-        return Mono.defer(() -> {
-            try {
-                Jws<Claims> claims = Jwts.parser().decryptWith(key).build().parseSignedClaims(token);
-                return Mono.just(claims.getPayload().getExpiration().after(Date.from(Instant.now())));
-            } catch (JwtException e) {
-                return Mono.error(new InvalidRequestException("Invalid access token"));
-            }
-        });
-    }
-
-    public Mono<String> getUserCode(String token){
-        return Mono.defer(() -> {
-            try{
-                Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-                return Mono.just(claims.getPayload().get("user_code", String.class));
-            }
-            catch (JwtException e) {
-                    return Mono.error(new JwtException(e.getMessage()));
-            }
-        });
-    }
-
     public Mono<Authentication> getAuthentication(String token) {
         return Mono.defer(()->{
             try {
@@ -139,20 +115,6 @@ public class TokenProvider {
                 return Mono.error(new AuthException("Invalid access token"));
         }).doOnError(e->log.error(e.getMessage()));
     }
-
-
-
-
-//    public boolean checkRefreshToken(String username) throws TokenException{
-//        User user = userRepository.findUserByUserName(username);
-//        Date expired = user.getRefreshToken().getExpiredDate();
-//        if(expired.before(new Date())){
-//            return false;
-//        }
-//        else{
-//            return true;
-//        }
-//    }
 
 
 }

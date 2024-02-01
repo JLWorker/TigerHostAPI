@@ -58,24 +58,4 @@ public class UserService implements ReactiveUserDetailsService {
                         user.getPassword(), user.getActive()));
         });
     }
-
-    public Mono<User> checkUserByEmail(String email) {
-        return userRepository.getUserByEmail(email).defaultIfEmpty(new User()).flatMap(result -> {
-            if (result.getId() != null) {
-                return Mono.empty()
-                        .then(Mono.error(new InvalidRequestException(String.format("User with email %s already exist", email))));
-            } else
-                return Mono.just(result);
-        });
-    }
-
-    public Mono<User> checkPasswords(String email) {
-        return userRepository.getUserByEmail(email).defaultIfEmpty(new User()).flatMap(result -> {
-            if (result.getId() != null) {
-                return Mono.empty()
-                        .then(Mono.error(new InvalidRequestException(String.format("User with email %s already exist", email))));
-            } else
-                return Mono.just(result);
-        });
-    }
 }
