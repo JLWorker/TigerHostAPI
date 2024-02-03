@@ -1,5 +1,6 @@
 package tgc.plus.authservice.exceptions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.KafkaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -35,10 +36,16 @@ public class RestControllerAdvice {
                     HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
     }
 
-    @ExceptionHandler({VersionException.class})
+    @ExceptionHandler(VersionException.class)
     public ResponseEntity<VersionResponseException> versionException(VersionException exception, ServerWebExchange request){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new VersionResponseException(request.getRequest().getPath().toString(),
                 HttpStatus.CONFLICT.getReasonPhrase(),  HttpStatus.CONFLICT.value(), exception.getMessage(), exception.getNewVersion()));
+    }
+
+    @ExceptionHandler(KafkaException.class)
+    public ResponseEntity<ResponseException> kafkaException(ServerWebExchange request){
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ResponseException(request.getRequest().getPath().toString(),
+                HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),  HttpStatus.SERVICE_UNAVAILABLE.value(), "Kafka broker is faulty, sending messages is impossible"));
     }
 
 }

@@ -11,6 +11,8 @@ import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.concurrent.CompletableFuture;
+
 import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration

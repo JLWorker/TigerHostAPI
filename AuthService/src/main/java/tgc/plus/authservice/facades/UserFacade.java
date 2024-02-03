@@ -12,6 +12,8 @@ import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
+import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
+import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
@@ -38,7 +40,7 @@ public class UserFacade {
     TokenMetaService tokenMetaService;
 
     @Autowired
-    UserFacadeUtils userFacadeUtils;
+    FacadesUtils facadesUtils;
 
     @Autowired
     SpringSecurityConfig springSecurityConfig;
@@ -51,7 +53,7 @@ public class UserFacade {
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
         if (userData.getPassword().equals(userData.getPasswordConfirm()))
-            return userFacadeUtils.getUserByEmailReg(userData.getEmail())
+            return facadesUtils.getUserByEmailReg(userData.getEmail())
                     .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
                             .zipWith(tokenProvider.createRefToken(savedUser.getId()))
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
@@ -72,8 +74,8 @@ public class UserFacade {
     public Mono<TokensResponse> loginUser(UserLogin userLogin, String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
-        return userFacadeUtils.getUserByEmailLog(userData.getEmail())
-                .flatMap(user -> userFacadeUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
+        return facadesUtils.getUserByEmailLog(userData.getEmail())
+                .flatMap(user -> facadesUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
                         .then(tokenProvider.createAccessToken(user.getUserCode(), user.getRole())
                                     .zipWith(tokenProvider.createRefToken(user.getId()))
                                     .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
@@ -91,8 +93,7 @@ public class UserFacade {
     public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                 String userCode = securityContext.getAuthentication().getPrincipal().toString();
-                return userRepository.getUserByUserCode(userCode)
-                        .flatMap(user -> userFacadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, userChangeContacts.getVersion(), user));
+                return facadesUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, userChangeContacts.getVersion());
                 }).doOnError(e->log.error(e.getMessage()));
     }
 
@@ -100,14 +101,22 @@ public class UserFacade {
     public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
-            return userRepository.getUserByUserCode(userCode)
-                    .flatMap(user -> userFacadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, userChangeContacts.getVersion(), user));
+            return facadesUtils.updateEmail(userChangeContacts.getEmail(), userCode, userChangeContacts.getVersion());
         }).doOnError(e->log.error(e.getMessage()));
     }
 
 //    public Mono<UserInfoResponse> getInfoAboutAccount(){
 //
 //    }
+
+    @Transactional(transactionManager = "kafkaTransactionManager")
+    public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
+        return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
+                .flatMap(user -> facadesUtils.generateToken(user.getVersion(), user.getUserCode())
+                        .flatMap(token -> facadesUtils.createMessageForRestorePsw(token, user.getUserCode())
+                                .flatMap(message -> facadesUtils.sendMessageInCallService(message))))
+                .doOnError(e -> log.error(e.getMessage()));
+    }
 
 
 }

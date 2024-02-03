@@ -10,11 +10,11 @@
                 <form class="w-100 d-flex flex-column justify-content-around" style="height: 40%">
                   <div class="form-group align-items-center mb-4">
                     <label class = "label_text text-lg-center text-sm-center" for="password_new">Введите пароль</label>
-                    <input class = "form-control" type="email" id="password_new" style="background-color: lightgray; border-color: #e60109; border-width: 2px">
+                    <input class = "form-control" type="password" id="password_new" style="background-color: lightgray; border-color: #e60109; border-width: 2px">
                   </div>
                   <div class="form-group align-items-center mb-4">
                     <label class="label_text text-lg-center text-sm-center" for="password_confirm">Повторите пароль</label>
-                    <input class = "form-control" type="email" id="password_new" style="background-color: lightgray; border-color: #e60109; border-width: 2px">
+                    <input class = "form-control" type="password" id="password_new" style="background-color: lightgray; border-color: #e60109; border-width: 2px">
                   </div>
                   <div class="form-group align-items-center">
                     <button type="submit" class="button_forgot_login">Сохранить</button>

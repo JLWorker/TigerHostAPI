@@ -2,6 +2,7 @@ package tgc.plus.authservice.api.mobile;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -49,9 +50,9 @@ public class UserController {
 //        return userFacade.getInfoAboutAccount();
 //    }
 
-//    @PutMapping("/recovery")
-//    public Mono<Void> createRecoveryCode(@RequestParam("email") @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts){
-////        return userFacade.changeEmail(userChangeContacts);
-//    }
+    @PutMapping("/recovery")
+    public Mono<Void> createRecoveryCode(@RequestBody @Valid RestorePassword restorePassword){
+        return userFacade.generateRecoveryCode(restorePassword);
+    }
 
 }

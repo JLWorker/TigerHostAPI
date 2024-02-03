@@ -6,9 +6,11 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.reactive.config.EnableWebFlux;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@EnableWebFlux
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
