@@ -1,4 +1,4 @@
-package tgc.plus.callservice;
+package tgc.plus.callservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

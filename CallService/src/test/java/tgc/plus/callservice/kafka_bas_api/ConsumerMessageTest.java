@@ -1,4 +1,4 @@
-package tgc.plus.callservice;
+package tgc.plus.callservice.kafka_bas_api;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,6 +10,7 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tgc.plus.callservice.dto.MessageTest;
 import tgc.plus.callservice.dto.*;
 
 import java.util.*;

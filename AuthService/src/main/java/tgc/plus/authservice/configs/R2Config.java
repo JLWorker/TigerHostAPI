@@ -17,7 +17,6 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 
 @Configuration
 @EnableR2dbcRepositories
-@EnableTransactionManagement
 public class R2Config{
 
     @Value("${postgresql.username}")
@@ -47,7 +46,7 @@ public class R2Config{
                 .build());
     }
 
-    @Bean
+    @Bean("reactiveTransactionManager")
     public ReactiveTransactionManager reactiveTransactionManager(){
        return new R2dbcTransactionManager(connectionFactory());
     }

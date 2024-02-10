@@ -1,28 +1,28 @@
-package tgc.plus.authservice.facades;
+package tgc.plus.authservice.facades.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.InvalidRequestException;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.Headers;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.KafkaException;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Mono;
+import reactor.kafka.sender.SenderRecord;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.PasswordRecoveryData;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.UserChangeContactResponse;
 import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 
@@ -30,11 +30,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
-import java.util.function.Supplier;
 
 @Component
 @Slf4j
@@ -124,21 +120,33 @@ public class FacadesUtils {
         });
     }
 
+
+    public Mono<Void> sendMessageInKafka(KafkaMessage message, CommandsForMessage command){
+        return Mono.defer(()-> {
+            ProducerRecord<Long, KafkaMessage> producerRecord = new ProducerRecord<>(topic, message);
+            producerRecord.headers().add(new RecordHeader("method", CommandsForMessage.SAVE.getName().getBytes()));
+            Mono<SenderRecord<Long, KafkaMessage, String>> record = Mono.just(SenderRecord.create(producerRecord, UUID.randomUUID().toString()));
+            return kafkaProducerConfig.kafkaSender().send(record)
+                    .doOnNext(el -> log.info(String.format("Message was send %s", el.correlationMetadata())))
+                    .doOnError(e -> log.error(e.getMessage()))
+                    .then(Mono.empty());
+        });
+    }
+
     public Mono<KafkaMessage> createMessageForRestorePsw(String token, String userCode){
         return Mono.defer(()->{
-            PasswordRestoreData passwordRestoreData = new PasswordRestoreData(recoverUrl+token);
-            return Mono.just(new KafkaMessage(userCode, passwordRestoreData));
+            PasswordRecoveryData passwordRecoveryData = new PasswordRecoveryData(recoverUrl+token);
+            return Mono.just(new KafkaMessage(userCode, passwordRecoveryData));
         });
     }
 
-
-    public Mono<Void> sendMessageInCallService(KafkaMessage message){
-        return Mono.defer(() -> {
-            ProducerRecord<Long, KafkaMessage> record = new ProducerRecord<>(topic, message);
-            CompletableFuture<SendResult<Long, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
-            return Mono.fromFuture(future).then(Mono.empty());
+    public Mono<KafkaMessage> createMessageForSaveUser(String userCode, String password, String email){
+        return Mono.defer(()->{
+            SaveUserData saveUserData = new SaveUserData(email, password);
+            return Mono.just(new KafkaMessage(userCode, saveUserData));
         });
     }
+
 
     private <T> Mono<T> getVersionException(Long version){
         return Mono.error(new VersionException(version, "Version incorrect"));

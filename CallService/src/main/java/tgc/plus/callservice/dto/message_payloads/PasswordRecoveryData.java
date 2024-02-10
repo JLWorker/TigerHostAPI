@@ -1,7 +1,6 @@
 package tgc.plus.callservice.dto.message_payloads;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 //import jakarta.validation.constraints.NotBlank;
@@ -17,12 +16,12 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @JsonTypeName(value = "PasswordRecoveryData")
-public class PasswordRestoreData implements Payload {
+public class PasswordRecoveryData implements Payload {
 
     @JsonProperty
     String url;
 
-    public PasswordRestoreData(String url) {
+    public PasswordRecoveryData(String url) {
         this.url = url;
     }
 

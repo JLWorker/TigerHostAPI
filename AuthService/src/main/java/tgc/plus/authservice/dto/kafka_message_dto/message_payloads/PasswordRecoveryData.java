@@ -1,4 +1,4 @@
-package tgc.plus.authservice.dto.kafka_message_dto;
+package tgc.plus.authservice.dto.kafka_message_dto.message_payloads;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @JsonTypeName(value = "PasswordRecoveryData")
-public class PasswordRestoreData implements Payload {
+public class PasswordRecoveryData implements Payload {
 
     @JsonProperty
     String url;
 
-    public PasswordRestoreData(String url) {
+    public PasswordRecoveryData(String url) {
         this.url = url;
     }
 

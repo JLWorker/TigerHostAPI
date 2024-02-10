@@ -12,9 +12,9 @@ import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
-import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
 import tgc.plus.authservice.dto.user_dto.*;
+import tgc.plus.authservice.facades.utils.CommandsForMessage;
+import tgc.plus.authservice.facades.utils.FacadesUtils;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.configs.utils.TokenProvider;
@@ -57,13 +57,15 @@ public class UserFacade {
                     .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
                             .zipWith(tokenProvider.createRefToken(savedUser.getId()))
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
-                                    .flatMap(tokenMeta -> {
-                                        log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
-                                        return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
-                                                Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
-                                                        VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
-                                                        VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
-                                    }))));
+                                    .flatMap(tokenMeta -> facadesUtils.createMessageForSaveUser(savedUser.getUserCode(), userData.getPassword(), userData.getEmail())
+                                            .flatMap(message -> facadesUtils.sendMessageInKafka(message, CommandsForMessage.SAVE))
+                                                 .then(Mono.defer(() -> {
+                                                    log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
+                                                    return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                                            Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
+                                                                    VersionsTypes.TOKEN_VERSION.getName(), tokenMeta.getVersion(),
+                                                                    VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
+                    })))))).doOnError(e-> log.error(e.getMessage()));
         else
             return Mono.error(new InvalidRequestException("Passwords mismatch"));
         }).doOnError(e -> log.error(e.getMessage()));
@@ -114,7 +116,7 @@ public class UserFacade {
         return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
                 .flatMap(user -> facadesUtils.generateToken(user.getVersion(), user.getUserCode())
                         .flatMap(token -> facadesUtils.createMessageForRestorePsw(token, user.getUserCode())
-                                .flatMap(message -> facadesUtils.sendMessageInCallService(message))))
+                                .flatMap(message -> facadesUtils.sendMessageInKafka(message, CommandsForMessage.SEND_RECOVERY_CODE))))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 

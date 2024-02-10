@@ -1,11 +1,16 @@
 package tgc.plus.authservice.dto.kafka_message_dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
 
 @NoArgsConstructor
 @Getter
+@Component
 public class KafkaMessage {
 
     @JsonProperty("user_code")

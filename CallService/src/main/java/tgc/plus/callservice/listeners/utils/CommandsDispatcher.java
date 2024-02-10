@@ -39,13 +39,11 @@ public class CommandsDispatcher {
     }
 
     public Mono<Void> execute(String method, MessageElement messageElement){
-        return Mono.defer(()-> {
             if (method.startsWith("send")) {
                 return commandMap.get("send_em").executionForSender(method, messageElement);
             } else if (commandMap.containsKey(method)) {
                 return commandMap.get(method).execution(messageElement);
             } else
                 return Mono.error(new CommandNotFound(String.format("Command with name - %s not found ::CommandsDispatcher", method)));
-        }).doOnError(error -> log.error(error.getMessage()));
-    }
+        }
 }

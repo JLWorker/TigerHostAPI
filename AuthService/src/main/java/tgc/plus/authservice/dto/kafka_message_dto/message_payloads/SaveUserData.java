@@ -1,4 +1,4 @@
-package tgc.plus.callservice.dto;
+package tgc.plus.authservice.dto.kafka_message_dto.message_payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @JsonTypeName(value = "SaveUserData")
-public class SaveUserDataTest implements PayloadTest {
+public class SaveUserData implements Payload {
 
     @JsonProperty
     private String email;
@@ -16,7 +16,7 @@ public class SaveUserDataTest implements PayloadTest {
     @JsonProperty
     private String password;
 
-    public SaveUserDataTest(String email, String password) {
+    public SaveUserData(String email, String password) {
         this.email = email;
         this.password = password;
     }
