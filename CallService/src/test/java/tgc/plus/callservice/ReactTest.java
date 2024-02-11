@@ -1,4 +1,4 @@
-package tgc.plus.callservice.reactive_test;
+package tgc.plus.callservice;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -38,16 +38,18 @@ public class ReactTest {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         props.put(ProducerConfig.ACKS_CONFIG, "all");
-        props.put(ProducerConfig.RETRIES_CONFIG, 3);
-        props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 10000);
-        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 4);
+        props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
+//        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 128);
+//        props.put(ProducerConfig.RETRIES_CONFIG, 3);
+//        props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 10000);
+//        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 4);
         kafkaSender = KafkaSender.create(SenderOptions.create(props));
     }
 
     @Test
     public void sendTestMessage(){
 
-        Flux<SenderRecord<Long, MessageTest, Integer>> flux = Flux.range(1, 1000)
+        Flux<SenderRecord<Long, MessageTest, Integer>> flux = Flux.range(1, 50000)
                 .flatMap(el -> {
                     String userCode = UUID.randomUUID().toString();
                     MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(String.format("%s@bk.ru", new Random().nextInt()), "sadasASD"));

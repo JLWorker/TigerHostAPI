@@ -1,4 +1,4 @@
-package tgc.plus.callservice.kafka_bas_api;
+package tgc.plus.callservice;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;

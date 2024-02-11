@@ -34,7 +34,7 @@ public class SaveUser implements Command {
                 .defaultIfEmpty(false)
                 .flatMap(result -> {
                     if (result) {
-                        return Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode())));
+                        return Mono.empty();
                     } else
                        return userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                 .flatMap(userBd -> {
@@ -45,6 +45,7 @@ public class SaveUser implements Command {
                                 });
                     });
 //        .doOnError(error -> log.error(error.getMessage()))
+//        Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode())));
     }
 
     @Override

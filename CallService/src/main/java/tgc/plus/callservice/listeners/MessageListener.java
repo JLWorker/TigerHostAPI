@@ -1,6 +1,7 @@
 package tgc.plus.callservice.listeners;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +14,10 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.kafka.receiver.KafkaReceiver;
+import reactor.kafka.receiver.ReceiverOffset;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.kafka.receiver.ReceiverRecord;
+import reactor.util.retry.Retry;
 import tgc.plus.callservice.configs.KafkaConsumerConfig;
 import org.springframework.stereotype.Component;
 import tgc.plus.callservice.dto.MessageElement;
@@ -58,8 +61,6 @@ public class MessageListener {
     public Disposable kafkaConsumerStarter() {
         ReceiverOptions<Long, MessageElement> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .subscription(Collections.singleton(topic))
-//                .withKeyDeserializer(new LongDeserializer())
-//                .withValueDeserializer(new MessageDeserializer())
                 .addAssignListener(receiverPartitions -> log.info("Partitions assign {}", receiverPartitions))
                 .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener))
                 .commitInterval(Duration.ZERO)
@@ -68,23 +69,33 @@ public class MessageListener {
 //                .pauseAllAfterRebalance(true);
 
         KafkaReceiver<Long, MessageElement> kafkaReceiver = KafkaReceiver.create(receiverOptions);
-        Scheduler scheduler = Schedulers.newBoundedElastic(10, 100000, "writerThreads");
+        Scheduler customScheduler = Schedulers.newBoundedElastic(threadCap, queueCap, "writerThreads");
 
-//        Flux<GroupedFlux<TopicPartition, ReceiverRecord<Long, MessageElement>>> partitions =  Flux.defer(kafkaReceiver::receive)
-//                .groupBy(elems -> elems.receiverOffset().topicPartition());
 
         return kafkaReceiver.receive()
-                .flatMapSequential(msg ->
-                commandsDispatcher.execute(msg).then(msg.receiverOffset().commit())).subscribe();
-//                .flatMap(partition -> )
-//                .subscribe(msg ->{
-//                    commandsDispatcher.execute(msg).subscribe();
-//                    log.info("Elem commit - {}", new String(msg.headers().lastHeader("id").value()));
-//                    msg.receiverOffset().acknowledge();
-////                    count.set(count.get() + 1);
-////                    log.info("Res - " + count);
-//                });
-//                                        .thenReturn(msg.offset())
+                .groupBy(ConsumerRecord::partition)
+                .flatMap(partition -> partition
+                        .flatMapSequential(msg -> commandsDispatcher.execute(msg).then(msg.receiverOffset().commit())))
+//                                .sample(Duration.ofMillis(3000))
+//                                .flatMapSequential(ReceiverOffset::commit))
+                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
+                .doOnError(err -> {
+                    log.error(err.getMessage());
+                }).retry()
+                .subscribe();
+
+
+//        return Flux.defer(kafkaReceiver::receive)
+//                .groupBy(el -> el.receiverOffset().topicPartition())
+//                .flatMap(partition -> partition.publishOn(customScheduler)
+//                                .concatMap(msg ->
+////                                    log.info("Processing {}", msg.receiverOffset().offset());
+//                                     commandsDispatcher.execute(msg).map(ReceiverOffset::commit)))
+//                .doOnError(e -> log.info(e.getMessage()))
+//                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
+//                .repeat()
+//                .subscribe();
+
 
 //        Scheduler scheduler = Schedulers.newBoundedElastic(60, 60, "writerThreads");
 //
