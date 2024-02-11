@@ -1,23 +1,20 @@
 package tgc.plus.callservice.listeners;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.common.requests.OffsetCommitResponse;
-import org.apache.kafka.common.serialization.LongDeserializer;
+import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.GroupedFlux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.kafka.receiver.KafkaReceiver;
-import reactor.kafka.receiver.ReceiverOffset;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.kafka.receiver.ReceiverRecord;
-import reactor.util.retry.Retry;
-import tgc.plus.callservice.configs.MessageDeserializer;
 import tgc.plus.callservice.configs.KafkaConsumerConfig;
 import org.springframework.stereotype.Component;
 import tgc.plus.callservice.dto.MessageElement;
@@ -25,7 +22,9 @@ import tgc.plus.callservice.listeners.utils.CommandsDispatcher;
 
 import java.time.Duration;
 import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+
 @Component
 @Slf4j
 public class MessageListener {
@@ -46,8 +45,8 @@ public class MessageListener {
     @Value("${scheduler.settings.queue_cap}")
     Integer queueCap;
 
-    @Value("${consumer.setting.commit_time}")
-    Integer commitTime;
+//    @Value("${consumer.setting.commit_time}")
+//    Integer commitTime;
 
     @Autowired
     CommandsDispatcher commandsDispatcher;
@@ -55,32 +54,77 @@ public class MessageListener {
     @Autowired
     KafkaConsumerConfig kafkaConsumerConfig;
 
-        @EventListener(value = ApplicationStartedEvent.class)
-        public Flux<?> kafkaConsumerStarter() {
+    @EventListener(value = ApplicationStartedEvent.class)
+    public Disposable kafkaConsumerStarter() {
         ReceiverOptions<Long, MessageElement> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .subscription(Collections.singleton(topic))
-                .withKeyDeserializer(new LongDeserializer())
-                .withValueDeserializer(new MessageDeserializer())
+//                .withKeyDeserializer(new LongDeserializer())
+//                .withValueDeserializer(new MessageDeserializer())
                 .addAssignListener(receiverPartitions -> log.info("Partitions assign {}", receiverPartitions))
-                .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener ))
-                .commitInterval(Duration.ZERO);
-//                .commitBatchSize(20);
+                .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener))
+                .commitInterval(Duration.ZERO)
+                .commitBatchSize(0);
+//                .commit;
 //                .pauseAllAfterRebalance(true);
-        Scheduler customScheduler = Schedulers.newBoundedElastic(threadCap, queueCap, "send_service_scheduler", 20, true);
+
         KafkaReceiver<Long, MessageElement> kafkaReceiver = KafkaReceiver.create(receiverOptions);
+        Scheduler scheduler = Schedulers.newBoundedElastic(10, 100000, "writerThreads");
+
+        Flux<GroupedFlux<TopicPartition, ReceiverRecord<Long, MessageElement>>> partitions =  Flux.defer(kafkaReceiver::receive)
+                .groupBy(elems -> elems.receiverOffset().topicPartition());
+
+        return partitions.publishOn(scheduler).flatMap(part -> part.publishOn(scheduler).concatMap(msg ->
+                commandsDispatcher.execute(msg).then(msg.receiverOffset().commit()))).subscribe();
+//                .flatMap(partition -> )
+//                .subscribe(msg ->{
+//                    commandsDispatcher.execute(msg).subscribe();
+//                    log.info("Elem commit - {}", new String(msg.headers().lastHeader("id").value()));
+//                    msg.receiverOffset().acknowledge();
+////                    count.set(count.get() + 1);
+////                    log.info("Res - " + count);
+//                });
+//                                        .thenReturn(msg.offset())
+
+//        Scheduler scheduler = Schedulers.newBoundedElastic(60, 60, "writerThreads");
+//
+//         return receiver.receive()
+//                .groupBy(m -> m.receiverOffset().topicPartition())
+//                .flatMap(partitionFlux ->
+//                        partitionFlux.publishOn(scheduler)
+//                                .map(msg -> commandsDispatcher.execute(msg)
+//                                        .thenReturn(msg.offset()))).subscribe();
+//
 
 
-        return Flux.defer(kafkaReceiver::receive)
-                 .groupBy(el -> el.receiverOffset().topicPartition())
-                .flatMap(partition -> partition.publishOn(customScheduler).
-                        concatMap(msg -> commandsDispatcher.execute(new String(msg.headers().lastHeader("method").value()), msg.value())
-                                    .thenReturn(msg.receiverOffset())
-                        )
-                        .sample(Duration.ofMillis(commitTime))
-                        .concatMap(ReceiverOffset::commit))
-                        .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
-                        .retry();
+//                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
+//                .doOnError(e -> log.info(e.getMessage()))
+//                .retry();
 
+
+//        return KafkaReceiver.create(receiverOptions)
+//                .receive()
+//                .groupBy(el -> el.receiverOffset().topicPartition())
+//                .flatMap(partition -> partition.publishOn(customScheduler)
+//                                .flatMapSequential(msg -> {
+//                                    log.info("Processing {}", msg.receiverOffset().offset());
+//                                    return commandsDispatcher.execute(msg).map(ReceiverOffset::commit);
+//                                }))
+//                .doOnError(e -> log.info(e.getMessage()));
+
+
+//                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)));
+//                .doOnError(e -> log.error(e.getMessage()))
+//                .retry();
+//                                .sample(Duration.ofMillis(commitTime))
+//                                .concatMap(commit -> commit.map(el -> {
+//                                    log.info("Elem commit - " + el.offset());
+//                                    return el.commit();
+//                                })))
+
+//                        .doOnError(e -> log.error(e.getMessage()));
+
+    }
+}
 
 //                        .concatMap(el -> {
 //                            log.info(el.topicPartition().partition() + " : " + el.offset());
@@ -98,10 +142,7 @@ public class MessageListener {
 //                            return el.commit();
 //                        }));
 //                 .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
-//           .repeat();
-    }
-
-}
+//           .repeat()
 
 
 

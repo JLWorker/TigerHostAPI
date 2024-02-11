@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
+import reactor.kafka.receiver.ReceiverOffset;
+import reactor.kafka.receiver.ReceiverRecord;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
@@ -38,11 +40,13 @@ public class CommandsDispatcher {
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public Mono<Void> execute(String method, MessageElement messageElement){
+    public Mono<ReceiverOffset> execute(ReceiverRecord<Long, MessageElement> record){
+            String method = new String(record.headers().lastHeader("method").value());
             if (method.startsWith("send")) {
-                return commandMap.get("send_em").executionForSender(method, messageElement);
+                 return commandMap.get("send_em").executionForSender(method, record.value())
+                         .thenReturn(record.receiverOffset());
             } else if (commandMap.containsKey(method)) {
-                return commandMap.get(method).execution(messageElement);
+                return commandMap.get(method).execution(record.value()).thenReturn(record.receiverOffset());
             } else
                 return Mono.error(new CommandNotFound(String.format("Command with name - %s not found ::CommandsDispatcher", method)));
         }

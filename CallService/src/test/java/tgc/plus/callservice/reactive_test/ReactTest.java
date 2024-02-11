@@ -47,12 +47,13 @@ public class ReactTest {
     @Test
     public void sendTestMessage(){
 
-        Flux<SenderRecord<Long, MessageTest, Integer>> flux = Flux.range(0, 3000)
+        Flux<SenderRecord<Long, MessageTest, Integer>> flux = Flux.range(1, 1000)
                 .flatMap(el -> {
                     String userCode = UUID.randomUUID().toString();
                     MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(String.format("%s@bk.ru", new Random().nextInt()), "sadasASD"));
-                    ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callService", baseMessageTest);
+                    ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
                     record.headers().add("method", "save".getBytes());
+                    record.headers().add("id", new byte[]{el.byteValue()});
                     return Mono.just(SenderRecord.create(record, el));
                 });
 
@@ -60,6 +61,13 @@ public class ReactTest {
                 sendElem.recordMetadata().partition(), sendElem.recordMetadata().offset(), sendElem.correlationMetadata().toString())))
                 .doOnError(e -> logger.warning(e.getMessage()))
                .subscribe();
+
+//        String userCode = UUID.randomUUID().toString();
+//        MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(String.format("%s@bk.ru", new Random().nextInt()), "sadasASD"));
+//                    ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callService", baseMessageTest);
+//                    record.headers().add("method", "save".getBytes());
+//
+//        sendOne(baseMessageTest).subscribe();
 
     }
 
