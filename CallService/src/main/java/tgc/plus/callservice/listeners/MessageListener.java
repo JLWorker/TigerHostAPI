@@ -70,11 +70,12 @@ public class MessageListener {
         KafkaReceiver<Long, MessageElement> kafkaReceiver = KafkaReceiver.create(receiverOptions);
         Scheduler scheduler = Schedulers.newBoundedElastic(10, 100000, "writerThreads");
 
-        Flux<GroupedFlux<TopicPartition, ReceiverRecord<Long, MessageElement>>> partitions =  Flux.defer(kafkaReceiver::receive)
-                .groupBy(elems -> elems.receiverOffset().topicPartition());
+//        Flux<GroupedFlux<TopicPartition, ReceiverRecord<Long, MessageElement>>> partitions =  Flux.defer(kafkaReceiver::receive)
+//                .groupBy(elems -> elems.receiverOffset().topicPartition());
 
-        return partitions.publishOn(scheduler).flatMap(part -> part.publishOn(scheduler).concatMap(msg ->
-                commandsDispatcher.execute(msg).then(msg.receiverOffset().commit()))).subscribe();
+        return kafkaReceiver.receive()
+                .flatMapSequential(msg ->
+                commandsDispatcher.execute(msg).then(msg.receiverOffset().commit())).subscribe();
 //                .flatMap(partition -> )
 //                .subscribe(msg ->{
 //                    commandsDispatcher.execute(msg).subscribe();
