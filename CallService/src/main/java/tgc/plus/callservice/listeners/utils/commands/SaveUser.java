@@ -2,6 +2,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import tgc.plus.callservice.dto.MessageElement;
@@ -38,9 +39,10 @@ public class SaveUser implements Command {
                        return userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                 .flatMap(userBd -> {
                                     log.info(String.format("User with code - %s was save", userBd.getUserCode()));
-                                    return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
+                                    return Mono.empty();
+//                                    return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
                                 });
-                    }).doOnError(error -> log.error(error.getMessage()));
+                    }).doOnError(error -> log.error(error.getMessage())).then();
     }
 
     @Override

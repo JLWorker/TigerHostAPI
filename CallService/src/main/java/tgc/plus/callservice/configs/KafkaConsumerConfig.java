@@ -44,22 +44,22 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 @Slf4j
-public class KafkaConsumerConfig implements KafkaListenerConfigurer{
+public class KafkaConsumerConfig{
 
     @Value("${spring.kafka.bootstrap-servers}")
     String server;
 
-    @Value("${spring.kafka.consumer.group-id}")
-    String group;
+//    @Value("${spring.kafka.consumer.group-id}")
+//    String group;
 
-    @Value("spring.kafka.listener.concurrency")
+    @Value("${spring.kafka.listener.concurrency}")
     String concurrency;
 
     @Bean
     public ConsumerFactory<Long, String> consumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, group);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "call_service");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
@@ -80,14 +80,14 @@ public class KafkaConsumerConfig implements KafkaListenerConfigurer{
         return factory;
     }
 
-
-    @Autowired
-    private LocalValidatorFactoryBean validator;
-
-    @Override
-    public void configureKafkaListeners(KafkaListenerEndpointRegistrar registrar) {
-        registrar.setValidator(this.validator);
-    }
+//
+//    @Autowired
+//    private LocalValidatorFactoryBean validator;
+//
+//    @Override
+//    public void configureKafkaListeners(KafkaListenerEndpointRegistrar registrar) {
+//        registrar.setValidator(this.validator);
+//    }
 
     @Bean
     public KafkaListenerErrorHandler handlerError(){

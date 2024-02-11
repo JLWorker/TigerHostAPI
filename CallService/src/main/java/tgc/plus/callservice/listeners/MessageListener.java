@@ -20,7 +20,6 @@ public class MessageListener {
     @Autowired
     CommandsDispatcher commandsDispatcher;
 
-    @SendToUser
     @KafkaListener(topics = "${spring.kafka.topic}", containerFactory = "concurrentFactory", errorHandler = "handlerError")
     public void listen(@Payload @Valid MessageElement message, @Header(name = "method") String header){
         commandsDispatcher.execute(header, message).subscribe();

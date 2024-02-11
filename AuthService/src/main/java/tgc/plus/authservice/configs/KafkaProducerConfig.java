@@ -35,7 +35,7 @@ public class KafkaProducerConfig {
     public ProducerFactory<Long, KafkaMessage> factory(){
         DefaultKafkaProducerFactory<Long, KafkaMessage> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
         defaultKafkaProducerFactory.setProducerPerThread(true);
-        defaultKafkaProducerFactory.setTransactionIdPrefix("tx-"+Thread.currentThread().getId());
+//        defaultKafkaProducerFactory.setTransactionIdPrefix("tx-"+Thread.currentThread().getId());
         return defaultKafkaProducerFactory;
     }
 
