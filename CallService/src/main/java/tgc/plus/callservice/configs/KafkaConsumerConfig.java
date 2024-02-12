@@ -17,14 +17,13 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistrar;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.CommonErrorHandler;
-import org.springframework.kafka.listener.KafkaListenerErrorHandler;
-import org.springframework.kafka.listener.ListenerExecutionFailedException;
-import org.springframework.kafka.listener.MessageListenerContainer;
+import org.springframework.kafka.listener.*;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.DefaultKafkaHeaderMapper;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.HandlerMethod;
@@ -44,7 +43,7 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 @Slf4j
-public class KafkaConsumerConfig{
+public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     String server;
@@ -56,7 +55,7 @@ public class KafkaConsumerConfig{
     String concurrency;
 
     @Bean
-    public ConsumerFactory<Long, String> consumerFactory(){
+    public ConsumerFactory<Long, MessageElement> consumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "call_service");
@@ -70,12 +69,13 @@ public class KafkaConsumerConfig{
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<Long, String> concurrentFactory() {
-        ConcurrentKafkaListenerContainerFactory<Long, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<Long, MessageElement> concurrentFactory() {
+        ConcurrentKafkaListenerContainerFactory<Long, MessageElement> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(Integer.getInteger(concurrency));
         factory.setBatchListener(false);
         factory.setRecordMessageConverter(new JsonMessageConverter());
+//        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
 //        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
         return factory;
     }
@@ -96,4 +96,5 @@ public class KafkaConsumerConfig{
             return null;
         };
     }
+
 }

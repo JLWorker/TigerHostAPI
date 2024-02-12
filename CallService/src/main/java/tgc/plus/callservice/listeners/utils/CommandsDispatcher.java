@@ -3,9 +3,12 @@ package tgc.plus.callservice.listeners.utils;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
+import tgc.plus.callservice.configs.KafkaConsumerConfig;
+import tgc.plus.callservice.configs.R2Config;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
@@ -30,15 +33,19 @@ public class CommandsDispatcher {
     @Autowired
     EmailSender emailSender;
 
+    @Autowired
+    R2Config r2Config;
+
     @PostConstruct
     void init(){
-        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender));
+        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender, r2Config.transactionalOperator()));
         commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository));
         commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
     public Mono<Void> execute(String method, MessageElement messageElement){
+
         return Mono.defer(()-> {
             if (method.startsWith("send")) {
                 return commandMap.get("send_em").executionForSender(method, messageElement);
