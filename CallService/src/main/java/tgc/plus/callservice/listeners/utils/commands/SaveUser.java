@@ -33,28 +33,23 @@ public class SaveUser implements Command {
     final UserRepository userRepository;
     final EmailSender emailSender;
 
-    final TransactionalOperator transactionalOperator;
-
-    public SaveUser(UserRepository userRepository, EmailSender emailSender, TransactionalOperator transactionalOperator) {
+    public SaveUser(UserRepository userRepository, EmailSender emailSender) {
         this.userRepository = userRepository;
         this.emailSender = emailSender;
-        this.transactionalOperator = transactionalOperator;
     }
 
     @Override
+    @Transactional
     public Mono<Void> execution(MessageElement messageElement) {
-
       return userRepository.getUserByUserCode(messageElement.getUserCode())
                .defaultIfEmpty(new User())
                .filter(user -> user.getId()==null)
                .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
-               .flatMap(user -> userRepository.saveUser(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
+               .flatMap(user -> userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                     .map(userBd -> {
                                         log.info(String.format("User with code - %s was save", userBd.getUserCode()));
-                                        return Mono.empty();
-                //                                    return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
+                                        return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
                                     }))
-              .as(transactionalOperator::transactional)
               .doOnError(error -> log.error(error.getMessage())).then();
     }
 
@@ -64,29 +59,3 @@ public class SaveUser implements Command {
     }
 
 }
-
-
-// userRepository.getUserByUserCode(messageElement.getUserCode())
-//        .defaultIfEmpty(new User())
-//        .filter(user -> user.getId()!=null)
-//        .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
-//        .flatMap(user -> {
-//        log.info(String.format("User with code - %s was save", user.getUserCode()));
-//        return userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
-//        .then(Mono.empty());
-//        }),
-
-
-//.map(Objects::nonNull)
-// .defaultIfEmpty(false)
-//                .flatMap(result -> {
-//        if (result)
-//            return Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode())));
-//        else
-//            return userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
-//                    .map(userBd -> {
-//                        log.info(String.format("User with code - %s was save", userBd.getUserCode()));
-//                        return Mono.empty();
-////                                    return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
-//                    });
-//    }).doOnError(error -> log.error(error.getMessage())).then();

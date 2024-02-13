@@ -24,7 +24,6 @@ public class KafkaProducerConfig {
     public Map<String, Object> producerConfigs(){
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "31.200.225.93:9199");
-        props.put(ProducerConfig.CLIENT_ID_CONFIG, "testProducer");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
@@ -35,7 +34,6 @@ public class KafkaProducerConfig {
     public ProducerFactory<Long, KafkaMessage> factory(){
         DefaultKafkaProducerFactory<Long, KafkaMessage> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
         defaultKafkaProducerFactory.setProducerPerThread(true);
-//        defaultKafkaProducerFactory.setTransactionIdPrefix("tx-"+Thread.currentThread().getId());
         return defaultKafkaProducerFactory;
     }
 

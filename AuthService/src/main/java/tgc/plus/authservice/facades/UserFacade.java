@@ -109,7 +109,7 @@ public class UserFacade {
 //
 //    }
 
-//    @Transactional(transactionManager = "kafkaTransactionManager")
+    @Transactional
     public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
         return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
                 .flatMap(user -> facadesUtils.generateToken(user.getVersion(), user.getUserCode())

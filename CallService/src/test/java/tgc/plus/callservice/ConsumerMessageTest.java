@@ -30,8 +30,6 @@ public class ConsumerMessageTest {
         props.put(ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
-//        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 10240);
-//        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         DefaultKafkaProducerFactory<Long, MessageTest> producerFactory = new DefaultKafkaProducerFactory<>(props);
@@ -47,7 +45,7 @@ public class ConsumerMessageTest {
 //            boolean result = kafkaTemplate.send("call_service",
 //                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
 //            Assert.isTrue(!result, "failed!");
-        Flux<Void> res = Flux.range(1, 30000).flatMap(el->{
+        Flux<Void> res = Flux.range(1, 15000).flatMap(el->{
                 String userCode = UUID.randomUUID().toString();
                 MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(String.format("%s@bk.ru", new Random().nextInt()), "sadasASD463"));
                 ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);

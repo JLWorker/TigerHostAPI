@@ -31,6 +31,9 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 import org.springframework.messaging.handler.invocation.InvocableHandlerMethod;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.util.ErrorHandler;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -48,8 +51,8 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     String server;
 
-//    @Value("${spring.kafka.consumer.group-id}")
-//    String group;
+    @Value("${spring.kafka.consumer.group-id}")
+    String group;
 
     @Value("${spring.kafka.listener.concurrency}")
     String concurrency;
@@ -58,13 +61,12 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<Long, MessageElement> consumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "call-service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, group);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -73,21 +75,15 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<Long, MessageElement> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(Integer.getInteger(concurrency));
-        factory.setBatchListener(false);
         factory.setRecordMessageConverter(new JsonMessageConverter());
-//        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
-//        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
-//
-//    @Autowired
-//    private LocalValidatorFactoryBean validator;
-//
-//    @Override
-//    public void configureKafkaListeners(KafkaListenerEndpointRegistrar registrar) {
-//        registrar.setValidator(this.validator);
-//    }
+    @Bean
+    public JsonMessageConverter converter() {
+        return new JsonMessageConverter();
+    }
 
     @Bean
     public KafkaListenerErrorHandler handlerError(){
