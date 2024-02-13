@@ -46,6 +46,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.2.1'
+    implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.6.2'
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.6.1'
+    implementation group: 'io.projectreactor.addons', name: 'reactor-extra', version: '3.5.1'
+//    implementation group: 'io.projectreactor.addons', name: 'reactor-pool', version: '1.0.5'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'

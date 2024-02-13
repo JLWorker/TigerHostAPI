@@ -72,17 +72,36 @@ public class MessageListener {
         Scheduler customScheduler = Schedulers.newBoundedElastic(threadCap, queueCap, "writerThreads");
 
 
-        return kafkaReceiver.receive()
-                .groupBy(ConsumerRecord::partition)
-                .flatMap(partition -> partition
-                        .flatMapSequential(msg -> commandsDispatcher.execute(msg).then(msg.receiverOffset().commit())))
+                return Flux.defer(kafkaReceiver::receive)
+                .groupBy(partition -> partition.receiverOffset().topicPartition())
+                .flatMap(elem -> elem.publishOn(customScheduler)
+                        .flatMapSequential(msg -> commandsDispatcher.execute(msg)
+                                .thenEmpty(msg.receiverOffset().commit())))
+//                        .sample(Duration.ofMillis(3000))
+//                        .concatMap(ReceiverOffset::commit))
 //                                .sample(Duration.ofMillis(3000))
 //                                .flatMapSequential(ReceiverOffset::commit))
-                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
-                .doOnError(err -> {
-                    log.error(err.getMessage());
-                }).retry()
+//                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
+//                .doOnError(err -> {
+//                    log.error(err.getMessage());
+//                }).retry()
                 .subscribe();
+
+
+//        return Flux.defer(kafkaReceiver::receive)
+//                .groupBy(partition -> partition.receiverOffset().topicPartition())
+//                .flatMap(elem -> elem.publishOn(customScheduler)
+//                        .flatMapSequential(msg -> commandsDispatcher.execute(msg)
+//                                .thenEmpty(msg.receiverOffset().commit())))
+////                        .sample(Duration.ofMillis(3000))
+////                        .concatMap(ReceiverOffset::commit))
+////                                .sample(Duration.ofMillis(3000))
+////                                .flatMapSequential(ReceiverOffset::commit))
+////                .retryWhen(Retry.backoff(retries, Duration.ofMillis(retriesBackoff)))
+////                .doOnError(err -> {
+////                    log.error(err.getMessage());
+////                }).retry()
+//                .subscribe();
 
 
 //        return Flux.defer(kafkaReceiver::receive)

@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.ReceiverOffset;
 import reactor.kafka.receiver.ReceiverRecord;
+import tgc.plus.callservice.configs.R2Config;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
@@ -31,6 +32,10 @@ public class CommandsDispatcher {
 
     @Autowired
     EmailSender emailSender;
+
+    @Autowired
+    R2Config r2Config;
+
 
     @PostConstruct
     void init(){
