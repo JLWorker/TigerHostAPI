@@ -22,6 +22,7 @@ import tgc.plus.callservice.repositories.UserRepository;
 //import tgc.plus.callservice.services.CustomValidator;
 import tgc.plus.callservice.services.EmailSender;
 
+import java.time.Duration;
 import java.util.Objects;
 
 
@@ -47,7 +48,7 @@ public class SaveUser implements Command {
                .defaultIfEmpty(new User())
                .filter(user -> user.getId()==null)
                .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
-               .flatMap(user -> userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
+               .flatMap(user -> userRepository.saveUser(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                                     .map(userBd -> {
                                         log.info(String.format("User with code - %s was save", userBd.getUserCode()));
                                         return Mono.empty();

@@ -58,7 +58,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<Long, MessageElement> consumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "call_service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "call-service");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);

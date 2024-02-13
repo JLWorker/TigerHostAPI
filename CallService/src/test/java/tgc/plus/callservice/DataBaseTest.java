@@ -38,13 +38,13 @@ public class DataBaseTest {
     @Test
     public void sendPosts(){
 
-        Scheduler scheduler = Schedulers.newBoundedElastic(3, 100000, "Test");
+        Scheduler scheduler = Schedulers.newBoundedElastic(8, 100000, "Test");
 
         Flux<User> flux = Flux.range(1, 10000)
                 .publishOn(scheduler).flatMap(el -> {
                     String uuid = UUID.randomUUID().toString();
                     System.out.println("Was save - " + uuid);
-                    return userRepository.save(new User(UUID.randomUUID().toString(), "45637289@bk.ru"));
+                    return userRepository.saveUser(new User(UUID.randomUUID().toString(), "45637289@bk.ru"));
                 });
 
         flux.subscribe();

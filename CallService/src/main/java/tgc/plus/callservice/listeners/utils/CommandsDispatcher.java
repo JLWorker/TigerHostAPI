@@ -11,8 +11,8 @@ import tgc.plus.callservice.configs.KafkaConsumerConfig;
 import tgc.plus.callservice.configs.R2Config;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.exceptions.CommandNotFound;
-import tgc.plus.callservice.listeners.utils.commands.EditEmail;
-import tgc.plus.callservice.listeners.utils.commands.EditPhone;
+//import tgc.plus.callservice.listeners.utils.commands.EditEmail;
+//import tgc.plus.callservice.listeners.utils.commands.EditPhone;
 import tgc.plus.callservice.listeners.utils.commands.SaveUser;
 import tgc.plus.callservice.listeners.utils.commands.SendMail;
 import tgc.plus.callservice.repositories.UserRepository;
@@ -28,9 +28,6 @@ public class CommandsDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     EmailSender emailSender;
 
     @Autowired
@@ -38,10 +35,10 @@ public class CommandsDispatcher {
 
     @PostConstruct
     void init(){
-        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender, r2Config.transactionalOperator()));
-        commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository));
-        commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
-        commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
+        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(new UserRepository(r2Config.r2dbcEntityTemplate()), emailSender, r2Config.transactionalOperator()));
+//        commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository));
+//        commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
+        commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, new UserRepository(r2Config.r2dbcEntityTemplate())));
     }
 
     public Mono<Void> execute(String method, MessageElement messageElement){
