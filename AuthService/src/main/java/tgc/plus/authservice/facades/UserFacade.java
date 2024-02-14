@@ -45,11 +45,8 @@ public class UserFacade {
     @Autowired
     SpringSecurityConfig springSecurityConfig;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Transactional
     public Mono<TokensResponse> registerUser(UserRegistration userRegistration, String ipAddr) {
-        return Mono.defer(()->{
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
         if (userData.getPassword().equals(userData.getPasswordConfirm()))
@@ -57,16 +54,18 @@ public class UserFacade {
                     .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
                             .zipWith(tokenProvider.createRefToken(savedUser.getId()))
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
-                                    .flatMap(tokenMeta -> {
-                                        log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
-                                        return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
-                                                Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
-                                                        VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
-                                                        VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
-                                    }))));
+                                    .flatMap(tokenMeta -> facadesUtils.createMessageForSaveUser(savedUser.getUserCode(), savedUser.getEmail(), userData.getPassword())
+                                                        .flatMap(msg -> facadesUtils.sendMessageInCallService(msg, CommandsName.SAVE.getName()))
+                                                            .then(Mono.defer(() -> {
+                                                                    log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
+                                                                    return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
+                                                                            Map.of(VersionsTypes.USER_VERSION.getName(), savedUser.getVersion(),
+                                                                                    VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
+                                                                                    VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
+                                                            }))
+                                    )))).doOnError(e -> log.error(e.getMessage()));
         else
             return Mono.error(new InvalidRequestException("Passwords mismatch"));
-        }).doOnError(e -> log.error(e.getMessage()));
     }
 
 
@@ -114,7 +113,7 @@ public class UserFacade {
         return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
                 .flatMap(user -> facadesUtils.generateToken(user.getVersion(), user.getUserCode())
                         .flatMap(token -> facadesUtils.createMessageForRestorePsw(token, user.getUserCode())
-                                .flatMap(message -> facadesUtils.sendMessageInCallService(message))))
+                                .flatMap(message -> facadesUtils.sendMessageInCallService(message, CommandsName.SEND_RECOVERY_CODE.getName()))))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 

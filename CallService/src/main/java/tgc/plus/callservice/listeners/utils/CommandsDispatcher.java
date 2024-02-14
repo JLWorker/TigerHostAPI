@@ -41,7 +41,7 @@ public class CommandsDispatcher {
     @PostConstruct
     void init(){
         commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender));
-        commandMap.put(CommandsName.EDIT_PHONE.getName(), new EditPhone(userRepository));
+        commandMap.put(CommandsName.UPDATE_PHONE.getName(), new EditPhone(userRepository));
         commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
         commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }

@@ -1,12 +1,16 @@
-package tgc.plus.callservice.listeners.utils;
+package tgc.plus.authservice.facades;
 
+import lombok.Getter;
+
+@Getter
 public enum CommandsName {
-    //Command Pattern
+
     SAVE("save"),
     UPDATE_PHONE("update_ph"),
     UPDATE_EMAIL("update_em"),
-    SEND_EMAIL("send_em"),
-    SEND_PHONE("send_ph");
+    SEND_RECOVERY_CODE("send_rest"),
+    SEND_2AUTH_CODE("send_2th_code");
+
 
     private final String name;
 
@@ -14,7 +18,4 @@ public enum CommandsName {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

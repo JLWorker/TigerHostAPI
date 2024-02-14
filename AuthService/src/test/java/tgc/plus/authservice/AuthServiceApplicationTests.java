@@ -31,8 +31,8 @@ class AuthServiceApplicationTests {
     }
     private Mono<ChangeResponse> sendRequest(){
         return webClient.put()
-                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiJlNjMwMmY1NC02MGJmLTQ3YWYtOGNlMi0xZTJjOTgxOTBjZjkiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwNjc5Mjc5NCwiaWF0IjoxNzA2NzYwNDUyfQ.eRr4qbaT-jq51Xwz7ZmfS3M6hBWd_pUVdHR27ui2ffw")
-                .body(Mono.just(new ChangePhone("89244272269", 7)), ChangePhone.class)
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJfY29kZSI6IjBmYTZjNmJlLWIzODgtNDkzNy05ZmU1LThjNmUyZjBjNzEyMCIsImV4cCI6MTcwNzkzMjE2NSwiaWF0IjoxNzA3ODk5ODIzfQ.dozoUlKTeCJl5xfbWlvxyNJ6DgkjGpTFYSD4_CQzVH8")
+                .body(Mono.just(new ChangePhone("89244272261", 13)), ChangePhone.class)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve().bodyToMono(ChangeResponse.class);
 

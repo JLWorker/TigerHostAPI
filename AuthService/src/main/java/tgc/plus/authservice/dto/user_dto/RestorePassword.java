@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RestorePassword {
 
-    @Email
     @JsonProperty
+    @Email(message = "Email invalid")
     private String email;
 
     public RestorePassword(String email) {

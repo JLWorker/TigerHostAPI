@@ -46,7 +46,7 @@ public class SaveUser implements Command {
                .filter(user -> user.getId()==null)
                .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
                .flatMap(user -> userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
-                                    .map(userBd -> {
+                                    .flatMap(userBd -> {
                                         log.info(String.format("User with code - %s was save", userBd.getUserCode()));
                                         return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
                                     }))

@@ -93,8 +93,8 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageRestorePassword() {
         String userCode = UUID.randomUUID().toString();
-        MessageTest messageTest = new MessageTest("f3fc21e3-4619-4a7f-aff7-b43ff419a88e",new PasswordRestoreDataTest("http://192.168.90.103/restore"));
-        ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("call_service", messageTest);
+        MessageTest messageTest = new MessageTest("0fa6c6be-b388-4937-9fe5-8c6e2f0c7120",new PasswordRestoreDataTest("http://192.168.90.103/restore"));
+        ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", messageTest);
         record.headers().add("method", "send_rest".getBytes());
 
         kafkaTemplate.send(record);
@@ -117,7 +117,7 @@ public class ConsumerMessageTest {
     public void sendMessageToChangePhone() {
             String userCode = UUID.randomUUID().toString();
             MessageTest baseMessageTest = new MessageTest("f3fc21e3-4619-4a7f-aff7-b43ff419a88e",new EditPhoneDataTest("89244380870"));
-            ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("call_service", baseMessageTest);
+            ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
             record.headers().add("method", "update_ph".getBytes());
 
             kafkaTemplate.send(record);
@@ -129,8 +129,8 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToChangeEmail() {
         String userCode = UUID.randomUUID().toString();
-        MessageTest baseMessageTest = new MessageTest("27ccff25-d955-4b97-9d7a-1b7b0f15c896", new EditEmailDataTest("53422346@bk.ru"));
-        ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("call_service", baseMessageTest);
+        MessageTest baseMessageTest = new MessageTest("0fa6c6be-b388-4937-9fe5-8c6e2f0c7120", new EditEmailDataTest("567842bm@bk.ru"));
+        ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
         record.headers().add("method", "update_em".getBytes());
 
         kafkaTemplate.send(record);

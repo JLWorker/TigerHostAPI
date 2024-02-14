@@ -2,10 +2,10 @@ package tgc.plus.authservice.facades;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.errors.InvalidRequestException;
+import org.apache.kafka.common.KafkaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,14 +15,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
+import tgc.plus.authservice.dto.kafka_message_dto.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.UserChangeContactResponse;
 import tgc.plus.authservice.entity.User;
 import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
+import tgc.plus.authservice.exceptions.exceptions_clases.InvalidRequestException;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 
@@ -131,13 +134,21 @@ public class FacadesUtils {
         });
     }
 
-
-    public Mono<Void> sendMessageInCallService(KafkaMessage message){
-        return Mono.defer(() -> {
-            ProducerRecord<Long, KafkaMessage> record = new ProducerRecord<>(topic, message);
-            CompletableFuture<SendResult<Long, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
-            return Mono.fromFuture(future).then(Mono.empty());
+    public Mono<KafkaMessage> createMessageForSaveUser(String userCode, String email, String password){
+        return Mono.defer(()->{
+            SaveUserData saveUserData = new SaveUserData(email, password);
+            return Mono.just(new KafkaMessage(userCode, saveUserData));
         });
+    }
+
+
+    public Mono<Void> sendMessageInCallService(KafkaMessage message, String method){
+            ProducerRecord<Long, KafkaMessage> record = new ProducerRecord<>(topic, message);
+            record.headers().add("method", method.getBytes());
+            CompletableFuture<SendResult<Long, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
+            return Mono.fromFuture(future)
+                    .onErrorResume(e -> Mono.error(new KafkaException(e.getMessage())))
+                    .then(Mono.empty());
     }
 
     private <T> Mono<T> getVersionException(Long version){
