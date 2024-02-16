@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,7 +23,6 @@ public class ConsumerMessageTest {
 //    public static String server;
 
     public static KafkaTemplate<Long, MessageTest> kafkaTemplate;
-
     @BeforeAll
     public static void initTestProducer(){
         Map<String, Object> props = new HashMap<>();
@@ -45,9 +45,9 @@ public class ConsumerMessageTest {
 //            boolean result = kafkaTemplate.send("call_service",
 //                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
 //            Assert.isTrue(!result, "failed!");
-        Flux<Void> res = Flux.range(1, 15000).flatMap(el->{
+        Flux<Void> res = Flux.range(1, 2).flatMap(el->{
                 String userCode = UUID.randomUUID().toString();
-                MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(String.format("%s@bk.ru", new Random().nextInt()), "sadasASD463"));
+                MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest("4357480@bk.ru", "sadasASD463"));
                 ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
                 record.headers().add("method", "save".getBytes());
                 kafkaTemplate.send(record);
@@ -129,7 +129,7 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToChangeEmail() {
         String userCode = UUID.randomUUID().toString();
-        MessageTest baseMessageTest = new MessageTest("0fa6c6be-b388-4937-9fe5-8c6e2f0c7120", new EditEmailDataTest("567842bm@bk.ru"));
+        MessageTest baseMessageTest = new MessageTest("d1cbc561-b978-4fc7-82c2-edc8d77032bc", new EditEmailDataTest("567842bm@bk.ru"));
         ProducerRecord<Long, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
         record.headers().add("method", "update_em".getBytes());
 

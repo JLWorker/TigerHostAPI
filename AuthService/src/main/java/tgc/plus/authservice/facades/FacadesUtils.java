@@ -5,17 +5,13 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Mono;
-import reactor.util.retry.Retry;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
@@ -24,8 +20,8 @@ import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
 import tgc.plus.authservice.dto.kafka_message_dto.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.UserChangeContactResponse;
 import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
 import tgc.plus.authservice.exceptions.exceptions_clases.InvalidRequestException;
+import tgc.plus.authservice.exceptions.exceptions_clases.RecoveryCodeExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserRepository;
 
@@ -33,11 +29,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
-import java.util.function.Supplier;
 
 @Component
 @Slf4j
@@ -64,11 +57,28 @@ public class FacadesUtils {
                 return springSecurityConfig.reactiveLoginAuthenticationManager().authenticate(authenticationToken);
     }
 
+    public Mono<Boolean> checkPasswords(String password, String confirmPassword){
+        return Mono.defer(() -> {
+            if (password.equals(confirmPassword)){
+                return Mono.just(true);
+            }
+            else
+                return getRequestException("Passwords mismatch");
+        });
+    }
+
     public Mono<Void> getUserByEmailReg(String email) {
         return userRepository.getUserByEmail(email).defaultIfEmpty(new User())
                 .filter(el -> el.getId() == null)
                 .switchIfEmpty(getRequestException(String.format("User with email %s already exist", email)))
                 .flatMap(el -> Mono.empty());
+    }
+
+    public Mono<User> getUserByRecoveryCode(String recoveryCode) {
+        return userRepository.getUserByRecoveryCode(recoveryCode)
+                .defaultIfEmpty(new User())
+                .filter(el -> el.getUserCode() != null)
+                .switchIfEmpty(getRequestException("Recovery code invalid"));
     }
 
     public Mono<User> getUserByEmailLog(String email) {
@@ -101,6 +111,22 @@ public class FacadesUtils {
                 });
     }
 
+    public Mono<Void> changePassword(Long version, String password, Instant expiredDate, String userCode){
+            if (expiredDate.isBefore(Instant.now())) {
+                return userRepository.clearRecoveryCode(userCode, version)
+                        .flatMap(newVersion -> Mono.empty())
+                        .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));//send new version to users;
+            }
+            else {
+                String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
+                return userRepository.changePassword(userCode, bcryptPassword, version)
+                        .filter(newVersion -> newVersion!=0)
+                        .switchIfEmpty(getRequestException("Password already change"))
+                        .flatMap(newVersion -> Mono.empty()); //send new version
+
+            }
+    }
+
 //    public Mono<UserInfoResponse> getInfo(String userCode, String regVersion){
 //        return userRepository.getUserByUserCode(userCode)
 //                .flatMap(user -> {
@@ -112,7 +138,7 @@ public class FacadesUtils {
 //                })
 //    }
 //
-    public Mono<String> generateToken(Long version, String userCode){
+    public Mono<String> generateRecoveryCode(Long version, String userCode){
         return Mono.defer(()->{
             String recoveryCode = UUID.randomUUID().toString();
             Instant expiredDate = Instant.now().plus(Duration.ofHours(1));
@@ -155,10 +181,15 @@ public class FacadesUtils {
         return Mono.error(new VersionException(version, "Version incorrect"));
     }
 
+    private <T> Mono<T> getSimpleVersionException(String message){
+        return Mono.error(new VersionException(message));
+    }
+
 
     private <T> Mono<T> getRequestException(String message){
         return Mono.error(new InvalidRequestException(message));
     }
+
 
     private  <T> Mono<T> getUserNotFoundException(String message){
         return Mono.error(new UsernameNotFoundException(message));

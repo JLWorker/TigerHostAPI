@@ -71,7 +71,7 @@ public class TokenProvider {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
                 Instant finishDate = startDate.plusMillis(refreshExpireDate);
-                return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, startDate, finishDate));
+                return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, finishDate, startDate));
             });
         }
 

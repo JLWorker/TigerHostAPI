@@ -19,7 +19,6 @@ import java.util.Map;
 public class EditEmailData implements Payload {
 
     @JsonProperty
-    @Email(message = "Incorrect email")
     private String email;
 
     public EditEmailData(String email) {

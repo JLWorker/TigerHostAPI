@@ -14,6 +14,9 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import tgc.plus.authservice.configs.utils.*;
 import tgc.plus.authservice.services.UserService;
 
@@ -65,6 +68,17 @@ public class SpringSecurityConfig {
         authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher());
         authenticationWebFilter.setAuthenticationFailureHandler(new JwtAuthenticationHandler(new ObjectMapper()));
         return authenticationWebFilter;
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+        return urlBasedCorsConfigurationSource;
     }
 
 }

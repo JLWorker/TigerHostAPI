@@ -64,7 +64,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.active = false;
+        this.active = true;
         this.phone = null;
         this.twoAuthStatus = false;
         this.codeExpiredDate = null;

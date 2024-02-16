@@ -13,6 +13,10 @@ public class VersionException extends RuntimeException{
 
     private String message;
 
+    public VersionException(String message) {
+        this.message = message;
+    }
+
     public VersionException(Long newVersion, String message) {
         this.newVersion = newVersion;
         this.message = message;

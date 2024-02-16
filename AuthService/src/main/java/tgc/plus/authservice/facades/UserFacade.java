@@ -1,8 +1,6 @@
 package tgc.plus.authservice.facades;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -12,8 +10,6 @@ import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
-import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
@@ -49,8 +45,9 @@ public class UserFacade {
     public Mono<TokensResponse> registerUser(UserRegistration userRegistration, String ipAddr) {
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
-        if (userData.getPassword().equals(userData.getPasswordConfirm()))
-            return facadesUtils.getUserByEmailReg(userData.getEmail())
+        return facadesUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
+                .filter(res -> res).then(
+                facadesUtils.getUserByEmailReg(userData.getEmail())
                     .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
                             .zipWith(tokenProvider.createRefToken(savedUser.getId()))
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
@@ -63,9 +60,7 @@ public class UserFacade {
                                                                                     VersionsTypes.TOKEN_VERSION.getName(),tokenMeta.getVersion(),
                                                                                     VersionsTypes.DEVICE_VERSION.getName(),tokens.getT2().getVersion())));
                                                             }))
-                                    )))).doOnError(e -> log.error(e.getMessage()));
-        else
-            return Mono.error(new InvalidRequestException("Passwords mismatch"));
+                                    ))))).doOnError(e -> log.error(e.getMessage()));
     }
 
 
@@ -111,9 +106,19 @@ public class UserFacade {
     @Transactional
     public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
         return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
-                .flatMap(user -> facadesUtils.generateToken(user.getVersion(), user.getUserCode())
+                .flatMap(user -> facadesUtils.generateRecoveryCode(user.getVersion(), user.getUserCode())
                         .flatMap(token -> facadesUtils.createMessageForRestorePsw(token, user.getUserCode())
                                 .flatMap(message -> facadesUtils.sendMessageInCallService(message, CommandsName.SEND_RECOVERY_CODE.getName()))))
+                .doOnError(e -> log.error(e.getMessage()));
+    }
+
+
+    @Transactional(noRollbackForClassName = "RecoveryCodeExpiredException")
+    public Mono<Void> checkRecoveryCode(RestorePassword restorePassword){
+        return facadesUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
+                .filter(res -> res)
+                .then(facadesUtils.getUserByRecoveryCode(restorePassword.getCode())
+                        .flatMap(user -> facadesUtils.changePassword(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 

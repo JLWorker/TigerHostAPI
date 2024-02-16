@@ -51,8 +51,13 @@ public class UserController {
 //    }
 
     @PutMapping("/recovery")
-    public Mono<Void> createRecoveryCode(@RequestBody @Valid RestorePassword restorePassword){
+    public Mono<Void> createRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Restore.class) RestorePassword restorePassword){
         return userFacade.generateRecoveryCode(restorePassword);
+    }
+
+    @PutMapping("/check")
+    public Mono<Void> checkRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Check.class) RestorePassword restorePassword){
+        return userFacade.checkRecoveryCode(restorePassword);
     }
 
 }
