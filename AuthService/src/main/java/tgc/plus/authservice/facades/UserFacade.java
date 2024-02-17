@@ -11,9 +11,11 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.user_dto.*;
+import tgc.plus.authservice.facades.utils.CommandsName;
+import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenMetaService;
-import tgc.plus.authservice.configs.utils.TokenProvider;
+import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class UserFacade {
     UserRepository userRepository;
 
     @Autowired
-    TokenProvider tokenProvider;
+    TokenService tokenService;
 
     @Autowired
     UserService userService;
@@ -36,7 +38,7 @@ public class UserFacade {
     TokenMetaService tokenMetaService;
 
     @Autowired
-    FacadesUtils facadesUtils;
+    FacadeUtils facadeUtils;
 
     @Autowired
     SpringSecurityConfig springSecurityConfig;
@@ -45,14 +47,14 @@ public class UserFacade {
     public Mono<TokensResponse> registerUser(UserRegistration userRegistration, String ipAddr) {
         UserData userData = userRegistration.getUserData();
         DeviceData deviceData = userRegistration.getDeviceData();
-        return facadesUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
+        return facadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
                 .filter(res -> res).then(
-                facadesUtils.getUserByEmailReg(userData.getEmail())
-                    .then(userService.save(userData).flatMap(savedUser -> tokenProvider.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
-                            .zipWith(tokenProvider.createRefToken(savedUser.getId()))
+                facadeUtils.getUserByEmailReg(userData.getEmail())
+                    .then(userService.save(userData).flatMap(savedUser -> tokenService.createAccessToken(savedUser.getUserCode(), savedUser.getRole())
+                            .zipWith(tokenService.createRefToken(savedUser.getId()))
                             .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
-                                    .flatMap(tokenMeta -> facadesUtils.createMessageForSaveUser(savedUser.getUserCode(), savedUser.getEmail(), userData.getPassword())
-                                                        .flatMap(msg -> facadesUtils.sendMessageInCallService(msg, CommandsName.SAVE.getName()))
+                                    .flatMap(tokenMeta -> facadeUtils.createMessageForSaveUser(savedUser.getUserCode(), savedUser.getEmail(), userData.getPassword())
+                                                        .flatMap(msg -> facadeUtils.sendMessageInCallService(msg, CommandsName.SAVE.getName()))
                                                             .then(Mono.defer(() -> {
                                                                     log.info(String.format("User with userCode - %s, registered, tokens was created", savedUser.getUserCode()));
                                                                     return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(),
@@ -68,10 +70,10 @@ public class UserFacade {
     public Mono<TokensResponse> loginUser(UserLogin userLogin, String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
-        return facadesUtils.getUserByEmailLog(userData.getEmail())
-                .flatMap(user -> facadesUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
-                        .then(tokenProvider.createAccessToken(user.getUserCode(), user.getRole())
-                                    .zipWith(tokenProvider.createRefToken(user.getId()))
+        return facadeUtils.getUserByEmailLog(userData.getEmail())
+                .flatMap(user -> facadeUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
+                        .then(tokenService.createAccessToken(user.getUserCode(), user.getRole())
+                                    .zipWith(tokenService.createRefToken(user.getId()))
                                     .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
                                             .flatMap(tokenMeta -> {
                                                 log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
@@ -84,20 +86,30 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts) {
+    public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                 String userCode = securityContext.getAuthentication().getPrincipal().toString();
-                return facadesUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, userChangeContacts.getVersion());
+                return facadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, version)
+                        .flatMap(newVersion -> facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getPhone(), UserChangeContacts.ChangePhone.class.getName())
+                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.UPDATE_PHONE.getName()))
+                                    .thenReturn(new UserChangeContactResponse(Map.of(VersionsTypes.USER_VERSION.getName(), newVersion,
+                                        "phone", userChangeContacts.getPhone()))));
                 }).doOnError(e->log.error(e.getMessage()));
+
     }
 
     @Transactional
-    public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts) {
+    public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
-            return facadesUtils.updateEmail(userChangeContacts.getEmail(), userCode, userChangeContacts.getVersion());
+            return facadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, version)
+                    .flatMap(newVersion -> facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getEmail(), UserChangeContacts.ChangeEmail.class.getName())
+                         .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.UPDATE_EMAIL.getName())
+                                .thenReturn( new UserChangeContactResponse(Map.of(VersionsTypes.USER_VERSION.getName(), newVersion,
+                                        "email", userChangeContacts.getEmail())))));
         }).doOnError(e->log.error(e.getMessage()));
     }
+
 
 //    public Mono<UserInfoResponse> getInfoAboutAccount(){
 //
@@ -105,20 +117,20 @@ public class UserFacade {
 
     @Transactional
     public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
-        return facadesUtils.getUserByEmailLog(restorePassword.getEmail())
-                .flatMap(user -> facadesUtils.generateRecoveryCode(user.getVersion(), user.getUserCode())
-                        .flatMap(token -> facadesUtils.createMessageForRestorePsw(token, user.getUserCode())
-                                .flatMap(message -> facadesUtils.sendMessageInCallService(message, CommandsName.SEND_RECOVERY_CODE.getName()))))
+        return facadeUtils.getUserByEmailLog(restorePassword.getEmail())
+                .flatMap(user -> facadeUtils.generateRecoveryCode(user.getVersion(), user.getUserCode())
+                        .flatMap(token -> facadeUtils.createMessageForRestorePsw(token, user.getUserCode())
+                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.SEND_RECOVERY_CODE.getName()))))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 
 
     @Transactional(noRollbackForClassName = "RecoveryCodeExpiredException")
     public Mono<Void> checkRecoveryCode(RestorePassword restorePassword){
-        return facadesUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
+        return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                 .filter(res -> res)
-                .then(facadesUtils.getUserByRecoveryCode(restorePassword.getCode())
-                        .flatMap(user -> facadesUtils.changePassword(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
+                .then(facadeUtils.getUserByRecoveryCode(restorePassword.getCode())
+                        .flatMap(user -> facadeUtils.changePassword(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 

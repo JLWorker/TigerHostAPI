@@ -26,12 +26,8 @@ public class UserChangeContacts {
             message = "Email invalid")
     private String email;
 
-    @JsonView({ChangeEmail.class, ChangePhone.class})
-    private Long version;
-
-    public UserChangeContacts(String phone, String email, Long version) {
+    public UserChangeContacts(String phone, String email) {
         this.phone = phone;
         this.email = email;
-        this.version = version;
     }
 }

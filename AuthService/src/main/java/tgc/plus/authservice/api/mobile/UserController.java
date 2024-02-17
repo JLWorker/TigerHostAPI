@@ -2,8 +2,6 @@ package tgc.plus.authservice.api.mobile;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +13,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/account")
-@Slf4j
 public class UserController {
 
     //пишем регистрацию и логин, чтобы просто возвращали данные (релизуем генерацию токенов и их возврат + Entity)
@@ -36,13 +33,13 @@ public class UserController {
     }
 
     @PutMapping("/phone")
-    public Mono<UserChangeContactResponse> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts){
-        return userFacade.changePhone(userChangeContacts);
+    public Mono<UserChangeContactResponse> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version) {
+        return userFacade.changePhone(userChangeContacts, version);
     }
 
     @PutMapping("/email")
-    public Mono<UserChangeContactResponse> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts){
-        return userFacade.changeEmail(userChangeContacts);
+    public Mono<UserChangeContactResponse> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version){
+        return userFacade.changeEmail(userChangeContacts, version);
     }
 
 //    @GetMapping("/info")

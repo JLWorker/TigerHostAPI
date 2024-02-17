@@ -1,4 +1,4 @@
-package tgc.plus.authservice.facades;
+package tgc.plus.authservice.facades.utils;
 
 import lombok.Getter;
 

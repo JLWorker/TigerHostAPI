@@ -6,20 +6,21 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.services.TokenService;
 
 @Component
 @Slf4j
 public class JwtServerAuthenticationConverter implements ServerAuthenticationConverter{
 
-    private final TokenProvider tokenProvider;
+    private final TokenService tokenService;
 
-    public JwtServerAuthenticationConverter(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
+    public JwtServerAuthenticationConverter(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
-        return tokenProvider.getTokenFromRequest(exchange)
-                .flatMap(tokenProvider::getAuthentication);
+        return tokenService.getTokenFromRequest(exchange)
+                .flatMap(tokenService::getAuthentication);
         }
 }

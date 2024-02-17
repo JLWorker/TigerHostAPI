@@ -1,36 +1,33 @@
-package tgc.plus.authservice.configs.utils;
+package tgc.plus.authservice.services;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.netty.util.internal.ThreadLocalRandom;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
+import tgc.plus.authservice.entity.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_clases.AccessTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
 import tgc.plus.authservice.repository.UserTokenRepository;
-import tgc.plus.authservice.services.utils.RoleList;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-@Component
+@Service
 @Slf4j
-public class TokenProvider {
+public class TokenService {
 
     @Value("${jwt.token.expired}")
     public Long accessExpireDate;
@@ -66,7 +63,7 @@ public class TokenProvider {
         });
     }
 
-    public Mono<tgc.plus.authservice.entity.UserToken> createRefToken(Long userId) {
+    public Mono<UserToken> createRefToken(Long userId) {
             return generateTokenId().flatMap(tokenId -> {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
@@ -116,5 +113,25 @@ public class TokenProvider {
         }).doOnError(e->log.error(e.getMessage()));
     }
 
+    public Mono<Boolean> checkRefreshToken(Instant expiredDate){
+       return Mono.defer(()->{
+            if(expiredDate.isBefore(Instant.now()))
+                return Mono.just(false);
+            else
+                return Mono.just(true);
+        });
+    }
+
+    public Mono<Map<String, String>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
+
+        String newRefreshToken = UUID.randomUUID().toString();
+        Instant startDate = Instant.now();
+        Instant finishDate = startDate.plusMillis(refreshExpireDate);
+
+        return createAccessToken(userCode, role)
+                .flatMap(accessToken -> userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate)
+                        .thenReturn(Map.of("access_token", accessToken, "refresh_token", newRefreshToken)));
+
+    }
 
 }

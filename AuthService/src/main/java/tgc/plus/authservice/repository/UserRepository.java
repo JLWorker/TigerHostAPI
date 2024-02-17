@@ -14,6 +14,7 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserByUserCode(String userCode);
      Mono<User> getUserByEmail(String email);
      Mono<User> getUserByRecoveryCode(String recoveryCode);
+     Mono<User> getUserById(Long id);
 
      @Query("UPDATE users SET phone= :phone, version = version+1 WHERE user_code = :userCode and version = :reqVersion RETURNING version")
      Mono<Long> changePhone(String phone, String userCode, Long reqVersion);

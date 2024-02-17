@@ -10,6 +10,8 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import tgc.plus.authservice.dto.exceptions_dto.ResponseException;
 import tgc.plus.authservice.dto.exceptions_dto.VersionResponseException;
+import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenException;
+import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenNotFoundException;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 
 import java.util.Objects;
@@ -27,7 +29,17 @@ public class RestControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseException> runtimeHandlerException(RuntimeException exception, ServerWebExchange request) {
 
-            if (exception instanceof AuthenticationException){
+            if (exception instanceof RefreshTokenException)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .header("Logout", "true").body(new ResponseException(request.getRequest().getPath().toString(),
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
+
+            else if (exception instanceof RefreshTokenNotFoundException){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseException(request.getRequest().getPath().toString(),
+                        HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+            }
+
+            else if (exception instanceof AuthenticationException){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseException(request.getRequest().getPath().toString(),
                         HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
             }
