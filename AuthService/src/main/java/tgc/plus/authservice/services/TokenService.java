@@ -19,6 +19,7 @@ import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.entity.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_clases.AccessTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
+import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 import tgc.plus.authservice.repository.UserTokenRepository;
 
 import javax.crypto.SecretKey;
@@ -122,15 +123,16 @@ public class TokenService {
         });
     }
 
-    public Mono<Map<String, String>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
+    public Mono<Map<String, Object>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
 
         String newRefreshToken = UUID.randomUUID().toString();
         Instant startDate = Instant.now();
         Instant finishDate = startDate.plusMillis(refreshExpireDate);
 
         return createAccessToken(userCode, role)
-                .flatMap(accessToken -> userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate)
-                        .thenReturn(Map.of("access_token", accessToken, "refresh_token", newRefreshToken)));
+                .flatMap(accessToken ->
+                        userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate)
+                        .flatMap(newVersion -> Mono.just(Map.of("access_token", accessToken, "refresh_token", newRefreshToken))));
 
     }
 

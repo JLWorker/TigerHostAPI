@@ -3,6 +3,8 @@ package tgc.plus.authservice.repository;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.relational.core.sql.LockMode;
+import org.springframework.data.relational.repository.Lock;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -25,7 +27,7 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
     Mono<Integer> updateRefreshToken(String oldRefreshToken, String newRefreshToken, Instant expiredDate, Instant activeDate);
 
     @Modifying
-    @Query("DELETE FROM user_tokens WHERE user_id = :userId and token_id <> :tokenId")
+    @Query("DELETE FROM user_tokens WHERE user_id= :userId and token_id <> :tokenId")
     Mono<Integer> removeAllUserTokens(String tokenId, Long userId);
 
 

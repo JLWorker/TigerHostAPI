@@ -16,12 +16,12 @@ public class TokensResponse {
     @JsonProperty("refresh_token")
     private String refreshToken;
 
-    @JsonProperty
-    private Map<String, Long> versions;
+    @JsonProperty("user_version")
+    private Long userVersion;
 
-    public TokensResponse(String accessToken, String refreshToken, Map<String, Long> versions) {
+    public TokensResponse(String accessToken, String refreshToken, Long userVersion) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.versions = versions;
+        this.userVersion = userVersion;
     }
 }

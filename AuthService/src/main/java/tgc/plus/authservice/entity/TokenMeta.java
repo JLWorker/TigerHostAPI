@@ -25,10 +25,6 @@ public class TokenMeta {
     @Column("id")
     private Long id;
 
-    @Version
-    @Column("version")
-    private Long version;
-
     @Column("token_id")
     private Long tokenId;
 

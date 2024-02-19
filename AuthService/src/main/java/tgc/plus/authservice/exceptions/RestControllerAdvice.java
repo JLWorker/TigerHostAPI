@@ -12,6 +12,7 @@ import tgc.plus.authservice.dto.exceptions_dto.ResponseException;
 import tgc.plus.authservice.dto.exceptions_dto.VersionResponseException;
 import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenException;
 import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenNotFoundException;
+import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActive;
 import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
 
 import java.util.Objects;
@@ -29,7 +30,11 @@ public class RestControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseException> runtimeHandlerException(RuntimeException exception, ServerWebExchange request) {
 
-            if (exception instanceof RefreshTokenException)
+        if (exception instanceof TwoFactorActive)
+                return ResponseEntity.status(HttpStatus.ACCEPTED)
+                        .header("TwoFactor", "true").build();
+
+        if (exception instanceof RefreshTokenException)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .header("Logout", "true").body(new ResponseException(request.getRequest().getPath().toString(),
                         HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));

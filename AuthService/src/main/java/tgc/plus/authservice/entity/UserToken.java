@@ -26,10 +26,6 @@ public class UserToken {
     @Column("token_id")
     private String tokenId;
 
-    @Version
-    @Column("version")
-    private Long version;
-
     @Column("user_id")
     private Long userId;
 

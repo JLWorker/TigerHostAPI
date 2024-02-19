@@ -1,6 +1,7 @@
 package tgc.plus.authservice.dto.exceptions_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ResponseException {
+
     @JsonProperty
     private String instant;
 
@@ -31,6 +33,10 @@ public class ResponseException {
         this.path = path;
         this.error = error;
         this.status = status;
+        this.message = message;
+    }
+
+    public ResponseException(String message) {
         this.message = message;
     }
 }

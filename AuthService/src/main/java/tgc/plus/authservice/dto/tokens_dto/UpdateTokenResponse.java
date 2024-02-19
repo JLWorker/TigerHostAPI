@@ -10,9 +10,9 @@ import java.util.Map;
 @NoArgsConstructor
 public class UpdateTokenResponse {
 
-    private Map<String, String> data;
+    private Map<String, Object> data;
 
-    public UpdateTokenResponse(Map<String, String> tokenPair) {
+    public UpdateTokenResponse(Map<String, Object> tokenPair) {
         this.data = tokenPair;
     }
 
