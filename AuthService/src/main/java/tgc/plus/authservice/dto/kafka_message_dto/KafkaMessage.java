@@ -3,6 +3,7 @@ package tgc.plus.authservice.dto.kafka_message_dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
 
 @NoArgsConstructor
 @Getter

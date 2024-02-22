@@ -3,18 +3,17 @@ package tgc.plus.authservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.ChangePhone;
 import tgc.plus.authservice.dto.ChangeResponse;
-import tgc.plus.authservice.dto.kafka_message_dto.PasswordRestoreData;
 import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
+import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.RestorePassword;
+import tgc.plus.authservice.dto.user_dto.UserData;
+import tgc.plus.authservice.dto.user_dto.UserLogin;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,6 +53,14 @@ class AuthServiceApplicationTests {
                 }).subscribe();
     }
 
+    @Test
+    public void testIpAddr(){
+        WebClient webClientDelete = WebClient.create("http://localhost:8081/account/login");
+         webClientDelete.post().header("X-Forwarded-For", "192.168.68.103, 255.156.32.0")
+                .body(Mono.just(new UserLogin(new UserData("4537480@bk.ru", "12345TYhj", "12345TYhj"), new DeviceData("Xiaomi", "web"))), UserLogin.class)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve().bodyToMono(Object.class).subscribe();
+    }
 
     @Test
     public void testDelete(){
@@ -123,6 +130,5 @@ class AuthServiceApplicationTests {
 
 
     }
-
 
 }

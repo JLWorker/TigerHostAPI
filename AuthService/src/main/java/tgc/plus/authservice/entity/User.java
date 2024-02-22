@@ -35,6 +35,9 @@ public class User {
     @Column("two_auth_status")
     private Boolean twoAuthStatus;
 
+    @Column("two_factor_secret")
+    private String twoFactorSecret;
+
     @Column("email")
     private String email;
 

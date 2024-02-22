@@ -17,7 +17,7 @@ public class TokenController {
     @Autowired
     TokenFacade tokenFacade;
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     public Mono<UpdateTokenResponse> updateToken(@RequestBody @Valid UpdateToken updateToken){
         return tokenFacade.updateAccessToken(updateToken);
     }

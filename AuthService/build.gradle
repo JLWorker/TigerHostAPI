@@ -55,6 +55,13 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.3'
+    implementation 'dev.samstevens.totp:totp-spring-boot-starter:1.7.1'
+
+
+// https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+
 
 }
 

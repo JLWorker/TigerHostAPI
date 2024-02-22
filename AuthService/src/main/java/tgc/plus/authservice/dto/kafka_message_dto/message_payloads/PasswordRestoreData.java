@@ -1,4 +1,4 @@
-package tgc.plus.authservice.dto.kafka_message_dto;
+package tgc.plus.authservice.dto.kafka_message_dto.message_payloads;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

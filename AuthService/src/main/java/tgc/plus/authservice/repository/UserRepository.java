@@ -19,7 +19,6 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      @Query("UPDATE users SET phone= :phone, version = version+1 WHERE user_code = :userCode and version = :reqVersion RETURNING version")
      Mono<Long> changePhone(String phone, String userCode, Long reqVersion);
 
-
      @Query("UPDATE users SET email= :email, version = version+1 WHERE user_code = :userCode and version = :reqVersion RETURNING version")
      Mono<Long> changeEmail(String email, String userCode, Long reqVersion);
 
@@ -31,4 +30,10 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
      @Query("UPDATE users SET code_expired_date= null, recovery_code= null, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
      Mono<Long> clearRecoveryCode(String userCode, Long reqVersion);
+
+     @Query("UPDATE users SET two_auth_status= :status, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
+     Mono<Long> switchTwoFactorStatus(String userCode, Boolean status, Long reqVersion);
+
+     @Query("UPDATE users SET two_auth_status= true, two_factor_secret= :secret, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
+     Mono<Long> updateTwoFactorSecret(String userCode, String secret, Long reqVersion);
 }

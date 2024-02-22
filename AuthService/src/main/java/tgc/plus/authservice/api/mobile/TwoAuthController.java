@@ -1,16 +1,39 @@
 package tgc.plus.authservice.api.mobile;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+import tgc.plus.authservice.api.mobile.utils.RequestsUtils;
+import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
+import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
+import tgc.plus.authservice.dto.two_factor_dto.TwoFactorSwitchResponse;
+import tgc.plus.authservice.dto.user_dto.TokensResponse;
+import tgc.plus.authservice.facades.TwoFactorFacade;
 
 @RestController
-@RequestMapping("/2auth")
+@RequestMapping("/2fa")
 public class TwoAuthController {
 
-//    @PostMapping("/create")
-//    public Mono<> createTwoAuthCode(){
-//
-//    }
+    @Autowired
+    TwoFactorFacade twoFactorFacade;
 
+    @Autowired
+    RequestsUtils requestsUtils;
+
+    @PatchMapping("/switch")
+    public Mono<TwoFactorSwitchResponse> checkTwoAuthCode(@RequestHeader("Version") Long version){
+        return twoFactorFacade.switch2Fa(version);
+    }
+
+    @GetMapping("/qr")
+    public Mono<QrCodeData> getQrCode(){
+        return twoFactorFacade.getQrCode();
+    }
+
+    @PostMapping("/verify-code")
+    public Mono<TokensResponse> verify2FaCode(@RequestBody @Valid TwoFactorCode twoFactorCode, @RequestHeader("2FA-Token") String token, ServerWebExchange serverWebExchange){
+        return requestsUtils.getIpAddress(serverWebExchange).flatMap(ipAddress -> twoFactorFacade.verifyCode(twoFactorCode, token, ipAddress));
+    }
 }

@@ -1,17 +1,20 @@
 package tgc.plus.authservice.facades;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 //import tgc.plus.authservice.configs.R2Config;
+import tgc.plus.authservice.api.mobile.utils.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActive;
+import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActiveException;
 import tgc.plus.authservice.facades.utils.CommandsName;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.UserRepository;
@@ -19,11 +22,15 @@ import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @Slf4j
+@Validated
 public class UserFacade {
 
     @Autowired
@@ -45,35 +52,38 @@ public class UserFacade {
     SpringSecurityConfig springSecurityConfig;
 
     @Transactional
-    public Mono<TokensResponse> registerUser(UserRegistration userRegistration, String ipAddr) {
-        UserData userData = userRegistration.getUserData();
-        DeviceData deviceData = userRegistration.getDeviceData();
+    public Mono<Void> registerUser(UserData userData) {
         return facadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
                 .then(facadeUtils.getUserByEmailReg(userData.getEmail())
-                    .then(userService.save(userData).flatMap(savedUser ->
-                            facadeUtils.generatePairTokens(savedUser, deviceData, ipAddr)
-                                    .flatMap(tokenMeta -> facadeUtils.createMessageForSaveUser(savedUser.getUserCode(), savedUser.getEmail(), userData.getPassword())
-                                            .flatMap(msg -> facadeUtils.sendMessageInCallService(msg, CommandsName.SAVE.getName()))
-                                            .thenReturn(new TokensResponse((String) tokenMeta.get("access_token"), (String) tokenMeta.get("refresh_token"),
-                                                    (Long) tokenMeta.get("user_version")))))))
-                .doOnError(e -> log.error(e.getMessage()));
+                    .then(userService.save(userData))
+                .doOnError(e -> log.error(e.getMessage())));
     }
 
 
-    @Transactional
-    public Mono<TokensResponse> loginUser(UserLogin userLogin, String ipAddr) {
+    //генерируем токен и отправляем для каждого у кого есть twoFactor
+
+    @Transactional(noRollbackForClassName = "TwoFactorActiveException")
+    public Mono<TokensResponse> loginUser(UserLogin userLogin, @IpValid String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
         return facadeUtils.getUserByEmailLog(userData.getEmail())
                 .flatMap(user -> facadeUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
-                        .then(facadeUtils.checkTwoAuthStatus(user))
-                        .then(facadeUtils.generatePairTokens(user, deviceData, ipAddr))
-                        .flatMap(tokenMeta->Mono.just(new TokensResponse((String) tokenMeta.get("access_token"), (String) tokenMeta.get("refresh_token"),
-                                (Long) tokenMeta.get("user_version")))))
-                .doOnError(e -> log.error(e.getMessage()));
+                        .then(Mono.defer(() -> {
+                            if (user.getTwoAuthStatus())
+                                return facadeUtils.generate2FaDeviceToken(user.getId())
+                                        .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
+                            else
+                                return facadeUtils.generatePairTokens(user, deviceData, ipAddr);
+                        })))
+        .doOnError(e -> {
+            if (!(e instanceof TwoFactorActiveException))
+                log.error(e.getMessage());
+        });
 
     }
 
+
+    //вернуть версию в шлюзе
     @Transactional
     public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
@@ -87,6 +97,7 @@ public class UserFacade {
 
     }
 
+    //вернуть версию в шлюзе
     @Transactional
     public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {

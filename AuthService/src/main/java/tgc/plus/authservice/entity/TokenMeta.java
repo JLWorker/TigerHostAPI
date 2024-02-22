@@ -10,6 +10,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
 
+import java.net.Inet4Address;
 import java.time.Instant;
 import java.util.Date;
 
@@ -37,14 +38,10 @@ public class TokenMeta {
     @Column("application_type")
     private String applicationType;
 
-    @Column("create_date")
-    private Instant createDate;
-
-    public TokenMeta(Long tokenId, String deviceIp, String deviceName, String applicationType, Instant createDate) {
+    public TokenMeta(Long tokenId, String deviceIp, String deviceName, String applicationType) {
         this.tokenId = tokenId;
         this.deviceIp = deviceIp;
         this.deviceName = deviceName;
         this.applicationType = applicationType;
-        this.createDate = createDate;
     }
 }

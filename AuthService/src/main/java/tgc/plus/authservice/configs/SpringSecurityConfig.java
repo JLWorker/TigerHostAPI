@@ -37,8 +37,8 @@ public class SpringSecurityConfig {
                 .authorizeExchange(exchange ->
                         exchange
                                 .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/create", "/account/check",
-                                        "/tokens/update").permitAll()
-                                .pathMatchers("/account/phone", "/account/email", "/tokens/token", "/tokens/tokenAll").authenticated()
+                                        "/tokens/update", "/2fa/verify-code").permitAll()
+                                .pathMatchers("/account/phone", "/account/email", "/tokens/token", "/tokens/tokenAll", "/2fa/switch", "/2fa/qr").authenticated()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);

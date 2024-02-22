@@ -13,14 +13,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.entity.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_clases.AccessTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_clases.AuthException;
-import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
+import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorTokenException;
+import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
+import tgc.plus.authservice.services.utils.TokensList;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
@@ -30,17 +30,24 @@ import java.util.*;
 @Slf4j
 public class TokenService {
 
-    @Value("${jwt.token.expired}")
-    public Long accessExpireDate;
+    @Value("${jwt.security.access.expired}")
+    public Long accessSecurityExpireDate;
 
-    @Value("${jwt.refresh.expired}")
-    public Long refreshExpireDate;
+    @Value("${jwt.security.refresh.expired}")
+    public Long refreshSecurityExpireDate;
+
+    @Value("${jwt.2fa.access.expired}")
+    public Long access2FaExpiredDate;
+
 
     @Value("${jwt.token.secret}")
     private String secretKey;
 
     @Autowired
     private UserTokenRepository userTokenRepository;
+
+    @Autowired
+    TwoFactorRepository twoFactorRepository;
 
     private SecretKey key;
 
@@ -49,11 +56,18 @@ public class TokenService {
        key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public Mono<String> createAccessToken(String userCode, String role) {
+    public Mono<String> createAccessToken(Map<String, String> claimElements, String expiredType) {
         return Mono.defer(() -> {
             Instant now = Instant.now();
-            Instant expirationDate = now.plusMillis(accessExpireDate);
-            Claims claims = Jwts.claims().add(Map.of("user_code", userCode, "role", role)).build();
+            Long tokenExpired=0L;
+
+            switch (expiredType){
+                case "secure": tokenExpired = accessSecurityExpireDate;
+                case "2fa": tokenExpired = access2FaExpiredDate;
+            }
+
+            Instant expirationDate = now.plusMillis(tokenExpired);
+            Claims claims = Jwts.claims().add(claimElements).build();
             String accessToken = Jwts.builder()
                     .claims(claims)
                     .expiration(Date.from(expirationDate))
@@ -68,7 +82,7 @@ public class TokenService {
             return generateTokenId().flatMap(tokenId -> {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
-                Instant finishDate = startDate.plusMillis(refreshExpireDate);
+                Instant finishDate = startDate.plusMillis(refreshSecurityExpireDate);
                 return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, finishDate, startDate));
             });
         }
@@ -87,7 +101,7 @@ public class TokenService {
                 String userCode = claims.getPayload().get("user_code", String.class);
                 String role = claims.getPayload().get("role", String.class);
                 if ((userCode == null || userCode.isBlank()) || (role == null || role.isBlank())) {
-                    return Mono.error(new AuthException("Invalid access token"));
+                    throw new AuthException("Invalid access token");
                 } else {
                     List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(claims.getPayload().get("role", String.class)));
                     return Mono.just((Authentication) new UsernamePasswordAuthenticationToken(userCode, "", authorities));
@@ -98,6 +112,25 @@ public class TokenService {
                     return Mono.error(new AccessTokenExpiredException("Token expired"));
                 else
                     return Mono.error((new AuthException("Invalid access token")));
+            }
+        }).doOnError(e -> log.error(e.getMessage()));
+    }
+
+    public Mono<String> get2FaTokenData(String token) {
+        return Mono.defer(()->{
+            try {
+                Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+                String deviceToken = claims.getPayload().get("device_token", String.class);
+                if(deviceToken==null || deviceToken.isBlank())
+                    throw new TwoFactorTokenException("Invalid 2fa token");
+                else
+                    return Mono.just(deviceToken);
+            }
+            catch (JwtException e) {
+                if (e instanceof ExpiredJwtException)
+                    return Mono.error(new TwoFactorTokenException("Session time has expired"));
+                else
+                    return Mono.error(new TwoFactorTokenException("Invalid 2fa token"));
             }
         }).doOnError(e -> log.error(e.getMessage()));
     }
@@ -127,9 +160,9 @@ public class TokenService {
 
         String newRefreshToken = UUID.randomUUID().toString();
         Instant startDate = Instant.now();
-        Instant finishDate = startDate.plusMillis(refreshExpireDate);
+        Instant finishDate = startDate.plusMillis(refreshSecurityExpireDate);
 
-        return createAccessToken(userCode, role)
+        return createAccessToken(Map.of("user_code", userCode, "role", role), TokensList.SECURITY.getName())
                 .flatMap(accessToken ->
                         userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate)
                         .flatMap(newVersion -> Mono.just(Map.of("access_token", accessToken, "refresh_token", newRefreshToken))));

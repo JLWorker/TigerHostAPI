@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.api.mobile.utils.RequestsUtils;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.facades.UserFacade;
 
@@ -25,22 +28,26 @@ public class UserController {
     @Autowired
     UserFacade userFacade;
 
+    @Autowired
+    RequestsUtils requestsUtils;
+
     @PostMapping("/reg")
-    public Mono<TokensResponse> registration(@RequestBody @Valid UserRegistration regData, ServerHttpRequest serverHttpRequest) {
-        return userFacade.registerUser(regData, Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).getAddress().getHostAddress());
+    public Mono<Void> registration(@RequestBody @Valid @JsonView(UserData.RegistrationUserData.class) UserData regData, ServerHttpRequest serverHttpRequest) {
+        return userFacade.registerUser(regData);
     }
 
     @PostMapping("/login")
-    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerHttpRequest serverHttpRequest) {
-        return userFacade.loginUser(logData, Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).getAddress().getHostAddress());
+    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerWebExchange serverWebExchange) {
+        return requestsUtils.getIpAddress(serverWebExchange).flatMap(ipAddress ->
+            userFacade.loginUser(logData, ipAddress));
     }
 
-    @PutMapping("/phone")
+    @PatchMapping("/phone")
     public Mono<UserChangeContactResponse> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version) {
         return userFacade.changePhone(userChangeContacts, version);
     }
 
-    @PutMapping("/email")
+    @PatchMapping("/email")
     public Mono<UserChangeContactResponse> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version){
         return userFacade.changeEmail(userChangeContacts, version);
     }
@@ -50,12 +57,12 @@ public class UserController {
 //        return userFacade.getInfoAboutAccount();
 //    }
 
-    @PutMapping("/recovery")
+    @PatchMapping("/recovery")
     public Mono<Void> createRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Restore.class) RestorePassword restorePassword){
         return userFacade.generateRecoveryCode(restorePassword);
     }
 
-    @PutMapping("/check")
+    @PatchMapping("/check")
     public Mono<Void> checkRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Check.class) RestorePassword restorePassword){
         return userFacade.checkRecoveryCode(restorePassword);
     }

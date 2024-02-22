@@ -11,7 +11,6 @@ public enum CommandsName {
     SEND_RECOVERY_CODE("send_rest"),
     SEND_2AUTH_CODE("send_2th_code");
 
-
     private final String name;
 
     CommandsName(String name) {

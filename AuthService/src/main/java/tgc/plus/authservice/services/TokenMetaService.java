@@ -19,8 +19,7 @@ public class TokenMetaService {
     TokenMetaRepository tokenMetaRepository;
 
     public Mono<TokenMeta> save(DeviceData deviceData, Long tokenId, String ipAddr){
-        return tokenMetaRepository.save(new TokenMeta(tokenId, ipAddr, deviceData.getName(), deviceData.getApplicationType(),
-                Instant.now()));
+        return tokenMetaRepository.save(new TokenMeta(tokenId, ipAddr, deviceData.getName(), deviceData.getApplicationType()));
     }
 
 }

@@ -14,7 +14,7 @@ public class UserLogin {
 
     @Valid
     @JsonProperty("user_data")
-    @JsonView(UserData.LoginData.class)
+    @JsonView(UserData.LoginUserData.class)
     private UserData userData;
 
     @Valid

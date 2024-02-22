@@ -1,4 +1,4 @@
-package tgc.plus.authservice.dto.kafka_message_dto;
+package tgc.plus.authservice.dto.kafka_message_dto.message_payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -9,16 +9,16 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonTypeName(value = "EditEmailData")
+@JsonTypeName(value = "TwoAuthData")
+@Setter
 @Getter
 @NoArgsConstructor
-public class EditEmailData implements Payload {
+public class TwoAuthData implements Payload {
 
     @JsonProperty
-    private String email;
+    private Integer code;
 
-    public EditEmailData(String email) {
-        this.email = email;
+    public TwoAuthData(Integer code) {
+        this.code = code;
     }
-
 }

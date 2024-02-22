@@ -1,6 +1,8 @@
 package tgc.plus.authservice.exceptions;
+import dev.samstevens.totp.exceptions.QrGenerationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -10,10 +12,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import tgc.plus.authservice.dto.exceptions_dto.ResponseException;
 import tgc.plus.authservice.dto.exceptions_dto.VersionResponseException;
-import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenException;
-import tgc.plus.authservice.exceptions.exceptions_clases.RefreshTokenNotFoundException;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActive;
-import tgc.plus.authservice.exceptions.exceptions_clases.VersionException;
+import tgc.plus.authservice.exceptions.exceptions_clases.*;
 
 import java.util.Objects;
 
@@ -27,24 +26,36 @@ public class RestControllerAdvice {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseException(request.getRequest().getPath().toString(),
                     HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value(), Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage()));
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ResponseException> runtimeHandlerException(RuntimeException exception, ServerWebExchange request) {
+    @ExceptionHandler({RuntimeException.class, QrGenerationException.class})
+    public ResponseEntity<ResponseException> runtimeHandlerException(Exception exception, ServerWebExchange request) {
 
-        if (exception instanceof TwoFactorActive)
-                return ResponseEntity.status(HttpStatus.ACCEPTED)
-                        .header("TwoFactor", "true").build();
+            if (exception instanceof TwoFactorActiveException)
+                    return ResponseEntity.status(HttpStatus.ACCEPTED)
+                            .header("2FA-Token", ((TwoFactorActiveException) exception).getDeviceToken()).build();
 
-        if (exception instanceof RefreshTokenException)
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .header("Logout", "true").body(new ResponseException(request.getRequest().getPath().toString(),
-                        HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
+//            else if (exception instanceof TwoFactorCodeException) {
+//                HttpStatus status = ((TwoFactorCodeException) exception).getHttpStatus();
+//                HttpHeaders httpHeaders = ((TwoFactorCodeException) exception).getHttpHeaders();
+//                return ResponseEntity.status(status).headers(httpHeaders).body(new ResponseException(request.getRequest().getPath().toString(),
+//                        status.getReasonPhrase(), status.value(), exception.getMessage()));
+//            }
 
-            else if (exception instanceof RefreshTokenNotFoundException){
+            else if (exception instanceof QrGenerationException) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseException(request.getRequest().getPath().toString(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),  HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
+            }
+
+            else if (exception instanceof RefreshTokenException)
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .header("Logout", "true").body(new ResponseException(request.getRequest().getPath().toString(),
+                            HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
+
+            else if (exception instanceof RefreshTokenNotFoundException || exception instanceof SecretNotFoundException){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseException(request.getRequest().getPath().toString(),
                         HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), exception.getMessage()));
             }
 
-            else if (exception instanceof AuthenticationException){
+            else if (exception instanceof AuthenticationException || exception instanceof TwoFactorTokenException){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseException(request.getRequest().getPath().toString(),
                         HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
             }
