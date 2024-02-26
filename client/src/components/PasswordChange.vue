@@ -109,19 +109,16 @@ export default {
 
     async changePassword(newPassword, confirmPassword, code) {
       console.log(code)
-      axios.put("http://localhost:8081/account/check", {
+      axios.patch("http://localhost:8081/account/check", {
         "password": newPassword,
-        "passwordConfirm": confirmPassword,
+        "password_confirm": confirmPassword,
         "code": code
       }).then(response => {
         if (response.status === 200) {
           this.createAlert("Password change success!", "success")
         }
       }).catch(error => {
-        console.log(error.response.status)
-        if (error.response.status === 400) {
           this.createAlert(error.message, "danger")
-        }
       })
     }
   }

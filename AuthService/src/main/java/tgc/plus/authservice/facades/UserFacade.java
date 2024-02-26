@@ -1,6 +1,5 @@
 package tgc.plus.authservice.facades;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,9 +21,6 @@ import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -54,9 +50,11 @@ public class UserFacade {
     @Transactional
     public Mono<Void> registerUser(UserData userData) {
         return facadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
-                .then(facadeUtils.getUserByEmailReg(userData.getEmail())
+                .then(facadeUtils.getUserByEmailReg(userData.getEmail()))
                     .then(userService.save(userData))
-                .doOnError(e -> log.error(e.getMessage())));
+                            .flatMap(user -> facadeUtils.createMessageForSaveUser(user.getUserCode(), userData.getEmail(), userData.getPassword()))
+                                    .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.SAVE.getName()))
+                .doOnError(e -> log.error(e.getMessage()));
     }
 
 
@@ -81,7 +79,6 @@ public class UserFacade {
         });
 
     }
-
 
     //вернуть версию в шлюзе
     @Transactional
@@ -110,10 +107,14 @@ public class UserFacade {
         }).doOnError(e->log.error(e.getMessage()));
     }
 
-
-//    public Mono<UserInfoResponse> getInfoAboutAccount(){
-//
-//    }
+    public Mono<AuthRestorePasswordResponse> changePassword(RestorePassword restorePassword, Long version){
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+            String userCode = securityContext.getAuthentication().getPrincipal().toString();
+            return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
+                    .then(facadeUtils.simpleChangePassword(version, userCode, restorePassword.getPassword())
+                            .flatMap(newVersion -> Mono.just(new AuthRestorePasswordResponse(newVersion))));
+        }).doOnError(e -> log.error(e.getMessage()));
+    }
 
     @Transactional
     public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
@@ -129,15 +130,18 @@ public class UserFacade {
     public Mono<Void> checkRecoveryCode(RestorePassword restorePassword){
         return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                 .then(facadeUtils.getUserByRecoveryCode(restorePassword.getCode())
-                        .flatMap(user -> facadeUtils.changePassword(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
+                        .flatMap(user -> facadeUtils.changePasswordForRecovery(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
                 .doOnError(e -> log.error(e.getMessage()));
+    }
+
+    @Transactional(readOnly = true)
+    public Mono<UserInfoResponse> getInfoAboutAccount(Long version){
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+               String userCode =  securityContext.getAuthentication().getPrincipal().toString();
+               return userRepository.getUserByUserCodeAndVersion(userCode, version).flatMap(user ->
+                       Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
+        });
     }
 
 
 }
-//
-//if (result!=null) {
-//        log.info(result.getEmail());
-//        return Mono.error(new InvalidRequestException(String.format("User with email %s already exist", userData.getEmail())));
-//
-//        }else {

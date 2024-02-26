@@ -10,10 +10,11 @@ import java.util.Map;
 @NoArgsConstructor
 public class UpdateTokenResponse {
 
-    private Map<String, Object> data;
+    private String accessToken;
+    private String refreshToken;
 
-    public UpdateTokenResponse(Map<String, Object> tokenPair) {
-        this.data = tokenPair;
+    public UpdateTokenResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
-
 }

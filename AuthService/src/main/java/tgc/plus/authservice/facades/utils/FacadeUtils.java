@@ -5,10 +5,12 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
@@ -20,10 +22,9 @@ import tgc.plus.authservice.dto.two_factor_dto.TwoFactorSwitchResponse;
 import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.dto.user_dto.UserChangeContacts;
-import tgc.plus.authservice.entity.TwoFactor;
-import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.entity.UserToken;
+import tgc.plus.authservice.entity.*;
 import tgc.plus.authservice.exceptions.exceptions_clases.*;
+import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
@@ -34,9 +35,7 @@ import tgc.plus.authservice.services.utils.TokensList;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -68,6 +67,9 @@ public class FacadeUtils {
     @Autowired
     TwoFactorRepository twoFactorRepository;
 
+    @Autowired
+    TokenMetaRepository tokenMetaRepository;
+
     @Value("${spring.kafka.topic}")
     String topic;
 
@@ -86,6 +88,12 @@ public class FacadeUtils {
             }
             else
                 return getRequestException("Passwords mismatch");
+    }
+
+    public Mono<TokenMeta> checkIpAddress(String ipAddress, Long tokenId){
+        return tokenMetaRepository.getTokenMetaByTokenId(tokenId)
+                .filter(tokenMeta -> tokenMeta.getDeviceIp().equals(ipAddress))
+                .switchIfEmpty(tokenMetaRepository.updateIpAddress(ipAddress, tokenId));
     }
 
     public Mono<TokensResponse> verify2FaCode(String deviceToken, String code, DeviceData deviceData, String ipAddr){
@@ -113,26 +121,34 @@ public class FacadeUtils {
         return userRepository.getUserByRecoveryCode(recoveryCode)
                 .defaultIfEmpty(new User())
                 .filter(el -> el.getUserCode() != null)
-                .switchIfEmpty(getRequestException("Recovery code invalid"));
+                .switchIfEmpty(getNotFoundException("Password already changed"));
     }
 
     public Mono<User> getUserByEmailLog(String email) {
         return userRepository.getUserByEmail(email).defaultIfEmpty(new User())
                 .filter(el -> el.getId() != null)
-                .switchIfEmpty(getRequestException(String.format("User with email %s not found", email)));
+                .switchIfEmpty(getNotFoundException(String.format("User with email %s not found", email)));
     }
 
-    Mono<UserToken> getUserTokenByTokenId(String tokenId){
-        return userTokenRepository.getUserTokenByTokenId(tokenId)
+    public Mono<UserToken> getUserTokenByTokenId(String tokenId, boolean forUpd){
+
+        Mono<UserToken> userTokenMono = null;
+
+        if (!forUpd)
+            userTokenMono = userTokenRepository.getUserTokenByTokenId(tokenId);
+        else
+            userTokenMono = userTokenRepository.getUserTokenByTokenIdForShare(tokenId);
+
+        return userTokenMono
+                .defaultIfEmpty(new UserToken())
                 .filter(userToken -> userToken.getUserId() != null)
-                .switchIfEmpty(getRefreshTokenNotFoundException(String.format("Token with id %s does not exist", tokenId)));
+                .switchIfEmpty(getRefreshTokenException(String.format("Token with id %s does not exist", tokenId), HttpStatus.UNAUTHORIZED));
     }
 
-    public Mono<UserToken> getRefreshToken(String refreshToken){
+    public Mono<UserToken> getUserTokenByRefreshToken(String refreshToken){
         return userTokenRepository.getUserTokenByRefreshToken(refreshToken)
                 .filter(userToken -> userToken.getTokenId() != null)
-                .switchIfEmpty(getRefreshTokenException("Token not exist"))
-                .flatMap(Mono::just);
+                .switchIfEmpty(getRefreshTokenException("Token not exist", HttpStatus.UNAUTHORIZED));
     }
 
     public Mono<Long> updatePhoneNumber(String phone, String userCode, Long reqVersion){
@@ -187,7 +203,7 @@ public class FacadeUtils {
     }
 
 
-    public Mono<Void> changePassword(Long version, String password, Instant expiredDate, String userCode){
+    public Mono<Void> changePasswordForRecovery(Long version, String password, Instant expiredDate, String userCode){
             if (expiredDate.isBefore(Instant.now())) {
                 return userRepository.clearRecoveryCode(userCode, version)
                         .flatMap(newVersion -> Mono.empty())
@@ -197,40 +213,35 @@ public class FacadeUtils {
                 String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
                 return userRepository.changePassword(userCode, bcryptPassword, version)
                         .filter(newVersion -> newVersion!=0)
-                        .switchIfEmpty(getRequestException("Password already changed"))
+                        .switchIfEmpty(getNotFoundException("Password already changed"))
                         .flatMap(newVersion -> Mono.empty()); //отослать новые версии подписчикам
 
             }
     }
 
-    public Mono<Void> removeUserToken(String tokenId){
-        return userTokenRepository.removeUserTokenByTokenId(tokenId)
-                .onErrorResume(e->getRefreshTokenNotFoundException("Token already removed"))
-                .filter(res -> res!=0)
-                .switchIfEmpty(getRefreshTokenNotFoundException("Token already removed"))
-                .flatMap(res -> Mono.empty());
+    public Mono<Long> simpleChangePassword(Long version, String userCode, String password){
+        String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
+        return userRepository.changePassword(userCode, bcryptPassword, version)
+                .filter(newVersion -> newVersion !=0)
+                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+                        .flatMap(user -> getVersionException(user.getVersion())));
     }
 
-    public Mono<Void> removeAllUserTokens(String tokenId){
-        return getUserTokenByTokenId(tokenId)
-                        .flatMap(userToken -> userTokenRepository.removeAllUserTokens(tokenId, userToken.getUserId())
-                                .onErrorResume(e->getRefreshTokenNotFoundException("Tokens already removed"))
+    public Mono<Void> removeUserToken(String tokenId){
+        return userTokenRepository.getUserTokenByTokenIdForDeleteToken(tokenId)
+                        .then(userTokenRepository.removeUserTokenByTokenId(tokenId)
+                                .filter(res -> res!=0)
+                                .switchIfEmpty(getRefreshTokenException("Token already removed", HttpStatus.NOT_FOUND))
                                 .flatMap(res -> Mono.empty()));
     }
 
+    public Mono<Void> removeAllUserTokens(String tokenId){
+        return getUserTokenByTokenId(tokenId, false)
+                        .flatMap(userToken -> userTokenRepository.removeAllUserTokens(tokenId, userToken.getUserId())
+                                .onErrorResume(e->getRefreshTokenException("Tokens already removed", HttpStatus.UNAUTHORIZED))
+                                .flatMap(res -> Mono.empty()));
+    }
 
-
-//    public Mono<UserInfoResponse> getInfo(String userCode, String regVersion){
-//        return userRepository.getUserByUserCode(userCode)
-//                .flatMap(user -> {
-//                    if (!user.getVersion().equals(regVersion))
-//                        return getVersionException(user.getVersion());
-//                    else
-//                        return Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(),
-//                                user.getTwoAuthStatus(),user.getVersion()))
-//                })
-//    }
-//
 
     public Mono<String> generateRecoveryCode(Long version, String userCode){
         return Mono.defer(()->{
@@ -251,7 +262,7 @@ public class FacadeUtils {
     public Mono<QrCodeData> generateQrCode(String userCode){
         return userRepository.getUserByUserCode(userCode)
                 .filter(user -> user.getTwoFactorSecret()!=null)
-                .switchIfEmpty(Mono.error(new SecretNotFoundException("Secret code not found for user, enable two factor status")))
+                .switchIfEmpty(getNotFoundException("Secret code not found for user, enable two factor status"))
                 .flatMap(user -> twoFactorService.generateQrCode(user.getEmail(), user.getTwoFactorSecret()));
     }
 
@@ -267,16 +278,16 @@ public class FacadeUtils {
                 .flatMap(tokens -> tokenMetaService.save(deviceData, tokens.getT2().getId(), ipAddr)
                         .flatMap(tokenMeta -> {
                             log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
-                            return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(), user.getVersion()));
+                            return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(), tokens.getT2().getTokenId(), user.getVersion()));
                         }));
     }
 
 
-    public Mono<Map<String, Object>> updatePairTokens(String refreshToken, Long userId, Boolean checkResult){
-        if (!checkResult) {
+    public Mono<Map<String, String>> updatePairTokens(String refreshToken, Long userId, Boolean checkResult){
+        if (!checkResult)
             return userTokenRepository.removeUserTokenByRefreshToken(refreshToken)
-                    .then(getRefreshTokenException("Token expired"));
-        }
+                    .then(getRefreshTokenException("Token expired", HttpStatus.UNAUTHORIZED));
+
         else
             return userRepository.getUserById(userId)
                             .flatMap(user -> tokenService.updateAccessTokenMobile(refreshToken, user.getUserCode(), user.getRole()));
@@ -297,13 +308,6 @@ public class FacadeUtils {
         });
     }
 
-//    public Mono<KafkaMessage> createMessageForTwoFactorCode(Integer code, String userCode){
-//        return Mono.defer(()->{
-//            TwoAuthData twoAuthData = new TwoAuthData(code);
-//            return Mono.just(new KafkaMessage(userCode, twoAuthData));
-//        });
-//    }
-
     public Mono<KafkaMessage> createMessageForContactUpdate(String userCode, String contact, String type){
         return Mono.defer(()->{
             if (type.equals(UserChangeContacts.ChangeEmail.class.getName())){
@@ -316,7 +320,6 @@ public class FacadeUtils {
             }
         });
     }
-
 
     public Mono<Void> sendMessageInCallService(KafkaMessage message, String method){
             ProducerRecord<Long, KafkaMessage> record = new ProducerRecord<>(topic, message);
@@ -331,25 +334,19 @@ public class FacadeUtils {
         return Mono.error(new VersionException(version, "Version incorrect"));
     }
 
-//    private <T> Mono<T> getInvalidTwoFactorCodeException(String message, HttpStatus httpStatus, Map<String, String> headers){
-//        if (headers.isEmpty())
-//         return Mono.error(new TwoFactorCodeException(message, httpStatus));
-//        else
-//            return Mono.error(new TwoFactorCodeException(message, httpStatus, headers));
-//    }
-
-    private <T> Mono<T> getRefreshTokenException(String message){
-        return Mono.error(new RefreshTokenException(message));
-    }
-
-    private <T> Mono<T> getRefreshTokenNotFoundException(String message){
-        return Mono.error(new RefreshTokenNotFoundException(message));
+    private <T> Mono<T> getRefreshTokenException(String message, HttpStatus httpStatus){
+        if (httpStatus.equals(HttpStatus.UNAUTHORIZED))
+             return Mono.error(new RefreshTokenException(message));
+        else
+            return Mono.error(new RefreshTokenException(message, httpStatus));
     }
 
     private <T> Mono<T> getRequestException(String message){
         return Mono.error(new InvalidRequestException(message));
     }
 
-
+    private <T> Mono<T> getNotFoundException(String message){
+        return Mono.error(new NotFoundException(message));
+    }
 
 }

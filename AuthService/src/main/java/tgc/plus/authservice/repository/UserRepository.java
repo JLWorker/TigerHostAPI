@@ -6,12 +6,14 @@ import tgc.plus.authservice.entity.User;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.entity.UserToken;
 
 import java.time.Instant;
 
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserByUserCode(String userCode);
+     Mono<User> getUserByUserCodeAndVersion(String userCode, Long version);
      Mono<User> getUserByEmail(String email);
      Mono<User> getUserByRecoveryCode(String recoveryCode);
      Mono<User> getUserById(Long id);

@@ -5,7 +5,11 @@ import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
 import io.r2dbc.spi.ValidationDepth;
 import jakarta.validation.constraints.NotNull;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
@@ -14,6 +18,7 @@ import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static io.r2dbc.pool.PoolingConnectionFactoryProvider.*;
@@ -22,6 +27,7 @@ import static io.r2dbc.spi.ConnectionFactoryOptions.*;
 @Configuration
 @EnableR2dbcRepositories
 @EnableTransactionManagement
+@EnableConfigurationProperties(FlywayProperties.class)
 public class R2Config extends AbstractR2dbcConfiguration {
 
     @Value("${postgresql.username}")
@@ -42,6 +48,12 @@ public class R2Config extends AbstractR2dbcConfiguration {
     @Value("${postgresql.max-pool-size}")
     Integer maxPoolSize;
 
+    @Value("${flyway.url}")
+    String flywayUrl;
+
+    @Value("${flyway.locations}")
+    String flywayLocations;
+
     @Bean
     public @NotNull ConnectionFactory connectionFactory() {
         return ConnectionFactories.get(ConnectionFactoryOptions.builder()
@@ -60,6 +72,17 @@ public class R2Config extends AbstractR2dbcConfiguration {
     @Bean
     public ReactiveTransactionManager reactiveTransactionManager(){
        return new R2dbcTransactionManager(connectionFactory());
+    }
+
+
+    //можно применить endpoints для мониторинга и управления базой
+    @Bean(initMethod = "migrate")
+    public Flyway configureFlyway(){
+        FluentConfiguration fluentConfiguration = new FluentConfiguration();
+        fluentConfiguration.dataSource(flywayUrl, username, password);
+        fluentConfiguration.locations(flywayLocations);
+        fluentConfiguration.baselineOnMigrate(true);
+        return Flyway.configure().configuration(fluentConfiguration).load();
     }
 
 }

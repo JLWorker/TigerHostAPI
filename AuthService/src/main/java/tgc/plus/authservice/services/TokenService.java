@@ -23,6 +23,7 @@ import tgc.plus.authservice.repository.UserTokenRepository;
 import tgc.plus.authservice.services.utils.TokensList;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -30,13 +31,13 @@ import java.util.*;
 @Slf4j
 public class TokenService {
 
-    @Value("${jwt.security.access.expired}")
+    @Value("${jwt.security.access.expired.ms}")
     public Long accessSecurityExpireDate;
 
-    @Value("${jwt.security.refresh.expired}")
-    public Long refreshSecurityExpireDate;
+    @Value("${jwt.security.refresh.expired.days}")
+    public Integer refreshSecurityExpireDate;
 
-    @Value("${jwt.2fa.access.expired}")
+    @Value("${jwt.2fa.access.expired.ms}")
     public Long access2FaExpiredDate;
 
 
@@ -82,7 +83,7 @@ public class TokenService {
             return generateTokenId().flatMap(tokenId -> {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
-                Instant finishDate = startDate.plusMillis(refreshSecurityExpireDate);
+                Instant finishDate = startDate.plus(Duration.ofDays(refreshSecurityExpireDate));
                 return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, finishDate, startDate));
             });
         }
@@ -113,7 +114,7 @@ public class TokenService {
                 else
                     return Mono.error((new AuthException("Invalid access token")));
             }
-        }).doOnError(e -> log.error(e.getMessage()));
+        });
     }
 
     public Mono<String> get2FaTokenData(String token) {
@@ -132,7 +133,7 @@ public class TokenService {
                 else
                     return Mono.error(new TwoFactorTokenException("Invalid 2fa token"));
             }
-        }).doOnError(e -> log.error(e.getMessage()));
+        });
     }
 
     public Mono<String> getTokenFromRequest(ServerWebExchange serverWebExchange){
@@ -147,25 +148,22 @@ public class TokenService {
         }).doOnError(e->log.error(e.getMessage()));
     }
 
-    public Mono<Boolean> checkRefreshToken(Instant expiredDate){
-       return Mono.defer(()->{
+    public Mono<Boolean> checkExpiredRefreshToken(Instant expiredDate){
             if(expiredDate.isBefore(Instant.now()))
                 return Mono.just(false);
             else
                 return Mono.just(true);
-        });
     }
 
-    public Mono<Map<String, Object>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
+    public Mono<Map<String, String>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
 
         String newRefreshToken = UUID.randomUUID().toString();
         Instant startDate = Instant.now();
         Instant finishDate = startDate.plusMillis(refreshSecurityExpireDate);
 
         return createAccessToken(Map.of("user_code", userCode, "role", role), TokensList.SECURITY.getName())
-                .flatMap(accessToken ->
-                        userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate)
-                        .flatMap(newVersion -> Mono.just(Map.of("access_token", accessToken, "refresh_token", newRefreshToken))));
+                .zipWith(userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate))
+                        .flatMap(tokens -> Mono.just(Map.of("access_token", tokens.getT1(), "refresh_token", newRefreshToken)));
 
     }
 

@@ -2,9 +2,6 @@ package tgc.plus.authservice.repository;
 
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.relational.core.sql.LockMode;
-import org.springframework.data.relational.repository.Lock;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -16,11 +13,11 @@ import java.time.Instant;
 public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, Long> {
     Mono<UserToken> getUserTokenByRefreshToken(String refreshToken);
 
-    Mono<UserToken> getUserTokenByTokenId(String tokenId);
+    Mono<Integer> removeUserTokenByRefreshToken(String refreshToken);
 
     Mono<Integer> removeUserTokenByTokenId(String tokenId);
 
-    Mono<Integer> removeUserTokenByRefreshToken(String refreshToken);
+    Mono<UserToken> getUserTokenByTokenId(String tokenId);
 
     @Modifying
     @Query("UPDATE user_tokens SET refresh_token= :newRefreshToken, expired_date= :expiredDate, active_date= :activeDate WHERE refresh_token= :oldRefreshToken")
@@ -30,5 +27,15 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
     @Query("DELETE FROM user_tokens WHERE user_id= :userId and token_id <> :tokenId")
     Mono<Integer> removeAllUserTokens(String tokenId, Long userId);
 
+    @Modifying
+    @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR UPDATE")
+    Mono<Void> getUserTokenByTokenIdForDeleteToken(String tokenId);
+
+    @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR SHARE")
+    Mono<UserToken> getUserTokenByTokenIdForShare(String tokenId);
+
+    @Modifying
+    @Query("DELETE FROM user_tokens WHERE expired_date < now()")
+    Mono<Void> remoteUserTokenByTime();
 
 }

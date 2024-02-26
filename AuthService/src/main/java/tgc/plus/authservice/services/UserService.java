@@ -42,11 +42,10 @@ public class UserService implements ReactiveUserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public Mono<Void> save(UserData userData) {
+    public Mono<User> save(UserData userData) {
         String userCode = UUID.randomUUID().toString();
         String password = bCryptPasswordEncoder.encode(userData.getPassword());
-        return userRepository.save(new User(userCode, userData.getEmail(), password, RoleList.USER.name()))
-                .then(Mono.empty());
+        return userRepository.save(new User(userCode, userData.getEmail(), password, RoleList.USER.name()));
     }
 
     @Override

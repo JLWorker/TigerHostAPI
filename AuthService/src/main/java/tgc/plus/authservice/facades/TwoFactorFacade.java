@@ -42,6 +42,7 @@ public class TwoFactorFacade {
         });
     }
 
+    @Transactional(readOnly = true)
     public Mono<QrCodeData> getQrCode(){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
@@ -50,10 +51,10 @@ public class TwoFactorFacade {
         });
     }
 
+    @Transactional
     public Mono<TokensResponse> verifyCode(TwoFactorCode twoFactorCode, String token, String ipAddress){
         return tokenService.get2FaTokenData(token)
                 .flatMap(deviceToken -> facadeUtils.verify2FaCode(deviceToken, twoFactorCode.getCode(), twoFactorCode.getDeviceData(), ipAddress))
-                .then(Mono.just(new TokensResponse()))
                 .doOnError(e -> log.error(e.getMessage()));
 
     }

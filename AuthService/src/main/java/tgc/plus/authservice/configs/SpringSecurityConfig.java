@@ -38,7 +38,8 @@ public class SpringSecurityConfig {
                         exchange
                                 .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/create", "/account/check",
                                         "/tokens/update", "/2fa/verify-code").permitAll()
-                                .pathMatchers("/account/phone", "/account/email", "/tokens/token", "/tokens/tokenAll", "/2fa/switch", "/2fa/qr").authenticated()
+                                .pathMatchers("/account/phone", "/account/email", "/account/info","/tokens/token", "/tokens/tokenAll", "/2fa/switch", "/2fa/qr",
+                                        "/account/password").authenticated()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
@@ -73,7 +74,7 @@ public class SpringSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedMethod("PUT");
+        configuration.addAllowedMethod("PATCH");
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();

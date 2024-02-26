@@ -43,7 +43,7 @@ class AuthServiceApplicationTests {
 
     @Test
     public void testDeleteAll(){
-        String[] arrayList = {"ID-3019579106624", "ID-1243835269566"};
+        String[] arrayList = {"ID-8539077008100", "ID-8620183119720"};
         Flux.fromArray(arrayList)
                 .flatMap(nm -> {
                     System.out.println(nm);
@@ -100,9 +100,9 @@ class AuthServiceApplicationTests {
     }
 
     private Mono<Object> sendRequestDeleteAll(String id){
-        WebClient webClientDelete = WebClient.create(String.format("http://localhost:8081/tokens/tokenAll?fromId=%s", id));
+        WebClient webClientDelete = WebClient.create(String.format("http://localhost:8081/tokens/tokenAll?currentTokenId=%s", id));
         return webClientDelete.delete()
-                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiJlYTYyN2MzOS0wM2RiLTQzMTMtOTgwMC1hZjg0MzcxODRmNGIiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODMxOTc4NSwiaWF0IjoxNzA4MzE5MTg1fQ.uI4iqLDoE-f2IUqHUSYMtMyuupfK6hrtfxqvjioel3U")
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJfY29kZSI6IjU1Mzc4ZGJhLWIyNjctNGNlYS1iNmFmLTFhZDdjMGU2YTBhNyIsImV4cCI6MTcwODkxNzM5OCwiaWF0IjoxNzA4OTE0MTk4fQ.iJ9LGCfS4wigqZRIOnpGQys0DeDEEfHXCSKXf1z9OOM")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve().bodyToMono(Object.class);
 
@@ -111,9 +111,9 @@ class AuthServiceApplicationTests {
 
 
     private Mono<Object> sendRequestDeleteToken(){
-        WebClient webClientDelete = WebClient.create("http://localhost:8081/tokens/token?tokenId=ID-2965151262657");
+        WebClient webClientDelete = WebClient.create("http://localhost:8081/tokens/token?tokenId=ID-8780298407417");
         return webClientDelete.delete()
-                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiJlYTYyN2MzOS0wM2RiLTQzMTMtOTgwMC1hZjg0MzcxODRmNGIiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODMxOTQ2MCwiaWF0IjoxNzA4MzE4ODYwfQ.pF8YVS_aHmqxtCFH586PE0sU4bSlcXwL-0X8_QxdkAc")
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJfY29kZSI6IjU1Mzc4ZGJhLWIyNjctNGNlYS1iNmFmLTFhZDdjMGU2YTBhNyIsImV4cCI6MTcwODg1NDQ1NCwiaWF0IjoxNzA4ODUxMjU0fQ.WiM_DaGgqDVEP-oiOqsuOuvlYFY15cXbUvzu5OXm6hA")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve().bodyToMono(Object.class);
 

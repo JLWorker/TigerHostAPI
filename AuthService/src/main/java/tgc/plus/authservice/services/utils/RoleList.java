@@ -6,7 +6,6 @@ import lombok.ToString;
 
 @Getter
 public enum RoleList {
-
     USER,
     ADMIN
 }

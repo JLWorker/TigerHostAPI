@@ -17,13 +17,9 @@ public class UserInfoResponse {
     @JsonProperty("two_auth_status")
     private Boolean twoAuth;
 
-    @JsonProperty("user_version")
-    private Long user_version;
-
-    public UserInfoResponse(String phone, String email, Boolean twoAuth, Long user_version) {
+    public UserInfoResponse(String phone, String email, Boolean twoAuth) {
         this.phone = phone;
         this.email = email;
         this.twoAuth = twoAuth;
-        this.user_version = user_version;
     }
 }

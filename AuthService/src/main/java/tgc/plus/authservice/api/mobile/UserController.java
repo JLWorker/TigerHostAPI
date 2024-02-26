@@ -32,7 +32,7 @@ public class UserController {
     RequestsUtils requestsUtils;
 
     @PostMapping("/reg")
-    public Mono<Void> registration(@RequestBody @Valid @JsonView(UserData.RegistrationUserData.class) UserData regData, ServerHttpRequest serverHttpRequest) {
+    public Mono<Void> registration(@RequestBody @Valid @JsonView(UserData.RegistrationUserData.class) UserData regData) {
         return userFacade.registerUser(regData);
     }
 
@@ -52,10 +52,15 @@ public class UserController {
         return userFacade.changeEmail(userChangeContacts, version);
     }
 
-//    @GetMapping("/info")
-//    public Mono<UserInfoResponse> userInfoResponseMono(){
-//        return userFacade.getInfoAboutAccount();
-//    }
+    @PatchMapping("/password")
+    public Mono<AuthRestorePasswordResponse> changePassword(@RequestBody @Valid @JsonView(RestorePassword.AuthChange.class) RestorePassword restorePassword, @RequestHeader("Version") Long version){
+        return userFacade.changePassword(restorePassword, version);
+    }
+
+    @GetMapping("/info")
+    public Mono<UserInfoResponse> userInfoResponseMono(@RequestHeader("Version") Long version){
+        return userFacade.getInfoAboutAccount(version);
+    }
 
     @PatchMapping("/recovery")
     public Mono<Void> createRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Restore.class) RestorePassword restorePassword){

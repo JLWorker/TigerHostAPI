@@ -45,12 +45,18 @@ public class RestControllerAdvice {
                         HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),  HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
             }
 
-            else if (exception instanceof RefreshTokenException)
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .header("Logout", "true").body(new ResponseException(request.getRequest().getPath().toString(),
-                            HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
+            else if (exception instanceof RefreshTokenException) {
 
-            else if (exception instanceof RefreshTokenNotFoundException || exception instanceof SecretNotFoundException){
+                HttpStatus httpStatus = ((RefreshTokenException) exception).getHttpStatus();
+                ResponseException response = new ResponseException(request.getRequest().getPath().toString(), httpStatus.getReasonPhrase(), httpStatus.value(), exception.getMessage());
+
+                if (httpStatus.equals(HttpStatus.UNAUTHORIZED))
+                    return ResponseEntity.status(httpStatus).header("Logout", "true").body(response);
+                else
+                    return ResponseEntity.status(httpStatus).body(response);
+
+            }
+            else if (exception instanceof NotFoundException){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseException(request.getRequest().getPath().toString(),
                         HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), exception.getMessage()));
             }

@@ -5,21 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
-import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
+import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.dto.tokens_dto.*;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
+import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
 import tgc.plus.authservice.services.TokenService;
 
-import java.util.Map;
-
 @Service
 @Slf4j
+@Validated
 public class TokenFacade {
-
-
-    //починить callService
 
     @Autowired
     FacadeUtils facadeUtils;
@@ -30,18 +28,19 @@ public class TokenFacade {
     @Autowired
     UserTokenRepository userTokenRepository;
 
+    @Autowired
+    CustomDatabaseClientRepository customDatabaseClientRepository;
+
     @Transactional(noRollbackForClassName = "RefreshTokenException")
     public Mono<UpdateTokenResponse> updateAccessToken(UpdateToken updateToken){
-        return facadeUtils.getRefreshToken(updateToken.getRefreshToken())
-                .flatMap(userToken -> tokenService.checkRefreshToken(userToken.getExpiredDate())
+        return facadeUtils.getUserTokenByRefreshToken(updateToken.getRefreshToken())
+                .flatMap(userToken -> tokenService.checkExpiredRefreshToken(userToken.getExpiredDate())
                         .flatMap(result -> facadeUtils.updatePairTokens(userToken.getRefreshToken(), userToken.getUserId(), result)
-                                .flatMap(tokenPair -> Mono.just(new UpdateTokenResponse(tokenPair)))))
+                                .flatMap(tokenPair -> Mono.just(new UpdateTokenResponse(tokenPair.get("access_token"), tokenPair.get("refresh_token"))))))
                 .doOnError(e->log.error(e.getMessage())); //вернуть новую версию всем
     }
 
-    //execute; bad SQL grammar [UPDATE user_tokens SET refresh_token= $1, expired_date= $2, active_date= $3 WHERE refresh_token= $4]
-
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public Mono<Void> deleteToken(String tokenId) {
         return facadeUtils.removeUserToken(tokenId)
                 .doOnError(e -> log.error(e.getMessage())); //вернуть информацию
@@ -49,10 +48,18 @@ public class TokenFacade {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Mono<Void> deleteAllTokens(String tokenId) {
-        return facadeUtils.removeAllUserTokens(tokenId)
+                return facadeUtils.removeAllUserTokens(tokenId)
                 .doOnError(e -> log.error(e.getMessage())); //вернуть информацию
     }
 
-
+    @Transactional
+    public Mono<TokensDataResponse> getAllTokens(String tokenId, @IpValid String ipAddress){
+        return facadeUtils.getUserTokenByTokenId(tokenId, true)
+                .flatMap(userToken -> facadeUtils.checkIpAddress(ipAddress, userToken.getId())
+                        .flatMap(tokenMeta -> customDatabaseClientRepository.getAllUserTokens(userToken.getUserId(), tokenId)
+                                .flatMap(userTokenWithMetaList ->
+                                        Mono.just(new TokensDataResponse(new TokenMetaData(tokenMeta.getDeviceName(), tokenMeta.getApplicationType(), tokenMeta.getDeviceIp()),
+                                                userTokenWithMetaList)))));
+    }
 
 }
