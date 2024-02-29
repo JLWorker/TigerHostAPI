@@ -26,14 +26,11 @@ public class EditPhone implements Command {
     @Override
     @Transactional
     public Mono<Void> execution(MessageElement messageElement) {
-
         return userRepository.getUserByUserCode(messageElement.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
                 .switchIfEmpty(Mono.error(new UserNotFound(String.format("User with code - %s not found",  messageElement.getUserCode()))))
-                .flatMap(result -> userRepository.updatePhoneUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("phone"))
-                                .doOnSuccess(success -> log.info("Phone number for user with code - " + messageElement.getUserCode() + " was updated")))
-                .doOnError(error -> log.error(error.getMessage()));
+                .then(userRepository.updatePhoneUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("phone")));
 
     }
 

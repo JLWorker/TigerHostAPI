@@ -3,6 +3,8 @@ package tgc.plus.authservice.facades.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,7 +12,6 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
@@ -70,7 +71,7 @@ public class FacadeUtils {
     @Autowired
     TokenMetaRepository tokenMetaRepository;
 
-    @Value("${spring.kafka.topic}")
+    @Value("${kafka.topic}")
     String topic;
 
     @Value("${tgc.web.url}")
@@ -322,10 +323,18 @@ public class FacadeUtils {
     }
 
     public Mono<Void> sendMessageInCallService(KafkaMessage message, String method){
-            ProducerRecord<Long, KafkaMessage> record = new ProducerRecord<>(topic, message);
-            record.headers().add("method", method.getBytes());
-            CompletableFuture<SendResult<Long, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
-            return Mono.fromFuture(future)
+
+        ProducerRecord<String, KafkaMessage> record;
+
+        if (method.contains("update"))
+            record = new ProducerRecord<>(topic, "change", message);
+        else
+            record = new ProducerRecord<>(topic, "other", message);
+
+        record.headers().add(new RecordHeader("method", method.getBytes()));
+
+        CompletableFuture<SendResult<String, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
+        return Mono.fromFuture(future)
                     .onErrorResume(e -> Mono.error(new KafkaException(e.getMessage())))
                     .then(Mono.empty());
     }

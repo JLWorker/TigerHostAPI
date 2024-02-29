@@ -21,9 +21,6 @@ import java.util.Objects;
 @RequestMapping("/account")
 public class UserController {
 
-    //пишем регистрацию и логин, чтобы просто возвращали данные (релизуем генерацию токенов и их возврат + Entity)
-    //восстановление пароля тоже пилим
-    //далее настраиваем security, а после допиливаем все что с нима связанно (удаление и прочее)
 
     @Autowired
     UserFacade userFacade;

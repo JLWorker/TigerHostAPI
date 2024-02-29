@@ -20,8 +20,6 @@ import java.util.Map;
 public class EditPhoneData implements Payload {
 
     @JsonProperty
-    @Pattern(regexp = "^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$",
-            message = "UserCode does`t match regex")
     private String phone;
     public EditPhoneData(String phone) {
         this.phone = phone;

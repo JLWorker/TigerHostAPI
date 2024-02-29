@@ -58,8 +58,6 @@ public class UserFacade {
     }
 
 
-    //генерируем токен и отправляем для каждого у кого есть twoFactor
-
     @Transactional(noRollbackForClassName = "TwoFactorActiveException")
     public Mono<TokensResponse> loginUser(UserLogin userLogin, @IpValid String ipAddr) {
         UserData userData = userLogin.getUserData();
@@ -80,7 +78,6 @@ public class UserFacade {
 
     }
 
-    //вернуть версию в шлюзе
     @Transactional
     public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
@@ -94,7 +91,6 @@ public class UserFacade {
 
     }
 
-    //вернуть версию в шлюзе
     @Transactional
     public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {

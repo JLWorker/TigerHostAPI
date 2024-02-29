@@ -6,13 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.ChangePhone;
-import tgc.plus.authservice.dto.ChangeResponse;
+import tgc.plus.authservice.dto.PhoneChange;
+import tgc.plus.authservice.dto.tokens_dto.TokensDataResponse;
 import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
-import tgc.plus.authservice.dto.user_dto.DeviceData;
-import tgc.plus.authservice.dto.user_dto.RestorePassword;
-import tgc.plus.authservice.dto.user_dto.UserData;
-import tgc.plus.authservice.dto.user_dto.UserLogin;
+import tgc.plus.authservice.dto.user_dto.*;
 
 import java.util.logging.Logger;
 
@@ -64,11 +61,11 @@ class AuthServiceApplicationTests {
 
     @Test
     public void testDelete(){
-        Flux.range(0, 4)
+        Flux.range(0, 3)
                 .flatMap(nm -> {
-//                    if (nm==2) {
+//                    if (nm==0) {
 //                        System.out.println(nm);
-//                        return sendRequestUpdateToken();
+//                        return sendRequestToGetData();
 //                    }
 //                    else {
                         System.out.println(nm);
@@ -79,25 +76,47 @@ class AuthServiceApplicationTests {
                 }).subscribe();
     }
 
-    private Mono<ChangeResponse> sendRequest(){
-        return webClientRecover.put()
-                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJfY29kZSI6ImVhNjI3YzM5LTAzZGItNDMxMy05ODAwLWFmODQzNzE4NGY0YiIsImV4cCI6MTcwODI1MTY5NywiaWF0IjoxNzA4MjUxMDk3fQ.dDOBpAhvJeYtGCyN0p_Ye9jb7ne0wEzvv2hmJb3D5ys")
-                .body(Mono.just(new ChangePhone("89244272261", 13)), ChangePhone.class)
+
+
+    @Test
+    public void testUserGetInfo(){
+        Flux.range(0, 10)
+                .flatMap(nm -> {
+                    if (nm==6) {
+                        System.out.println(nm);
+                        return sendRequestToGetUserData();
+                    }
+                    else {
+                    System.out.println(nm);
+                    return sendRequestToChangePhone()
+                            .doOnSuccess(res -> logger.info("Success: " + nm))
+                            .doOnError(e -> logger.warning(e.getMessage()));
+                    }
+                }).subscribe();
+    }
+
+
+    private Mono<UserChangeContactResponse> sendRequestToChangePhone(){
+        WebClient patchPhone = WebClient.create("http://localhost:8081/account/phone");
+        return patchPhone.patch()
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiI1OWJhODI3ZS1hZjI5LTRlMTQtYTJjNS0zY2E5NmI2NmQyNWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODkzMTIyNCwiaWF0IjoxNzA4OTI4MDI0fQ.03MHRkCICawT_aVQdpsYNRmKV9cyxFizhDUTnOQT9-M")
+                .header("Version", "18")
+                .body(Mono.just(new PhoneChange("89244273135")), PhoneChange.class)
                 .accept(MediaType.APPLICATION_JSON)
-                .retrieve().bodyToMono(ChangeResponse.class);
+                .retrieve().bodyToMono(UserChangeContactResponse.class);
 
 
     }
 
 
-    private Mono<ChangeResponse> sendRequestChangePswd(){
-        return webClientRecover.put()
-                .body(Mono.just(new RestorePassword("sgahTYjsx67", "sgahTYjsx67", "6748bf1a-f007-42ca-9e47-a63b2c199abc")), ChangePhone.class)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve().bodyToMono(ChangeResponse.class);
-
-
-    }
+//    private Mono<ChangeResponse> sendRequestChangePswd(){
+//        return webClientRecover.put()
+//                .body(Mono.just(new RestorePassword("sgahTYjsx67", "sgahTYjsx67", "6748bf1a-f007-42ca-9e47-a63b2c199abc")), ChangePhone.class)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .retrieve().bodyToMono(ChangeResponse.class);
+//
+//
+//    }
 
     private Mono<Object> sendRequestDeleteAll(String id){
         WebClient webClientDelete = WebClient.create(String.format("http://localhost:8081/tokens/tokenAll?currentTokenId=%s", id));
@@ -111,9 +130,9 @@ class AuthServiceApplicationTests {
 
 
     private Mono<Object> sendRequestDeleteToken(){
-        WebClient webClientDelete = WebClient.create("http://localhost:8081/tokens/token?tokenId=ID-8780298407417");
+        WebClient webClientDelete = WebClient.create("http://localhost:8081/tokens/token?tokenId=ID-3313995976820");
         return webClientDelete.delete()
-                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInVzZXJfY29kZSI6IjU1Mzc4ZGJhLWIyNjctNGNlYS1iNmFmLTFhZDdjMGU2YTBhNyIsImV4cCI6MTcwODg1NDQ1NCwiaWF0IjoxNzA4ODUxMjU0fQ.WiM_DaGgqDVEP-oiOqsuOuvlYFY15cXbUvzu5OXm6hA")
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiI1OWJhODI3ZS1hZjI5LTRlMTQtYTJjNS0zY2E5NmI2NmQyNWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODkyOTg1NiwiaWF0IjoxNzA4OTI2NjU2fQ.n7ohD2c42R-pHVr6spgPQbj1lYr2-5DARaREOloMBXg")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve().bodyToMono(Object.class);
 
@@ -129,6 +148,35 @@ class AuthServiceApplicationTests {
                 .retrieve().bodyToMono(Object.class);
 
 
+    }
+
+
+    private Mono<Object> sendRequestToGetData(){
+        WebClient webClientDelete = WebClient.create("http://localhost:8081/tokens/tokenAll?currentTokenId=ID-3313995976820");
+        Mono<TokensDataResponse> tokensDataResponseMono = webClientDelete.get()
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiI1OWJhODI3ZS1hZjI5LTRlMTQtYTJjNS0zY2E5NmI2NmQyNWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODkyOTg1NiwiaWF0IjoxNzA4OTI2NjU2fQ.n7ohD2c42R-pHVr6spgPQbj1lYr2-5DARaREOloMBXg")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve().bodyToMono(TokensDataResponse.class);
+
+        return tokensDataResponseMono.flatMap(tokensDataResponse -> {
+            System.out.println(tokensDataResponse.getTokenMetaData().getTokenDeviceName());
+            return Mono.empty();
+        });
+    }
+
+
+    private Mono<Object> sendRequestToGetUserData(){
+        WebClient webClientDelete = WebClient.create("http://localhost:8081/account/info");
+        Mono<UserInfoResponse> tokensDataResponseMono = webClientDelete.get()
+                .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiI1OWJhODI3ZS1hZjI5LTRlMTQtYTJjNS0zY2E5NmI2NmQyNWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODkzMTIyNCwiaWF0IjoxNzA4OTI4MDI0fQ.03MHRkCICawT_aVQdpsYNRmKV9cyxFizhDUTnOQT9-M")
+                .header("Version", "18")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve().bodyToMono(UserInfoResponse.class);
+
+        return tokensDataResponseMono.flatMap(userInfoResponse -> {
+            System.out.println(userInfoResponse.getEmail() + " : " + userInfoResponse.getPhone());
+            return Mono.empty();
+        });
     }
 
 }

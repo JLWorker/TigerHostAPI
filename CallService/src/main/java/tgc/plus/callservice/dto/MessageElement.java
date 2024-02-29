@@ -19,12 +19,8 @@ import tgc.plus.callservice.dto.message_payloads.Payload;
 @Setter
 public class MessageElement {
 
-    @Pattern(regexp = "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$",
-    message = "UserCode does`t match regex")
-    @NotBlank(message = "UserCode must`t be null or empty")
     private String userCode;
 
-    @Valid
     private Payload payload;
 
     @JsonCreator

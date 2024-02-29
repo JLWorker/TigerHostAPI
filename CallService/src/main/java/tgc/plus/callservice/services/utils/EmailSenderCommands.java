@@ -13,9 +13,7 @@ public enum EmailSenderCommands {
 
     SEND_DATA_EXPIRE_VIRTUAL_MACHINE("send_vm_ex", "Срок предоставляемой услуги истек!", "tiger_error_vm_template.ftl"),
 
-    SEND_DATA_WARNING_VIRTUAL_MACHINE("send_vm_wn", "Срок предоставляемой услуги скоро истечет!", "tiger_warning_vm_template.ftl"),
-
-    SEND_2AUTH_CODE("send_2th_code", "Подтверждение входа", "tiger_2auth_template.ftl");
+    SEND_DATA_WARNING_VIRTUAL_MACHINE("send_vm_wn", "Срок предоставляемой услуги скоро истечет!", "tiger_warning_vm_template.ftl");
 
     private final String name;
     private final String subject;

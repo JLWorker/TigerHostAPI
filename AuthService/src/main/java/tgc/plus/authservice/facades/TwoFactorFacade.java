@@ -32,13 +32,12 @@ public class TwoFactorFacade {
     @Autowired
     TwoFactorRepository twoFactorRepository;
 
-    //вынести отправку версии в шлюз
     @Transactional
     public Mono<TwoFactorSwitchResponse> switch2Fa(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.switch2FaStatus(userCode, version)
-                    .doOnError(e -> log.error(e.getMessage()));
+                    .doOnError(e -> log.error(e.getMessage()));//вынести отправку версии в шлюз
         });
     }
 

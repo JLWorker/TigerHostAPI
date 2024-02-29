@@ -33,14 +33,14 @@ public class SendMail implements Command {
     }
 
     @Override
-    @Transactional
     public Mono<Void> executionForSender(String method, MessageElement messageElement) {
         return userRepository.getUserByUserCode(messageElement.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
                 .switchIfEmpty(Mono.error(new UserNotFound(String.format("User with code - %s not found", messageElement.getUserCode()))))
-                .flatMap(user -> emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method))
-                .doOnError(error -> log.error(error.getMessage()));
+                .then(Mono.empty());
+//                .flatMap(user -> emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method))
+//                .doOnError(error -> log.error(error.getMessage()));
     }
 
 }

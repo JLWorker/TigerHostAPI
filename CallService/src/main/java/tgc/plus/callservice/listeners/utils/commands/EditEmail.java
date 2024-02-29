@@ -32,9 +32,8 @@ public class EditEmail implements Command {
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
                 .switchIfEmpty(Mono.error(new UserNotFound(String.format("User with code - %s not found", messageElement.getUserCode()))))
-                .flatMap(result -> userRepository.updateEmailUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("email"))
-                                .doOnSuccess(success -> log.info(String.format("Email for user with code - %s was updated", messageElement.getUserCode()))))
-                .doOnError(error -> log.error(error.getMessage()));
+                .then(userRepository.updateEmailUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("email"))
+                                .doOnSuccess(success -> log.info(String.format("Email for user with code - %s was updated", messageElement.getUserCode()))));
     }
 
     @Override

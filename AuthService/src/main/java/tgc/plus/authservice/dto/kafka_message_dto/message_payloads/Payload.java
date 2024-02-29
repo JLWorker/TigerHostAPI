@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = PasswordRestoreData.class, name = "PasswordRecoveryData"),
         @JsonSubTypes.Type(value = EditPhoneData.class, name = "EditPhoneData"),
         @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData"),
-        @JsonSubTypes.Type(value = TwoAuthData.class, name = "TwoAuthData")
 })
 public interface Payload {
 

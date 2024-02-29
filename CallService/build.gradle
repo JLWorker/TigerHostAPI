@@ -56,7 +56,8 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '3.2.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.0'
-
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.8.1'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.8.1'
 
 
 

@@ -5,8 +5,7 @@ public enum CommandsName {
     SAVE("save"),
     UPDATE_PHONE("update_ph"),
     UPDATE_EMAIL("update_em"),
-    SEND_EMAIL("send_em"),
-    SEND_PHONE("send_ph");
+    SEND_EMAIL("send_em");
 
     private final String name;
 

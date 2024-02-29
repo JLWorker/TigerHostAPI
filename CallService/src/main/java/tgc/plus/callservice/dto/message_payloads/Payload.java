@@ -12,8 +12,7 @@ import java.util.Map;
         @JsonSubTypes.Type(value = VirtualMachineExpireData.class, name = "VirtualMachineExpireData"),
         @JsonSubTypes.Type(value = PasswordRestoreData.class, name = "PasswordRecoveryData"),
         @JsonSubTypes.Type(value = EditPhoneData.class, name = "EditPhoneData"),
-        @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData"),
-        @JsonSubTypes.Type(value = TwoAuthData.class, name = "TwoAuthData")
+        @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData")
 })
 public interface Payload {
     Map<String, String> getData();
