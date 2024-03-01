@@ -16,6 +16,7 @@ import org.springframework.kafka.listener.*;
 import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.util.backoff.FixedBackOff;
 import tgc.plus.callservice.dto.MessageElement;
 
 import java.util.HashMap;
@@ -36,6 +37,9 @@ public class KafkaConsumerConfig {
     @Value("${kafka.listener.concurrency}")
     Integer concurrency;
 
+    @Value("${kafka.max.pool}")
+    Integer poolRecords;
+
     @Bean
     public ConsumerFactory<String, MessageElement> consumerFactory(){
         Map<String, Object> props = new HashMap<>();
@@ -44,7 +48,8 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 0);
+//        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 2000);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, poolRecords);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, "org.apache.kafka.clients.consumer.RoundRobinAssignor");
@@ -57,12 +62,17 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, MessageElement> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency);
-        factory.setBatchListener(false);
-        factory.setRecordMessageConverter(new JsonMessageConverter());
-        factory.setCommonErrorHandler(new CustomCommonErrorHandler());
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+        factory.setBatchListener(true);
+        factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new JsonMessageConverter()));
+        factory.setCommonErrorHandler(new DefaultErrorHandler());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.getContainerProperties().setAsyncAcks(true);
+        factory.getContainerProperties().setSyncCommits(false);
+        factory.getContainerProperties().setAssignmentCommitOption(ContainerProperties.AssignmentCommitOption.NEVER);
+//        factory.getContainerProperties().setPollTimeout(2000);
         return factory;
     }
+
 
 
 }

@@ -44,7 +44,8 @@ public class SaveUser implements Command{
       return userRepository.getUserByUserCode(messageElement.getUserCode())
                .defaultIfEmpty(new User())
                .filter(user -> user.getId()==null)
-               .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
+              .switchIfEmpty(Mono.empty())
+//               .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", messageElement.getUserCode()))))
                .then(userRepository.save(new User(messageElement.getUserCode(), messageElement.getPayload().getData().get("email")))
                         .flatMap(userBd -> {
                             log.info(String.format("User with code - %s was save", userBd.getUserCode()));
@@ -52,6 +53,15 @@ public class SaveUser implements Command{
 //                              return emailSender.sendMessage(messageElement.getPayload().getData(), userBd.getEmail(), "send_user_cr");
                             })
                       );
+    }
+
+    @Transactional
+    public Mono<User> saveUser(MessageElement msg){
+        return userRepository.getUserByUserCode(msg.getUserCode())
+                .defaultIfEmpty(new User())
+                .filter(user -> user.getId()==null)
+                .switchIfEmpty(Mono.error(new UserAlreadyExist(String.format("User with code - %s already exist", msg.getUserCode()))))
+                .then(userRepository.save(new User(msg.getUserCode(), msg.getPayload().getData().get("email"))));
     }
 
     @Override
