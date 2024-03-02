@@ -1,5 +1,6 @@
 package tgc.plus.authservice.configs;
 
+import io.r2dbc.postgresql.PostgresqlConnectionFactoryProvider;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactoryOptions;
@@ -17,6 +18,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import reactor.netty.resources.LoopResources;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -66,6 +68,7 @@ public class R2Config extends AbstractR2dbcConfiguration {
                 .option(MAX_SIZE, maxPoolSize)
                 .option(VALIDATION_QUERY, "SELECT 1")
                 .option(VALIDATION_DEPTH, ValidationDepth.REMOTE)
+                .option(PostgresqlConnectionFactoryProvider.LOOP_RESOURCES, LoopResources.create("pref", -1, maxPoolSize, true, false))
                 .build());
     }
 

@@ -13,7 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.kafka.sender.SenderRecord;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.kafka_message_dto.*;
@@ -324,17 +326,17 @@ public class FacadeUtils {
 
     public Mono<Void> sendMessageInCallService(KafkaMessage message, String method){
 
-        ProducerRecord<String, KafkaMessage> record;
+        ProducerRecord<String, KafkaMessage> messageRecord;
 
         if (method.contains("update"))
-            record = new ProducerRecord<>(topic, "change", message);
+            messageRecord = new ProducerRecord<>(topic, "change", message);
         else
-            record = new ProducerRecord<>(topic, "other", message);
+            messageRecord = new ProducerRecord<>(topic, "other", message);
 
-        record.headers().add(new RecordHeader("method", method.getBytes()));
+        messageRecord.headers().add(new RecordHeader("method", method.getBytes()));
+        SenderRecord<String, KafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
 
-        CompletableFuture<SendResult<String, KafkaMessage>> future = kafkaProducerConfig.kafkaTemplate().send(record);
-        return Mono.fromFuture(future)
+        return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord))
                     .onErrorResume(e -> Mono.error(new KafkaException(e.getMessage())))
                     .then(Mono.empty());
     }

@@ -4,26 +4,19 @@ import freemarker.template.Template;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import reactor.core.publisher.Mono;
 import tgc.plus.callservice.configs.FreeMarkerConfig;
-import tgc.plus.callservice.exceptions.CommandNotFound;
-import tgc.plus.callservice.exceptions.EmailSenderException;
+import tgc.plus.callservice.exceptions.CommandNotFoundException;
 import tgc.plus.callservice.services.utils.EmailSenderCommands;
 
 import java.nio.charset.StandardCharsets;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +71,7 @@ public class EmailSender {
             }
         }
         else
-            return Mono.error(new CommandNotFound(String.format("Command with name %s not found!", method)));
+            return Mono.error(new CommandNotFoundException(String.format("Command with name %s not found!", method)));
         });
     }
 }

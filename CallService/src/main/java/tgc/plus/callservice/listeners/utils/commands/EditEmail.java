@@ -1,19 +1,14 @@
 package tgc.plus.callservice.listeners.utils.commands;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 import tgc.plus.callservice.dto.MessageElement;
 import tgc.plus.callservice.entity.User;
-import tgc.plus.callservice.exceptions.UserNotFound;
+import tgc.plus.callservice.exceptions.UserNotFoundException;
 import tgc.plus.callservice.listeners.utils.Command;
 import tgc.plus.callservice.repositories.UserRepository;
-
-import java.util.Objects;
 
 @Slf4j
 @Component
@@ -28,10 +23,10 @@ public class EditEmail implements Command {
     @Override
     @Transactional
     public Mono<Void> execution(MessageElement messageElement) {
-        return userRepository.getUserByUserCode(messageElement.getUserCode())
+        return userRepository.getUserByUserCodeForChange(messageElement.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
-                .switchIfEmpty(Mono.error(new UserNotFound(String.format("User with code - %s not found", messageElement.getUserCode()))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found", messageElement.getUserCode()))))
                 .then(userRepository.updateEmailUser(messageElement.getUserCode(), messageElement.getPayload().getData().get("email"))
                                 .doOnSuccess(success -> log.info(String.format("Email for user with code - %s was updated", messageElement.getUserCode()))));
     }

@@ -12,6 +12,12 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
     Mono<User> getUserByUserCode(String userCode);
 
+    @Query("SELECT * FROM user_communicate WHERE user_code= :userCode or email= :email FOR UPDATE")
+    Mono<User> getUserByUserCodeForReg(String userCode, String email);
+
+    @Query("SELECT * FROM user_communicate WHERE user_code= :userCode FOR UPDATE")
+    Mono<User> getUserByUserCodeForChange(String userCode);
+
     @Modifying
     @Query("UPDATE user_communicate SET phone = :phone WHERE user_code = :userCode")
     Mono<Void> updatePhoneUser(String userCode, String phone);

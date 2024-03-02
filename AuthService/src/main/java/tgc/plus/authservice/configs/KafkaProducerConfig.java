@@ -11,6 +11,9 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import reactor.core.scheduler.Schedulers;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
 import tgc.plus.authservice.configs.utils.CustomPartitioner;
 import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
 
@@ -30,6 +33,12 @@ public class KafkaProducerConfig {
     @Value("${kafka.bootstrap-servers}")
     String serverConfig;
 
+    @Value("${kafka.sender.scheduler.result.thread}")
+    Integer schedulerResultThread;
+
+    @Value("${kafka.sender.scheduler.result.queue}")
+    Integer schedulerResultQueue;
+
     @Bean
     public Map<String, Object> producerConfigs(){
         Map<String, Object> props = new HashMap<>();
@@ -42,20 +51,19 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.RETRIES_CONFIG, retriesConfig);
         props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retriesBackoff);
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);
-
         return props;
     }
 
     @Bean
-    public ProducerFactory<String, KafkaMessage> factory(){
-        DefaultKafkaProducerFactory<String, KafkaMessage> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
-        defaultKafkaProducerFactory.setProducerPerThread(true);
-        return defaultKafkaProducerFactory;
+    public SenderOptions<String, KafkaMessage> senderOptions(){
+        SenderOptions<String, KafkaMessage> senderOptions = SenderOptions.create(producerConfigs());
+        senderOptions.scheduler(Schedulers.newBoundedElastic(schedulerResultThread, schedulerResultQueue, "sender-option-result"));
+        return senderOptions;
     }
 
     @Bean
-    public KafkaTemplate<String, KafkaMessage> kafkaTemplate(){
-        return new KafkaTemplate<>(factory());
+    public KafkaSender<String, KafkaMessage> kafkaSender(){
+        return KafkaSender.create(senderOptions());
     }
 
 }

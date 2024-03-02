@@ -33,12 +33,6 @@ public class RestControllerAdvice {
                     return ResponseEntity.status(HttpStatus.ACCEPTED)
                             .header("2FA-Token", ((TwoFactorActiveException) exception).getDeviceToken()).build();
 
-//            else if (exception instanceof TwoFactorCodeException) {
-//                HttpStatus status = ((TwoFactorCodeException) exception).getHttpStatus();
-//                HttpHeaders httpHeaders = ((TwoFactorCodeException) exception).getHttpHeaders();
-//                return ResponseEntity.status(status).headers(httpHeaders).body(new ResponseException(request.getRequest().getPath().toString(),
-//                        status.getReasonPhrase(), status.value(), exception.getMessage()));
-//            }
 
             else if (exception instanceof QrGenerationException) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseException(request.getRequest().getPath().toString(),

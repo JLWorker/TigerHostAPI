@@ -30,7 +30,7 @@ public class ConsumerMessageTest {
     @BeforeAll
     public static void initTestProducer(){
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "31.200.225.93:9199");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "31.200.225.93:9189");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
@@ -45,14 +45,9 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToTopic() {
 
-//        int i = 10;
-//        while (i-- > 9)
-//            boolean result = kafkaTemplate.send("call_service",
-//                    new TestJson(UUID.randomUUID().toString(), "https://auth.tgc.plus/reset/i9810ska1")).isDone();
-//            Assert.isTrue(!result, "failed!");
         Flux<Void> res = Flux.range(1, 30000).flatMapSequential(el->{
                 String userCode = UUID.randomUUID().toString();
-                MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest("4357480@bk.ru", "sadasASD463"));
+                MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(UUID.randomUUID().toString(), "sadasASD463"));
                 ProducerRecord<String, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
                 record.headers().add("method", "save".getBytes());
                 kafkaTemplate.send(record);

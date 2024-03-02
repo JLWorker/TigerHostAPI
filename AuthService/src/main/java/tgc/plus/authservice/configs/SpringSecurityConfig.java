@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
                         exchange
                                 .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/create", "/account/check",
                                         "/tokens/update", "/2fa/verify-code").permitAll()
-                                .pathMatchers("/account/phone", "/account/email", "/account/info","/tokens/token", "/tokens/tokenAll", "/2fa/switch", "/2fa/qr",
+                                .pathMatchers("/account/phone", "/account/email", "/account/info","/tokens/token", "/tokens/all", "/2fa/switch", "/2fa/qr",
                                         "/account/password").authenticated()
                                 .anyExchange().denyAll()
                 )

@@ -34,12 +34,12 @@ public class TokenController {
         return tokenFacade.deleteToken(tokenId);
     }
 
-    @DeleteMapping("/tokenAll")
+    @DeleteMapping("/all")
     public Mono<Void> deleteAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId){
         return tokenFacade.deleteAllTokens(tokenId);
     }
 
-    @GetMapping("/tokenAll")
+    @GetMapping("/all")
     public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId, ServerWebExchange serverWebExchange){
         return requestsUtils.getIpAddress(serverWebExchange).flatMap(ipAddress ->
                 tokenFacade.getAllTokens(tokenId, ipAddress));
