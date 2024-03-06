@@ -45,10 +45,10 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToTopic() {
 
-        Flux<Void> res = Flux.range(1, 30000).flatMapSequential(el->{
+        Flux<Void> res = Flux.range(1, 60000).flatMapSequential(el->{
                 String userCode = UUID.randomUUID().toString();
                 MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(UUID.randomUUID().toString(), "sadasASD463"));
-                ProducerRecord<String, MessageTest> record = new ProducerRecord<>("callservice", baseMessageTest);
+                ProducerRecord<String, MessageTest> record = new ProducerRecord<>("event-service", baseMessageTest);
                 record.headers().add("method", "save".getBytes());
                 kafkaTemplate.send(record);
                 System.out.println(userCode + " - code " + el);
@@ -61,7 +61,7 @@ public class ConsumerMessageTest {
         public void sendMessageToCreateVM() {
             String userCode = UUID.randomUUID().toString();
             MessageTest messageTest = new MessageTest("f3fc21e3-4619-4a7f-aff7-b43ff419a88e",new VirtualMachineCreateDataTest(993, "root", "ghtydjJS8732", 2313, "192.168.64.33"));
-            ProducerRecord<String, MessageTest> record = new ProducerRecord<>("call_service", messageTest);
+            ProducerRecord<String, MessageTest> record = new ProducerRecord<>("event-service", messageTest);
             record.headers().add("method", "send_vm_cr".getBytes());
 
             kafkaTemplate.send(record);
