@@ -4,6 +4,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,6 +21,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
@@ -30,6 +32,7 @@ import tgc.plus.feedbackgateaway.configs.SpringSecurityConfig;
 import tgc.plus.feedbackgateaway.dto.EventMessage;
 import tgc.plus.feedbackgateaway.facade.utils.EventTypes;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -41,10 +44,13 @@ public class FeedbackControllerTest {
     @Value("${kafka.topic}")
     private String topic;
 
-    private final static String code = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiIxZDM2NzkyMy1mNjcxLTRmMWUtODcwOC1kOTM2NWVjYzQ3MWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwOTc0MzA1OSwiaWF0IjoxNzA5NzM5ODU5fQ.Pv_Bj13p8PidiRmFwW8mKWi3VeXO1zZjA3Y8cTgplTM";
+    private final static String code = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiIxZDM2NzkyMy1mNjcxLTRmMWUtODcwOC1kOTM2NWVjYzQ3MWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwOTkxMTQwOSwiaWF0IjoxNzA5OTA4MjA5fQ.yz---xJ95_38YmVimNg4DDKxwPxV-szNuKsNOxiwDt4";
     public static KafkaSender<String, EventMessage> kafkaSender;
     private final String authHeader = String.format("Bearer_%s", code);
     private final WebClient webClient = WebClient.create("http://localhost:8083");
+
+    @Autowired
+    private WebTestClient webTestClient;
 
     @BeforeAll
     public static void initTestProducer(){
@@ -63,22 +69,29 @@ public class FeedbackControllerTest {
     @Test
     public void getEvents(){
         ParameterizedTypeReference<ServerSentEvent<EventMessage>> event = new ParameterizedTypeReference<ServerSentEvent<EventMessage>>(){};
-        Flux<ServerSentEvent<EventMessage>> events = webClient.get()
-                .uri("/feedback/events")
-                .header("Authorization", authHeader)
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .retrieve().bodyToFlux(event);
 
-        events.flatMapSequential(msg -> {
-            System.out.printf("Id: %s, Event: %s, payload_type: %s%n", msg.id(),msg.event(),msg.data().getOperationType());
-            return Mono.empty();
-        }).subscribe();
+        Disposable disposable = webTestClient.mutate().responseTimeout(Duration.ofMillis(1000000000)).build().get()
+                .uri("http://localhost:8083/feedback/events")
+                .header("Authorization", authHeader)
+                .exchange().expectStatus().isOk()
+                        .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
+                        .returnResult(event)
+                                .getResponseBody().flatMapSequential(msg -> {
+                    System.out.printf("Id: %s, Event: %s", msg.id(),msg.event());
+                    return Mono.empty();
+                }).subscribe();
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        disposable.dispose();
 
     }
 
     @Test
     public void fastEventCreator(){
-        Flux<Void> recordsFeedback = Flux.range(0, 1)
+        Flux<Void> recordsFeedback = Flux.range(0, 10)
                 .flatMapSequential(el -> {
                     ProducerRecord<String, EventMessage> messageRecord = new ProducerRecord<>(topic, new EventMessage("update_user_info"));
                     messageRecord.headers().add("user_code", "1d367923-f671-4f1e-8708-d9365ecc471e".getBytes());

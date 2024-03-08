@@ -14,11 +14,14 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-       return Mono.defer(()->
-                 Mono.just(authentication)
-                        .cast(UsernamePasswordAuthenticationToken.class)
-                        .flatMap(this::authenticateToken)
-        ).doOnError(e->log.error(e.getMessage()));
+       return Mono.defer(()-> {
+           if (authentication.isAuthenticated())
+               return Mono.just(authentication);
+           else
+                return Mono.just(authentication)
+                   .cast(UsernamePasswordAuthenticationToken.class)
+                   .flatMap(this::authenticateToken);
+       }).doOnError(e->log.error(e.getMessage()));
     }
 
     public Mono<Authentication> authenticateToken(UsernamePasswordAuthenticationToken authenticationToken) {

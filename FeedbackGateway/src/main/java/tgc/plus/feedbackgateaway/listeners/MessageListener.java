@@ -35,8 +35,14 @@ public class MessageListener {
     @Value("${kafka.listener.concurrency}")
     Integer listenerConcurrency;
 
+    @Value("${sse.key-live-time.ms}")
+    Long keyLiveTime;
+
     @Autowired
     RedisConfig redisConfig;
+
+    @Autowired
+    ReactiveRedisTemplate<String, EventMessage> redisTemplate;
 
     @EventListener(value = ApplicationStartedEvent.class)
     public void kafkaConsumerStarter() {
@@ -51,15 +57,14 @@ public class MessageListener {
 
         KafkaReceiver<String, EventMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
 
-        ReactiveRedisTemplate<String, EventMessage> redisTemplate = redisConfig.reactiveRedisTemplate();
-
         return kafkaReceiver.receive()
                 .concatMap(msg -> {
                     String userCode = new String(msg.headers().lastHeader("user_code").value());
                     if (!userCode.isBlank()) {
                         String uniqueKey = String.format("%s-%d%d", userCode, msg.receiverOffset().offset(), msg.receiverOffset().topicPartition().partition());
-                        return redisTemplate.opsForValue().set(uniqueKey, msg.value())
-                                .doFinally(res -> msg.receiverOffset().acknowledge()).then();
+                        return redisTemplate.opsForValue().set(uniqueKey, msg.value(), Duration.ofMillis(keyLiveTime))
+                                .doFinally(res ->
+                                    msg.receiverOffset().acknowledge()).then();
                     }
                     else {
                         log.warn("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());
