@@ -1,23 +1,13 @@
 package tgc.plus.authservice.dto.kafka_message_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
 
-@NoArgsConstructor
-@Getter
-public class KafkaMessage {
-
-    @JsonProperty("user_code")
-    private String userCode;
-
-    @JsonProperty("payload")
+public abstract class KafkaMessage {
+    @JsonProperty
     private Payload payload;
 
-    public KafkaMessage(String userCode, Payload payload) {
-        this.userCode = userCode;
+    public KafkaMessage(Payload payload) {
         this.payload = payload;
     }
-
 }

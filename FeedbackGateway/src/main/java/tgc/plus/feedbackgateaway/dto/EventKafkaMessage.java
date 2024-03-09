@@ -3,13 +3,13 @@ package tgc.plus.feedbackgateaway.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tgc.plus.feedbackgateaway.dto.message_payloads.Payload;
-
-import java.time.Duration;
 
 @NoArgsConstructor
 @Getter
-public class EventMessage {
+@Setter
+public class EventKafkaMessage {
 
     @JsonProperty("type")
     String operationType;
@@ -17,12 +17,12 @@ public class EventMessage {
     @JsonProperty
     Payload payload;
 
-    public EventMessage(String operationType, Payload payload) {
+    public EventKafkaMessage(String operationType, Payload payload) {
         this.operationType = operationType;
         this.payload = payload;
     }
 
-    public EventMessage(String operationType) {
+    public EventKafkaMessage(String operationType) {
         this.operationType = operationType;
     }
 }

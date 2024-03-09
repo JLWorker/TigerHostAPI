@@ -40,17 +40,17 @@ public class UserController {
     }
 
     @PatchMapping("/phone")
-    public Mono<UserChangeContactResponse> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version) {
+    public Mono<Void> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version) {
         return userFacade.changePhone(userChangeContacts, version);
     }
 
     @PatchMapping("/email")
-    public Mono<UserChangeContactResponse> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version){
+    public Mono<Void> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version){
         return userFacade.changeEmail(userChangeContacts, version);
     }
 
     @PatchMapping("/password")
-    public Mono<AuthRestorePasswordResponse> changePassword(@RequestBody @Valid @JsonView(RestorePassword.AuthChange.class) RestorePassword restorePassword, @RequestHeader("Version") Long version){
+    public Mono<Void> changePassword(@RequestBody @Valid @JsonView(RestorePassword.AuthChange.class) RestorePassword restorePassword, @RequestHeader("Version") Long version){
         return userFacade.changePassword(restorePassword, version);
     }
 

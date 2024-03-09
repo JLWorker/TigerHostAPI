@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
 import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
-import tgc.plus.authservice.dto.two_factor_dto.TwoFactorSwitchResponse;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorCodeException;
+import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.services.TokenService;
@@ -33,11 +32,13 @@ public class TwoFactorFacade {
     TwoFactorRepository twoFactorRepository;
 
     @Transactional
-    public Mono<TwoFactorSwitchResponse> switch2Fa(Long version){
+    public Mono<Void> switch2Fa(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.switch2FaStatus(userCode, version)
-                    .doOnError(e -> log.error(e.getMessage()));//вынести отправку версии в шлюз
+                    .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName())
+                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)))
+                    .doOnError(e -> log.error(e.getMessage()));
         });
     }
 

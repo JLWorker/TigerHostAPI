@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.api.mobile.utils.RequestsUtils;
 import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
 import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
-import tgc.plus.authservice.dto.two_factor_dto.TwoFactorSwitchResponse;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.facades.TwoFactorFacade;
 
@@ -23,7 +22,7 @@ public class TwoAuthController {
     RequestsUtils requestsUtils;
 
     @PatchMapping("/switch")
-    public Mono<TwoFactorSwitchResponse> checkTwoAuthCode(@RequestHeader("Version") Long version){
+    public Mono<Void> checkTwoAuthCode(@RequestHeader("Version") Long version){
         return twoFactorFacade.switch2Fa(version);
     }
 

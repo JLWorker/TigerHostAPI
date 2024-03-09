@@ -12,7 +12,7 @@ public class CustomPartitioner implements Partitioner {
 
     private final Integer CHANGE_MESSAGE_PARTITION = 0;
 
-    @Value("${kafka.topic}")
+    @Value("${kafka.topic.call-service}")
     String topic;
 
     @Override

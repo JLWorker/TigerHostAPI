@@ -3,6 +3,7 @@ package tgc.plus.authservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -96,14 +97,14 @@ class AuthServiceApplicationTests {
     }
 
 
-    private Mono<UserChangeContactResponse> sendRequestToChangePhone(){
+    private Mono<ResponseEntity<Void>> sendRequestToChangePhone(){
         WebClient patchPhone = WebClient.create("http://localhost:8081/account/phone");
         return patchPhone.patch()
                 .header("Authorization", "Bearer_eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiI1OWJhODI3ZS1hZjI5LTRlMTQtYTJjNS0zY2E5NmI2NmQyNWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwODkzMTIyNCwiaWF0IjoxNzA4OTI4MDI0fQ.03MHRkCICawT_aVQdpsYNRmKV9cyxFizhDUTnOQT9-M")
                 .header("Version", "18")
                 .body(Mono.just(new PhoneChange("89244273135")), PhoneChange.class)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve().bodyToMono(UserChangeContactResponse.class);
+                .retrieve()
+                .toBodilessEntity();
 
 
     }

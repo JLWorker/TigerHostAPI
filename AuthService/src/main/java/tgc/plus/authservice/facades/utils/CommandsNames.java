@@ -3,7 +3,7 @@ package tgc.plus.authservice.facades.utils;
 import lombok.Getter;
 
 @Getter
-public enum CommandsName {
+public enum CommandsNames {
 
     SAVE("save"),
     UPDATE_PHONE("update_ph"),
@@ -13,7 +13,7 @@ public enum CommandsName {
 
     private final String name;
 
-    CommandsName(String name) {
+    CommandsNames(String name) {
         this.name = name;
     }
 
