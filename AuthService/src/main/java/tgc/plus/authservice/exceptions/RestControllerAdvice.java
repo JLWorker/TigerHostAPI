@@ -2,7 +2,6 @@ package tgc.plus.authservice.exceptions;
 import dev.samstevens.totp.exceptions.QrGenerationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import tgc.plus.authservice.dto.exceptions_dto.ResponseException;
 import tgc.plus.authservice.dto.exceptions_dto.VersionResponseException;
-import tgc.plus.authservice.exceptions.exceptions_clases.*;
+import tgc.plus.authservice.exceptions.exceptions_elements.*;
 
 import java.util.Objects;
 

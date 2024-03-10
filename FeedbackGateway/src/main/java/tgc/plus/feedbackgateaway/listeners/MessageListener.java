@@ -66,7 +66,7 @@ public class MessageListener {
                                     msg.receiverOffset().acknowledge()).then();
                     }
                     else {
-                        log.warn("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());
+                        log.error("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());
                         return Mono.empty();
                     }
                 })

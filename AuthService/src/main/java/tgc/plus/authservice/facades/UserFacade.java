@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.api.mobile.utils.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActiveException;
+import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;
 import tgc.plus.authservice.facades.utils.CommandsNames;
 import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
@@ -20,7 +20,6 @@ import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j

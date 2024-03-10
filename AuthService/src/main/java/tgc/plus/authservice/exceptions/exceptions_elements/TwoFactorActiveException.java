@@ -1,4 +1,4 @@
-package tgc.plus.authservice.exceptions.exceptions_clases;
+package tgc.plus.authservice.exceptions.exceptions_elements;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -20,19 +20,19 @@ import java.util.Map;
 public class VirtualMachineCreateData implements Payload{
 
     @JsonProperty("vm_id")
-    Integer vmId;
+    private Integer vmId;
 
     @JsonProperty
-    String username;
+    private String username;
 
     @JsonProperty
-    String password;
+    private String password;
 
     @JsonProperty
-    Integer port;
+    private Integer port;
 
     @JsonProperty
-    String ip;
+    private String ip;
 
     public VirtualMachineCreateData(Integer vmId, String username, String password, Integer port, String ip) {
         this.vmId = vmId;

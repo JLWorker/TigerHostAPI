@@ -36,10 +36,10 @@ public class CommandsDispatcher {
 
     @PostConstruct
     void init(){
-        commandMap.put(CommandsName.SAVE.getName(), new SaveUser(userRepository, emailSender));
-        commandMap.put(CommandsName.UPDATE_PHONE.getName(), new EditPhone(userRepository));
-        commandMap.put(CommandsName.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
-        commandMap.put(CommandsName.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
+        commandMap.put(CommandsNames.SAVE.getName(), new SaveUser(userRepository, emailSender));
+        commandMap.put(CommandsNames.UPDATE_PHONE.getName(), new EditPhone(userRepository));
+        commandMap.put(CommandsNames.UPDATE_EMAIL.getName(), new EditEmail(userRepository));
+        commandMap.put(CommandsNames.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
     public Mono<Void> execute(String method, MessageElement messageElement){
@@ -50,7 +50,8 @@ public class CommandsDispatcher {
             } else if (commandMap.containsKey(method)) {
                 return commandMap.get(method).execution(messageElement);
             } else
-               return Mono.error(new CommandNotFoundException(String.format("Command with name - %s not found ::CommandsDispatcher", method)));
+               return Mono.error(new CommandNotFoundException(String.format("Command with name - %s not found " +
+                       "::CommandsDispatcher", method)));
         }).onErrorResume(e -> {
             log.error("Error with message: {}, cause: {}", e.getMessage(), e.getCause());
             return Mono.empty();

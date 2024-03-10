@@ -1,4 +1,4 @@
-package tgc.plus.authservice.exceptions.exceptions_clases;
+package tgc.plus.feedbackgateaway.exceptions.exception_elements;
 
 import org.springframework.security.core.AuthenticationException;
 

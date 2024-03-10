@@ -1,4 +1,4 @@
-package tgc.plus.feedbackgateaway.configs.utils;
+package tgc.plus.feedbackgateaway.services;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -12,8 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tgc.plus.feedbackgateaway.exceptions.AccessTokenExpiredException;
-import tgc.plus.feedbackgateaway.exceptions.AuthException;
+import tgc.plus.feedbackgateaway.exceptions.exception_elements.AccessTokenExpiredException;
+import tgc.plus.feedbackgateaway.exceptions.exception_elements.AccessTokenCorruptionException;
 
 import javax.crypto.SecretKey;
 import java.util.List;
@@ -41,7 +41,7 @@ public class TokenService {
                 String userCode = claims.getPayload().get("user_code", String.class);
                 String role = claims.getPayload().get("role", String.class);
                 if ((userCode == null || userCode.isBlank()) || (role == null || role.isBlank())) {
-                    throw new AuthException("Invalid access token");
+                    throw new AccessTokenCorruptionException("Invalid access token");
                 } else {
                     List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(claims.getPayload().get("role", String.class)));
                     return Mono.just((Authentication) new UsernamePasswordAuthenticationToken(userCode, "", authorities));
@@ -51,7 +51,7 @@ public class TokenService {
                 if (e instanceof ExpiredJwtException)
                     return Mono.error(new AccessTokenExpiredException("Token expired"));
                 else
-                    return Mono.error((new AuthException("Invalid access token")));
+                    return Mono.error((new AccessTokenCorruptionException("Invalid access token")));
             }
         });
     }
@@ -65,7 +65,7 @@ public class TokenService {
                 return Mono.just(token.substring(bearer.length()));
             }
             else
-                return Mono.error(new AuthException("Invalid access token"));
+                return Mono.error(new AccessTokenCorruptionException("Invalid access token"));
         }).doOnError(e->log.error(e.getMessage()));
     }
 

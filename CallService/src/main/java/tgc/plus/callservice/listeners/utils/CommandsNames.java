@@ -1,6 +1,6 @@
 package tgc.plus.callservice.listeners.utils;
 
-public enum CommandsName {
+public enum CommandsNames {
     //Command Pattern
     SAVE("save"),
     UPDATE_PHONE("update_ph"),
@@ -9,7 +9,7 @@ public enum CommandsName {
 
     private final String name;
 
-    CommandsName(String name) {
+    CommandsNames(String name) {
         this.name = name;
     }
 

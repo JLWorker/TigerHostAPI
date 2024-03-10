@@ -14,14 +14,9 @@ import tgc.plus.authservice.services.UserService;
 @Slf4j
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
-    private final UserService userService;
-    public JwtReactiveAuthenticationManager(UserService userService) {
-        this.userService = userService;
-    }
-
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-       return Mono.defer(()->{
+        return Mono.defer(()-> {
             if (authentication.isAuthenticated())
                 return Mono.just(authentication);
             else
@@ -34,14 +29,10 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
     public Mono<Authentication> authenticateToken(UsernamePasswordAuthenticationToken authenticationToken) {
         if(authenticationToken != null) {
             return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
-                if (securityContext.getAuthentication() == null)
-                 return userService.findByUsername(authenticationToken.getPrincipal().toString())
-                        .switchIfEmpty(raiseBadCredentials())
-                        .doOnError(e->log.error(e.getMessage()))
-                        .flatMap(user -> {
-                                securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
-                                return Mono.just(securityContext.getAuthentication());
-                            });
+                if (securityContext.getAuthentication() == null){
+                    securityContext.setAuthentication(authenticationToken);
+                    return Mono.just(securityContext.getAuthentication());
+                }
                 else
                     return Mono.error(new AuthenticationException("Token already authenticate"));
             });

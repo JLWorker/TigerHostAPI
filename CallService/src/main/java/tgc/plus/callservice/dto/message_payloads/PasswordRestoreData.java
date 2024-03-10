@@ -20,7 +20,7 @@ import java.util.Map;
 public class PasswordRestoreData implements Payload {
 
     @JsonProperty
-    String url;
+    private String url;
 
     public PasswordRestoreData(String url) {
         this.url = url;

@@ -22,7 +22,7 @@ import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.dto.user_dto.UserChangeContacts;
 import tgc.plus.authservice.entity.*;
-import tgc.plus.authservice.exceptions.exceptions_clases.*;
+import tgc.plus.authservice.exceptions.exceptions_elements.*;
 import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;

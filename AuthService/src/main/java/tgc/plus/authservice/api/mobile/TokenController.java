@@ -4,11 +4,11 @@ package tgc.plus.authservice.api.mobile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.mobile.utils.RequestsUtils;
 import tgc.plus.authservice.dto.tokens_dto.TokensDataResponse;
 import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
@@ -20,9 +20,6 @@ public class TokenController {
 
     @Autowired
     TokenFacade tokenFacade;
-
-    @Autowired
-    RequestsUtils requestsUtils;
 
     @PatchMapping("/update")
     public Mono<UpdateTokenResponse> updateToken(@RequestBody @Valid UpdateToken updateToken){
@@ -40,8 +37,7 @@ public class TokenController {
     }
 
     @GetMapping("/all")
-    public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId, ServerWebExchange serverWebExchange){
-        return requestsUtils.getIpAddress(serverWebExchange).flatMap(ipAddress ->
-                tokenFacade.getAllTokens(tokenId, ipAddress));
+    public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId, ServerHttpRequest request){
+        return tokenFacade.getAllTokens(tokenId, request.getHeaders().getFirst("Device-Ip"));
     }
 }

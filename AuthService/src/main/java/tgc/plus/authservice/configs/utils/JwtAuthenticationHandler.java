@@ -12,7 +12,7 @@ import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.exceptions_dto.ResponseException;
-import tgc.plus.authservice.exceptions.exceptions_clases.AccessTokenExpiredException;
+import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenExpiredException;
 
 @Slf4j
 public class JwtAuthenticationHandler implements ServerAuthenticationFailureHandler {

@@ -3,19 +3,11 @@ package tgc.plus.authservice.api.mobile;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.mobile.utils.IpValid;
-import tgc.plus.authservice.api.mobile.utils.RequestsUtils;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.facades.UserFacade;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/account")
@@ -25,18 +17,14 @@ public class UserController {
     @Autowired
     UserFacade userFacade;
 
-    @Autowired
-    RequestsUtils requestsUtils;
-
     @PostMapping("/reg")
     public Mono<Void> registration(@RequestBody @Valid @JsonView(UserData.RegistrationUserData.class) UserData regData) {
         return userFacade.registerUser(regData);
     }
 
     @PostMapping("/login")
-    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerWebExchange serverWebExchange) {
-        return requestsUtils.getIpAddress(serverWebExchange).flatMap(ipAddress ->
-            userFacade.loginUser(logData, ipAddress));
+    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerHttpRequest request) {
+        return userFacade.loginUser(logData, request.getHeaders().getFirst("Device-Ip"));
     }
 
     @PatchMapping("/phone")

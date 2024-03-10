@@ -21,13 +21,13 @@ import java.util.Map;
 public class VirtualMachineExpireData implements Payload{
 
     @JsonProperty("vm_id")
-    Integer vmId;
+    private Integer vmId;
 
     @JsonProperty("expired_date")
-    String expiredDate;
+    private String expiredDate;
 
     @JsonProperty
-    Double price;
+    private Double price;
 
     public VirtualMachineExpireData(Integer vmId, String expiredDate, Double price) {
         this.vmId = vmId;

@@ -36,7 +36,7 @@ public class SpringSecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
-                                .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/create", "/account/check",
+                                .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/check",
                                         "/tokens/update", "/2fa/verify-code").permitAll()
                                 .pathMatchers("/account/phone", "/account/email", "/account/info","/tokens/token", "/tokens/all", "/2fa/switch", "/2fa/qr",
                                         "/account/password").authenticated()
@@ -54,7 +54,7 @@ public class SpringSecurityConfig {
     @Bean
     @Primary
     public ReactiveAuthenticationManager reactiveFilterAuthenticationManager(){
-        return new JwtReactiveAuthenticationManager(userService);
+        return new JwtReactiveAuthenticationManager();
     }
 
     @Bean
