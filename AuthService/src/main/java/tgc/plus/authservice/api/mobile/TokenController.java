@@ -15,7 +15,7 @@ import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.facades.TokenFacade;
 
 @RestController
-@RequestMapping("/tokens")
+@RequestMapping("/api/tokens")
 public class TokenController {
 
     @Autowired

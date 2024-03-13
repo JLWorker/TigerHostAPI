@@ -16,7 +16,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.entity.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenExpiredException;
-import tgc.plus.authservice.exceptions.exceptions_elements.AuthException;
+import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenCorruptionException;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorTokenException;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
@@ -102,7 +102,7 @@ public class TokenService {
                 String userCode = claims.getPayload().get("user_code", String.class);
                 String role = claims.getPayload().get("role", String.class);
                 if ((userCode == null || userCode.isBlank()) || (role == null || role.isBlank())) {
-                    throw new AuthException("Invalid access token");
+                    throw new AccessTokenCorruptionException("Invalid access token");
                 } else {
                     List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(claims.getPayload().get("role", String.class)));
                     return Mono.just((Authentication) new UsernamePasswordAuthenticationToken(userCode, "", authorities));
@@ -112,7 +112,7 @@ public class TokenService {
                 if (e instanceof ExpiredJwtException)
                     return Mono.error(new AccessTokenExpiredException("Token expired"));
                 else
-                    return Mono.error((new AuthException("Invalid access token")));
+                    return Mono.error((new AccessTokenCorruptionException(e.getMessage())));
             }
         });
     }
@@ -144,7 +144,7 @@ public class TokenService {
                 return Mono.just(token.substring(bearer.length()));
             }
             else
-                return Mono.error(new AuthException("Invalid access token"));
+                return Mono.error(new AccessTokenCorruptionException("Invalid access token"));
         }).doOnError(e->log.error(e.getMessage()));
     }
 
@@ -155,14 +155,14 @@ public class TokenService {
                 return Mono.just(true);
     }
 
-    public Mono<Map<String, String>> updateAccessTokenMobile(String oldRefreshToken, String userCode, String role){
+    public Mono<Map<String, String>> updateAccessToken(String oldRefreshToken, String userCode, String role){
 
         String newRefreshToken = UUID.randomUUID().toString();
-        Instant startDate = Instant.now();
-        Instant finishDate = startDate.plusMillis(refreshSecurityExpireDate);
+        Instant createDate = Instant.now();
+        Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
 
         return createAccessToken(Map.of("user_code", userCode, "role", role), TokensList.SECURITY.getName())
-                .zipWith(userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, startDate))
+                .zipWith(userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, createDate))
                         .flatMap(tokens -> Mono.just(Map.of("access_token", tokens.getT1(), "refresh_token", newRefreshToken)));
 
     }

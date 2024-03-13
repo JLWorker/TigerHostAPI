@@ -10,7 +10,7 @@ import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.facades.UserFacade;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 public class UserController {
 
 
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public Mono<UserInfoResponse> userInfoResponseMono(@RequestHeader("Version") Long version){
+    public Mono<UserInfoResponse> getAccountInfo(@RequestHeader("Version") Long version){
         return userFacade.getInfoAboutAccount(version);
     }
 

@@ -134,9 +134,8 @@ public class UserFacade {
     public Mono<UserInfoResponse> getInfoAboutAccount(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                String userCode =  securityContext.getAuthentication().getPrincipal().toString();
-               return userRepository.getUserByUserCodeAndVersion(userCode, version).flatMap(user ->
-                       Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
-        });
+               return facadeUtils.getUserInfoByVersion(version, userCode);
+        }).doOnError(e -> log.error(e.getMessage()));
     }
 
 

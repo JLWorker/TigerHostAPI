@@ -108,8 +108,7 @@ export default {
     },
 
     async changePassword(newPassword, confirmPassword, code) {
-      console.log(code)
-      axios.patch("http://localhost:8081/account/check", {
+      axios.patch("http://localhost:8080/api/account/check", {
         "password": newPassword,
         "password_confirm": confirmPassword,
         "code": code

@@ -11,7 +11,7 @@ import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
 import tgc.plus.feedbackgateaway.facade.FeedbackFacade;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping("/api/feedback")
 @Slf4j
 public class FeedbackController {
 

@@ -16,7 +16,7 @@ public class Expired2FaCleaner {
     @Value("${jwt.2fa.access.expired.ms}")
     public Integer access2FaExpiredDate;
 
-    @Scheduled(fixedDelayString = "${scheduler.cleaner.delay.ms}")
+    @Scheduled(fixedDelayString = "${cleaner.delay.ms}")
     private Mono<Void> cleaner(){
         return twoFactorRepository.remoteTwoFactorsByTime(access2FaExpiredDate/1000);
     }

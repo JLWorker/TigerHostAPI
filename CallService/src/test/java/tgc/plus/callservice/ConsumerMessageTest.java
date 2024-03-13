@@ -1,5 +1,6 @@
 package tgc.plus.callservice;
 
+import org.apache.kafka.clients.producer.KafkaProducerTest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
@@ -45,7 +46,9 @@ public class ConsumerMessageTest {
     @Test
     public void sendMessageToTopic() {
 
-        Flux<Void> res = Flux.range(1, 60000).flatMapSequential(el->{
+
+
+        Flux<Void> res = Flux.range(1, 5000).flatMapSequential(el->{
                 String userCode = UUID.randomUUID().toString();
                 MessageTest baseMessageTest = new MessageTest(userCode, new SaveUserDataTest(UUID.randomUUID().toString(), "sadasASD463"));
                 ProducerRecord<String, MessageTest> record = new ProducerRecord<>("event-service", baseMessageTest);

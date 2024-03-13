@@ -11,14 +11,14 @@ import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.facades.TwoFactorFacade;
 
 @RestController
-@RequestMapping("/2fa")
+@RequestMapping("/api/2fa")
 public class TwoAuthController {
 
     @Autowired
     TwoFactorFacade twoFactorFacade;
 
     @PatchMapping("/switch")
-    public Mono<Void> checkTwoAuthCode(@RequestHeader("Version") Long version){
+    public Mono<Void> check2FaCode(@RequestHeader("Version") Long version){
         return twoFactorFacade.switch2Fa(version);
     }
 

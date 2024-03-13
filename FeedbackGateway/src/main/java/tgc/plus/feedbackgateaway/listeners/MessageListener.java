@@ -34,7 +34,7 @@ public class MessageListener {
     @Value("${kafka.listener.concurrency}")
     Integer listenerConcurrency;
 
-    @Value("${sse.key-live-time.ms}")
+    @Value("${sse.interval.key_ms}")
     Long keyLiveTime;
 
     @Autowired

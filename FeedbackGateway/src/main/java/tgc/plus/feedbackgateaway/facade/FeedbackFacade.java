@@ -22,10 +22,10 @@ public class FeedbackFacade {
     @Autowired
     RedisConfig redisConfig;
 
-    @Value("${sse.interval.heartbeats.s}")
+    @Value("${sse.interval.heartbeats_s}")
     Integer intervalHeartbeats;
 
-    @Value("${sse.interval.events.ms}")
+    @Value("${sse.interval.events_ms}")
     Long intervalEvent;
 
     @Autowired

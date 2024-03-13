@@ -21,6 +21,7 @@ import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
 import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.dto.user_dto.UserChangeContacts;
+import tgc.plus.authservice.dto.user_dto.UserInfoResponse;
 import tgc.plus.authservice.entity.*;
 import tgc.plus.authservice.exceptions.exceptions_elements.*;
 import tgc.plus.authservice.repository.TokenMetaRepository;
@@ -101,8 +102,10 @@ public class FacadeUtils {
                 .flatMap(user -> twoFactorService.verify(code, user.getTwoFactorSecret())
                         .filter(res -> res)
                         .switchIfEmpty(Mono.error(new TwoFactorCodeException("Authentication code is incorrect")))
-                        .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken)
-                                .then(generatePairTokens(user, deviceData, ipAddr))));
+                        .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken))
+                                .then(createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName()))
+                                .flatMap(feedbackMessage -> sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))
+                                .then(generatePairTokens(user, deviceData, ipAddr)));
     }
 
 
@@ -145,6 +148,16 @@ public class FacadeUtils {
         return userTokenRepository.getUserTokenByRefreshToken(refreshToken)
                 .filter(userToken -> userToken.getTokenId() != null)
                 .switchIfEmpty(getRefreshTokenException("Token not exist", HttpStatus.UNAUTHORIZED));
+    }
+
+    public Mono<UserInfoResponse> getUserInfoByVersion(Long version, String userCode){
+        return userRepository.getUserByUserCodeAndVersion(userCode, version)
+                .defaultIfEmpty(new User())
+                .filter(user -> user.getId()!=null)
+                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+                        .flatMap(user -> getVersionException(user.getVersion())))
+                .flatMap(user ->
+                        Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
     }
 
     public Mono<Long> updatePhoneNumber(String phone, String userCode, Long reqVersion){
@@ -289,7 +302,7 @@ public class FacadeUtils {
 
         else
             return userRepository.getUserById(userId)
-                            .flatMap(user -> tokenService.updateAccessTokenMobile(refreshToken, user.getUserCode(), user.getRole()));
+                            .flatMap(user -> tokenService.updateAccessToken(refreshToken, user.getUserCode(), user.getRole()));
     }
 
     public Mono<CallMessage> createMessageForRestorePsw(String token, String userCode){

@@ -31,7 +31,8 @@ public class SpringSecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
-                        exchange.pathMatchers("/feedback/events").authenticated()
+                        exchange.pathMatchers("/api/feedback/**").authenticated()
+                                .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
         return http.build();

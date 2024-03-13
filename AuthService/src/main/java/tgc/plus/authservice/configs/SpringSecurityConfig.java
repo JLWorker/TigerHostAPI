@@ -12,6 +12,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -36,10 +37,9 @@ public class SpringSecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
-                                .pathMatchers("/account/reg", "/account/login", "/account/recovery", "/account/check",
-                                        "/tokens/update", "/2fa/verify-code").permitAll()
-                                .pathMatchers("/account/phone", "/account/email", "/account/info","/tokens/token", "/tokens/all", "/2fa/switch", "/2fa/qr",
-                                        "/account/password").authenticated()
+                                .pathMatchers("/api/account/reg", "/api/account/login", "/api/account/recovery", "/api/account/check",
+                                        "/api/tokens/update", "/api/2fa/verify-code").permitAll()
+                                .pathMatchers("/api/**").authenticated()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
@@ -69,17 +69,6 @@ public class SpringSecurityConfig {
         authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher());
         authenticationWebFilter.setAuthenticationFailureHandler(new JwtAuthenticationHandler(new ObjectMapper()));
         return authenticationWebFilter;
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedMethod("PATCH");
-        configuration.addAllowedOrigin("http://localhost:5173");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
-        return urlBasedCorsConfigurationSource;
     }
 
 }
