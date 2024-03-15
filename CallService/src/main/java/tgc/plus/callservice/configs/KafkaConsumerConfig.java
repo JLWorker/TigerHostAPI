@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import reactor.kafka.receiver.ReceiverOptions;
 import tgc.plus.callservice.dto.MessageElement;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,16 +21,13 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 
     @Value("${kafka.bootstrap-servers}")
-    String server;
+    private String server;
 
     @Value("${kafka.consumer.group-id}")
-    String group;
-
-    @Value("${kafka.listener.concurrency}")
-    Integer concurrency;
+    private String group;
 
     @Value("${kafka.max.pool}")
-    Integer poolRecords;
+    private Integer poolRecords;
 
     @Bean
     public Map<String, Object> consumerProps(){
@@ -54,6 +49,7 @@ public class KafkaConsumerConfig {
         return props;
     }
 
+
     @Bean
     public ReceiverOptions<String, MessageElement> receiverOptions(){
         ReceiverOptions<String, MessageElement> receiverOptions = ReceiverOptions.create(consumerProps());
@@ -62,7 +58,6 @@ public class KafkaConsumerConfig {
                 .commitInterval(Duration.ofMillis(1000))
                 .commitBatchSize(50)
                 .pauseAllAfterRebalance(true);
-
         return receiverOptions;
     }
 

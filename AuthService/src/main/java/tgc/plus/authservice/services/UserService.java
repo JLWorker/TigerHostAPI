@@ -1,16 +1,8 @@
 package tgc.plus.authservice.services;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,8 +20,6 @@ import tgc.plus.authservice.entity.UserDetail;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.utils.RoleList;
 
-import java.util.Base64;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

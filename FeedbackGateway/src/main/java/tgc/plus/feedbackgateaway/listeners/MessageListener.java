@@ -62,8 +62,8 @@ public class MessageListener {
                     if (!userCode.isBlank()) {
                         String uniqueKey = String.format("%s-%d%d", userCode, msg.receiverOffset().offset(), msg.receiverOffset().topicPartition().partition());
                         return redisTemplate.opsForValue().set(uniqueKey, msg.value(), Duration.ofMillis(keyLiveTime))
-                                .doFinally(res ->
-                                    msg.receiverOffset().acknowledge()).then();
+                                .doOnTerminate(msg.receiverOffset()::acknowledge)
+                                .then();
                     }
                     else {
                         log.error("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());

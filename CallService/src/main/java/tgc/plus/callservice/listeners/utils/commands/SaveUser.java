@@ -38,9 +38,9 @@ public class SaveUser implements Command{
                .defaultIfEmpty(new User())
                .filter(user -> user.getId()==null)
                .switchIfEmpty(Mono.error(new UserAlreadyExistException(String.format("User with code - %s already exist", messageElement.getUserCode()))))
-               .then(userRepository.save(new User(messageElement.getUserCode(), payload.get("email")))
-                       .flatMap(user -> emailSender.sendMessage(payload, user.getEmail(), EmailSenderCommands.SEND_NEW_USER.getName()))
-                       .then(Mono.empty()));
+               .then(userRepository.save(new User(messageElement.getUserCode(), payload.get("email"))).then());
+//                       .flatMap(user -> emailSender.sendMessage(payload, user.getEmail(), EmailSenderCommands.SEND_NEW_USER.getName()))
+//                       .then(Mono.empty()));
     }
 
     @Override

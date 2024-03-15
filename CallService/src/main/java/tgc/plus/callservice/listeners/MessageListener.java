@@ -18,6 +18,7 @@ import tgc.plus.callservice.listeners.utils.CommandsDispatcher;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -42,7 +43,6 @@ public class MessageListener {
     }
 
     private Flux<Void> startListenerPartition(Integer partition) {
-
         ReceiverOptions<String, MessageElement> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .assignment(Collections.singleton(new TopicPartition(topic, partition)));
 
@@ -53,7 +53,7 @@ public class MessageListener {
                     String method = new String(msg.headers().lastHeader("method").value());
                     if (!method.isBlank())
                         return commandsDispatcher.execute(method, msg.value())
-                                .doFinally(res -> msg.receiverOffset().acknowledge());
+                                .doOnTerminate(msg.receiverOffset()::acknowledge);
                         else {
                             log.warn("Message with offset: {} have problem with key method", msg.receiverOffset().offset());
                             return Mono.empty();

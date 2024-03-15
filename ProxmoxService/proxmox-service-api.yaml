@@ -1,0 +1,127 @@
+openapi: 3.0.3
+
+info:
+ description: "This api give all information about proxmox service endpoints"
+ version: "1.0.0" # This is your api version
+ title: "Proxmox Service API"
+ 
+tags:
+  - name: vm
+    description: Endpoint for interaction with virtual-machine user
+    externalDocs:
+      description: Find out more
+      url: http://localhost/8080/api/
+    
+paths:
+  /vm/{vmId}:
+    get:
+      tags:
+        - vm
+      summary: Get virtual machine by id
+      description: ''
+      operationId: getVmById
+      parameters:
+        - name: vmId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VirtualMachine"
+        
+        '404':
+          description: Virtual machine not found
+          
+        '401':
+          description: No Authorize  
+   
+  /vm/all:
+    get:
+      tags:
+        - vm
+      summary: Get all virtual machine
+      description: ''
+      operationId: getVmByUserCode
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user_vms:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/VirtualMachine"
+        
+        '404':
+          description: Virtual machines not found
+        
+        '401':
+          description: No Authorize
+
+components:
+  schemas:
+    VirtualMachine:
+      type: object
+      properties:
+        vm_id:
+            type: string
+            example: vm-98734
+        expired_date: 
+            type: string
+            format: datetime
+            example: 07-08-2024:12.65
+        price_month:
+            type: integer
+            example: 2500
+        price_period:
+            type: integer
+            example: 15000
+            
+  
+  
+  
+  
+  
+  
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+   
+   
+   
