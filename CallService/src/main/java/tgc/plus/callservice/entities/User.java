@@ -1,4 +1,4 @@
-package tgc.plus.callservice.entity;
+package tgc.plus.callservice.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

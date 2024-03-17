@@ -21,7 +21,6 @@ import java.util.Map;
 
 @Component
 @Slf4j
-@Validated
 public class CommandsDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
 

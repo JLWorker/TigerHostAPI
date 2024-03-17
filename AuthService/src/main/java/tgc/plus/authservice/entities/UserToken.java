@@ -1,4 +1,4 @@
-package tgc.plus.authservice.entity;
+package tgc.plus.authservice.entities;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

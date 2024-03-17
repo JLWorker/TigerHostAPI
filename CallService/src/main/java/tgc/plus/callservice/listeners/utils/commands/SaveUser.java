@@ -2,17 +2,15 @@ package tgc.plus.callservice.listeners.utils.commands;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.callservice.dto.MessageElement;
-import tgc.plus.callservice.entity.User;
+import tgc.plus.callservice.entities.User;
 import tgc.plus.callservice.exceptions.UserAlreadyExistException;
 import tgc.plus.callservice.listeners.utils.Command;
 import tgc.plus.callservice.repositories.UserRepository;
 //import tgc.plus.callservice.services.CustomValidator;
 import tgc.plus.callservice.services.EmailSender;
-import tgc.plus.callservice.services.utils.EmailSenderCommands;
 
 import java.util.Map;
 

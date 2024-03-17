@@ -26,17 +26,17 @@ public class TokenController {
         return tokenFacade.updateAccessToken(updateToken);
     }
 
-    @DeleteMapping("/token")
+    @DeleteMapping("/token/{tokenId}")
     public Mono<Void> deleteToken(@Pattern(regexp = "^ID-\\d+$") @RequestParam("tokenId") String tokenId){
         return tokenFacade.deleteToken(tokenId);
     }
 
-    @DeleteMapping("/all")
+    @DeleteMapping("/all/{currentTokenId}")
     public Mono<Void> deleteAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId){
         return tokenFacade.deleteAllTokens(tokenId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all/{currentTokenId}")
     public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @RequestParam("currentTokenId") String tokenId, ServerHttpRequest request){
         return tokenFacade.getAllTokens(tokenId, request.getHeaders().getFirst("Device-Ip"));
     }

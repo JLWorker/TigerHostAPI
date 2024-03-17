@@ -1,7 +1,6 @@
-package tgc.plus.authservice.entity;
+package tgc.plus.authservice.entities;
 
 import lombok.*;
-import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
@@ -10,8 +9,6 @@ import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Component

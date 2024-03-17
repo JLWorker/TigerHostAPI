@@ -22,7 +22,7 @@ import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.dto.user_dto.UserChangeContacts;
 import tgc.plus.authservice.dto.user_dto.UserInfoResponse;
-import tgc.plus.authservice.entity.*;
+import tgc.plus.authservice.entities.*;
 import tgc.plus.authservice.exceptions.exceptions_elements.*;
 import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.repository.TwoFactorRepository;
@@ -357,7 +357,7 @@ public class FacadeUtils {
         else
             messageRecord = new ProducerRecord<>(eventTopic, "other", message);
 
-        messageRecord.headers().add(new RecordHeader("method", method.getBytes()));
+        messageRecord.headers().add(new RecordHeader("command", method.getBytes()));
         SenderRecord<String, KafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
 
         return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord))

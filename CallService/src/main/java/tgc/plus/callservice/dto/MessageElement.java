@@ -14,12 +14,13 @@ import tgc.plus.callservice.dto.message_payloads.Payload;
 @Setter
 public class MessageElement {
 
+    @JsonProperty("user_code")
     private String userCode;
 
+    @JsonProperty("payload")
     private Payload payload;
 
-    @JsonCreator
-    public MessageElement(@JsonProperty("user_code") String userCode, @JsonProperty("payload") Payload payload) {
+    public MessageElement(String userCode, Payload payload) {
         this.userCode = userCode;
         this.payload = payload;
     }

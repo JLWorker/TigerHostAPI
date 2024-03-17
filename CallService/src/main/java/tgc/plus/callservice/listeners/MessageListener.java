@@ -50,7 +50,7 @@ public class MessageListener {
 
         return kafkaReceiver.receive()
                 .concatMap(msg -> {
-                    String method = new String(msg.headers().lastHeader("method").value());
+                    String method = new String(msg.headers().lastHeader("command").value());
                     if (!method.isBlank())
                         return commandsDispatcher.execute(method, msg.value())
                                 .doOnTerminate(msg.receiverOffset()::acknowledge);

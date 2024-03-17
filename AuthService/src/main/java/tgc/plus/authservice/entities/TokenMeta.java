@@ -1,18 +1,13 @@
-package tgc.plus.authservice.entity;
+package tgc.plus.authservice.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
-
-import java.net.Inet4Address;
-import java.time.Instant;
-import java.util.Date;
 
 @Component
 @Getter

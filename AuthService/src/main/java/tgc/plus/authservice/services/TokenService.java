@@ -14,7 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.entity.UserToken;
+import tgc.plus.authservice.entities.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenCorruptionException;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorTokenException;
@@ -84,7 +84,7 @@ public class TokenService {
                 String refreshToken = UUID.randomUUID().toString();
                 Instant startDate = Instant.now();
                 Instant finishDate = startDate.plus(Duration.ofDays(refreshSecurityExpireDate));
-                return userTokenRepository.save(new tgc.plus.authservice.entity.UserToken(tokenId, userId, refreshToken, finishDate, startDate));
+                return userTokenRepository.save(new tgc.plus.authservice.entities.UserToken(tokenId, userId, refreshToken, finishDate, startDate));
             });
         }
 

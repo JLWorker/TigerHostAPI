@@ -1,4 +1,4 @@
-package tgc.plus.feedbackgateaway.exceptions.exception_elements;
+package tgc.plus.proxmoxservice.exceptions.authorize_exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

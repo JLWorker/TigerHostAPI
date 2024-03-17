@@ -1,22 +1,17 @@
 package tgc.plus.authservice.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.user_dto.UserData;
-import tgc.plus.authservice.entity.User;
-import tgc.plus.authservice.entity.UserDetail;
+import tgc.plus.authservice.entities.User;
+import tgc.plus.authservice.entities.UserDetail;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.utils.RoleList;
 

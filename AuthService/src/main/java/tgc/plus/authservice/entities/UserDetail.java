@@ -1,4 +1,4 @@
-package tgc.plus.authservice.entity;
+package tgc.plus.authservice.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

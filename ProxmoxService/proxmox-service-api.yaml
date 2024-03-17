@@ -23,22 +23,20 @@ paths:
       parameters:
         - name: vmId
           in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
-        '200':
+        200:
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VirtualMachine"
-        
-        '404':
+                $ref: "#/components/schemas/SingleVirtualMachineResponse"
+        404:
           description: Virtual machine not found
-          
-        '401':
+        401:
           description: No Authorize  
    
   /vm/all:
@@ -48,8 +46,10 @@ paths:
       summary: Get all virtual machine
       description: ''
       operationId: getVmByUserCode
+      parameters:
+         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
-        '200':
+        200:
           description: Successful operation
           content:
             application/json:
@@ -59,22 +59,112 @@ paths:
                   user_vms:
                     type: "array"
                     items:
-                      $ref: "#/components/schemas/VirtualMachine"
-        
-        '404':
+                      $ref: "#/components/schemas/AllVirtualMachinesResponse"
+        404:
           description: Virtual machines not found
-        
-        '401':
+        401:
           description: No Authorize
 
+  /vm/{vmId}/time:
+    get:
+      tags:
+        - vm
+      summary: Get timestamp virtual machine
+      description: ''
+      operationId: GetTimestampsByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: vm_98827912
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successfully operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimestampInfoResponse"
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
+
+  /vm/{vmId}/storage:
+    get:
+      tags:
+        - vm
+      summary: Get storage info about virtual machine
+      description: ''
+      operationId: GetStorageByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: vm_98827912
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successfully operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetStorageInfoResponse"
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
+
+
+  /vm/password:
+    patch:
+      tags:
+        - vm
+      summary: Set password for virtual machine
+      description: ''
+      operationId: setPasswordByVmId
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Virtual machine not found
+        '401':
+          description: No authorize
+
 components:
+
+  parameters:
+    AuthorizationHeader :
+      in: header
+      name: Authorization
+      description: Authorization header with access jwt token
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: Bearer_urie0988Jud-**
+
+
   schemas:
-    VirtualMachine:
+    AllVirtualMachinesResponse:
       type: object
       properties:
         vm_id:
             type: string
-            example: vm-98734
+            example: vm_98746281638
         expired_date: 
             type: string
             format: datetime
@@ -85,43 +175,78 @@ components:
         price_period:
             type: integer
             example: 15000
-            
-  
-  
-  
-  
-  
-  
-    Order:
+        tariff_id:
+            type: integer
+            example: 10
+        period_id:
+            type: integer
+            example: 3
+        os_id:
+            type: integer
+            example: 5
+
+    SingleVirtualMachineResponse:
       type: object
       properties:
-        id:
+        expired_date:
+          type: string
+          format: datetime
+          example: 07-08-2024:12.65
+        price_month:
           type: integer
-          format: int64
+          example: 2500
+        price_period:
+          type: integer
+          example: 15000
+        tariff_id:
+          type: integer
           example: 10
-        petId:
+        period_id:
+          type: integer
+          example: 3
+        os_id:
+          type: integer
+          example: 5
+
+    GetTimestampInfoResponse:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: datetime
+          example: "08.01.2024"
+        finish_date:
+          type: string
+          format: datetime
+          example: "08.06.2024"
+
+    GetStorageInfoResponse:
+      type: object
+      description: "Contains information about size vm storage in bytes"
+      properties:
+        size:
           type: integer
           format: int64
-          example: 198772
-        quantity:
+          example: 62890082719
+        used:
           type: integer
-          format: int32
-          example: 7
-        shipDate:
+          format: int64
+          example: 987328
+
+    ChangePasswordRequest:
+      type: object
+      properties:
+        vmId:
           type: string
-          format: date-time
-        status:
+          example: vm_987492387
+        password:
           type: string
-          description: Order Status
-          example: approved
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          type: boolean
-      xml:
-        name: order
-   
+          example: Uhjsi9821
+        password_confirm:
+          type: string
+          example: Uhjsi9821
+
+
+
    
    

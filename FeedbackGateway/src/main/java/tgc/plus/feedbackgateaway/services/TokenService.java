@@ -12,8 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import tgc.plus.feedbackgateaway.exceptions.exception_elements.AccessTokenExpiredException;
-import tgc.plus.feedbackgateaway.exceptions.exception_elements.AccessTokenCorruptionException;
+import tgc.plus.feedbackgateaway.exceptions.AccessTokenExpiredException;
+import tgc.plus.feedbackgateaway.exceptions.AccessTokenCorruptionException;
 
 import javax.crypto.SecretKey;
 import java.util.List;
