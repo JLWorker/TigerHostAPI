@@ -29,7 +29,7 @@ public class MessageListener {
     @Autowired
     CommandsDispatcher commandsDispatcher;
 
-    @Value("${kafka.topic}")
+    @Value("${kafka.topic.proxmox-service}")
     String topic;
 
     @Value("${kafka.listener.concurrency}")

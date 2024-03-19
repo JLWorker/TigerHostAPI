@@ -1,21 +1,20 @@
 package tgc.plus.proxmoxservice.services.utils.paths;
 
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor
-public enum NodeClusterPaths implements ClusterPaths {
+public enum NodesClusterPaths implements ClusterPaths {
 
-    CREATE_VM("");
+    GET_STORAGE_FOR_VM("/api2/json/nodes/{node}/storage/{storage}/content/{volume}"),
+
+    GET_NODES_LOADS("/nodes");
 
     private String url;
 
-    NodeClusterPaths(String url) {
+    NodesClusterPaths(String url) {
         this.url = url;
     }
-
     @Override
     public String getUrl() {
         return url;

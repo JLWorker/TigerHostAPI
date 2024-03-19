@@ -30,12 +30,12 @@ public class SpringSecurityConfig {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
-                .authorizeExchange(exchange ->
-                        exchange
-                                .pathMatchers().permitAll()
-                                .pathMatchers().authenticated()
-                                .anyExchange().denyAll()
-                )
+//                .authorizeExchange(exchange ->
+//                        exchange.anyExchange().permitAll()
+////                                .pathMatchers().permitAll()
+////                                .pathMatchers().authenticated()
+//                                .anyExchange().denyAll()
+//                )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
         return http.build();
     }

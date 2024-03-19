@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ReactorResourceFactory;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -15,6 +16,7 @@ import reactor.netty.resources.LoopResources;
 import java.time.Duration;
 
 @Configuration
+@EnableWebFlux
 public class FluxConfig {
 
     @Value("${flux.client.selectorCount}")
@@ -66,10 +68,8 @@ public class FluxConfig {
     public WebClient webClient(){
         return WebClient.builder()
                 .clientConnector(httpConnector())
-                .filter((request, next) -> {
-                    request.headers().add("Authorization", accessKey);
-                    return next.exchange(request);
-                }).build();
+                .defaultHeader("Authorization", accessKey)
+                .build();
     }
 
 }
