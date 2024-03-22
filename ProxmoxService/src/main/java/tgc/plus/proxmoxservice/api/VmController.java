@@ -3,9 +3,9 @@ package tgc.plus.proxmoxservice.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserAllVmsResponse;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserChangePassword;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.VmTimestampsResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.UserAllVms;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.requests.UserChangePassword;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.TimestampsVm;
 import tgc.plus.proxmoxservice.facades.VmFacade;
 
 @RequestMapping("/api/vm")
@@ -16,12 +16,12 @@ public class VmController {
     private VmFacade vmFacade;
 
     @GetMapping("/all")
-    public Mono<UserAllVmsResponse> getAllUserVms(){
+    public Mono<UserAllVms> getAllUserVms(){
         return vmFacade.getAllUserVms();
     }
 
     @GetMapping("/{vmId}/time")
-    public Mono<VmTimestampsResponse> getVmTimestamps(@PathVariable("vmId") String vmId){
+    public Mono<TimestampsVm> getVmTimestamps(@PathVariable("vmId") String vmId){
         return vmFacade.getVmTimestamps(vmId);
     }
 

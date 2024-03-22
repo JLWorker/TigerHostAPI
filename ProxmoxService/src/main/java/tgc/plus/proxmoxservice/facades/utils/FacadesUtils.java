@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserAllVmsResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.UserAllVms;
 import tgc.plus.proxmoxservice.entities.Vds;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.ServiceException;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.VmNotFoundException;
@@ -23,10 +23,10 @@ public class FacadesUtils {
     @Autowired
     private VdsRepository vdsRepository;
 
-    public Mono<UserAllVmsResponse> getAllUserVms(String userCode) {
+    public Mono<UserAllVms> getAllUserVms(String userCode) {
         return customRepository.getAllUserVms(userCode)
                 .collectList()
-                .flatMap(list -> Mono.just(new UserAllVmsResponse(list)));
+                .flatMap(list -> Mono.just(new UserAllVms(list)));
     }
 
     public Mono<Vds> getVdsByUserCodeAndVmId(String userCode, String vmId){
@@ -44,8 +44,8 @@ public class FacadesUtils {
     }
 
 
-    public <T> Mono<T> getServiceException(){
-        return Mono.error(new ServiceException("The service cannot process the request"));
+    public <T> Mono<T> getServiceException(String message){
+        return Mono.error(new ServiceException(message));
     }
 
     public <T> Mono<T> getVmNotFoundException(String message){

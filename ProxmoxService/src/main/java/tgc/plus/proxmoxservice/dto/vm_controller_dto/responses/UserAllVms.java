@@ -1,4 +1,4 @@
-package tgc.plus.proxmoxservice.dto.vm_controller_dto;
+package tgc.plus.proxmoxservice.dto.vm_controller_dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class UserAllVmsResponse {
+public class UserAllVms {
 
     @JsonProperty("user_vms")
-    private List<UserVmElemResponse> userVms;
+    private List<UserVmElem> userVms;
 
-    public UserAllVmsResponse(List<UserVmElemResponse> userVms) {
+    public UserAllVms(List<UserVmElem> userVms) {
         this.userVms = userVms;
     }
 }

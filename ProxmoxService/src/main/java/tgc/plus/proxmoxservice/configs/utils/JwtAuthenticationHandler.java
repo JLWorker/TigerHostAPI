@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.ExceptionResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.ExceptionResponse;
 import tgc.plus.proxmoxservice.exceptions.authorize_exceptions.AccessTokenExpiredException;
 
 @Slf4j

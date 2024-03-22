@@ -12,17 +12,15 @@ import reactor.core.publisher.Mono;
 import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.requests.VmUserSetPassword;
 import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.VmDiskInfo;
 import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.vm_payloads.VmPartitionDiskData;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserAllVmsResponse;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserChangePassword;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.VmTimestampsResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.UserAllVms;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.requests.UserChangePassword;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.TimestampsVm;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.PasswordsMismatchException;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.TrialPeriodExpired;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.VmNotFoundException;
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.VmStorageEnoughException;
-import tgc.plus.proxmoxservice.exceptions.proxmox_exceptions.web_client.UnexpectedJsonNodeType;
 import tgc.plus.proxmoxservice.facades.utils.FacadesUtils;
 import tgc.plus.proxmoxservice.services.utils.ProxmoxUtils;
-import tgc.plus.proxmoxservice.services.utils.paths.ClusterPaths;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -48,7 +46,7 @@ public class VmFacade {
     private ProxmoxUtils proxmoxUtils;
 
     @Transactional
-    public Mono<UserAllVmsResponse> getAllUserVms() {
+    public Mono<UserAllVms> getAllUserVms() {
         return ReactiveSecurityContextHolder.getContext()
                 .flatMap(securityContext -> {
                     String userCode = (String) securityContext.getAuthentication().getPrincipal();
@@ -56,18 +54,18 @@ public class VmFacade {
                 })
                 .onErrorResume(e -> {
                     log.error(e.getMessage());
-                    return facadesUtils.getServiceException();
+                    return facadesUtils.getServiceException("The service cannot process the request");
                 });
 
     }
 
     @Transactional
-    public Mono<VmTimestampsResponse> getVmTimestamps(String vmId) {
+    public Mono<TimestampsVm> getVmTimestamps(String vmId) { //для изменения тарифа, реализовать проверку при изменении еще
         return ReactiveSecurityContextHolder.getContext()
                 .flatMap(securityContext -> {
                     String userCode = (String) securityContext.getAuthentication().getPrincipal();
                     return facadesUtils.getVdsByUserCodeAndVmId(userCode, vmId)
-                            .flatMap(vds -> Mono.just(new VmTimestampsResponse(vds.getStartDate(), vds.getExpiredDate())));
+                            .flatMap(vds -> Mono.just(new TimestampsVm(vds.getStartDate(), vds.getExpiredDate())));
                 })
                 .doOnError(e -> log.error(e.getMessage()));
     }
@@ -102,7 +100,7 @@ public class VmFacade {
                 .onErrorResume(e -> {
                     if (!(e instanceof VmStorageEnoughException) && !(e instanceof VmNotFoundException)) {
                         log.error(e.getMessage());
-                        return facadesUtils.getServiceException();
+                        return facadesUtils.getServiceException("Vm not available at the moment");
                     } else
                         return Mono.empty();
                 });
@@ -121,11 +119,13 @@ public class VmFacade {
                 .onErrorResume(e -> {
                     if (!(e instanceof PasswordsMismatchException) && !(e instanceof VmNotFoundException)) {
                         log.error(e.getMessage());
-                        return facadesUtils.getServiceException();
+                        return facadesUtils.getServiceException("Vm not available at the moment or user data invalid");
                     } else
                         return Mono.empty();
                 });
     }
+
+    //еще информацию о пользователях
 
 
 

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.UserVmElemResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.UserVmElem;
 
 import java.time.Instant;
 
@@ -16,11 +16,11 @@ public class CustomDatabaseClientRepository {
     @Autowired
     private DatabaseClient databaseClient;
 
-    public Flux<UserVmElemResponse> getAllUserVms(String userCode){
+    public Flux<UserVmElem> getAllUserVms(String userCode){
         return databaseClient.sql(SqlList.GET_ALL_USER_VMS.getSqlRequest())
                 .bind("userCode", userCode)
                 .map(row->
-                        new UserVmElemResponse(
+                        new UserVmElem(
                                 row.get("vm_id", String.class),
                                 row.get("expired_date", Instant.class),
                                 row.get("start_date", Instant.class),

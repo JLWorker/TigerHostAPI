@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.vm_controller_dto.ExceptionResponse;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.ExceptionResponse;
 
 import java.util.Objects;
 

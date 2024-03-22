@@ -1,4 +1,4 @@
-package tgc.plus.proxmoxservice.dto.vm_controller_dto;
+package tgc.plus.proxmoxservice.dto.vm_controller_dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Getter
 @NoArgsConstructor
-public class UserVmElemResponse {
+public class UserVmElem {
 
     @JsonProperty("vm_id")
     private String vmId;
@@ -37,7 +37,7 @@ public class UserVmElemResponse {
     @JsonProperty("active")
     private Boolean active;
 
-    public UserVmElemResponse(String vmId, Instant expiredDate, Instant startDate, Integer priceMonth, Integer pricePeriod, Integer tariffId, Integer periodId, Integer osId, Boolean active) {
+    public UserVmElem(String vmId, Instant expiredDate, Instant startDate, Integer priceMonth, Integer pricePeriod, Integer tariffId, Integer periodId, Integer osId, Boolean active) {
         this.vmId = vmId;
         this.expiredDate = expiredDate;
         this.startDate = startDate;
