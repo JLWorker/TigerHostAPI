@@ -1,7 +1,8 @@
-package tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses;
+package tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

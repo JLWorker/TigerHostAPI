@@ -1,6 +1,9 @@
-package tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses;
+package tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.nodes_payloads;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class NodeLoadData {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class NodeLoadData{
 
     @JsonProperty("node")
     private String node;

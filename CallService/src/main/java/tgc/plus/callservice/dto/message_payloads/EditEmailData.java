@@ -20,11 +20,4 @@ public class EditEmailData implements Payload {
     public EditEmailData(String email) {
         this.email = email;
     }
-
-    @Override
-    public Map<String, String> getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("email", this.getEmail());
-        return map;
-    }
 }

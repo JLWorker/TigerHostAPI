@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.exceptions_dto.ResponseException;
+import tgc.plus.proxmoxservice.dto.vm_controller_dto.ExceptionResponse;
 import tgc.plus.proxmoxservice.exceptions.authorize_exceptions.AccessTokenExpiredException;
 
 @Slf4j
@@ -45,7 +45,7 @@ public class JwtAuthenticationHandler implements ServerAuthenticationFailureHand
             response.getHeaders().add("Content-Type", "application/json");
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
-            ResponseException responseException = new ResponseException(request.getPath().toString(),
+            ExceptionResponse responseException = new ExceptionResponse(request.getPath().toString(),
                     HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
 
             try {

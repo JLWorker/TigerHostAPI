@@ -26,9 +26,6 @@ public class Vds {
     @Column("template_id")
     private Integer templateId;
 
-    @Column("vm_password")
-    private String vmPassword;
-
     @Column("vm_id")
     private String vmId;
 
@@ -44,19 +41,22 @@ public class Vds {
     @Column("active")
     private boolean active;
 
+    @Column("start_date")
+    private Instant startDate;
+
     @Column("expired_date")
     private Instant expiredDate;
 
 
-    public Vds(String userCode, Integer templateId, String vmId, String vmPassword, Integer vmNumber, String vmNode, Instant expiredDate) {
+    public Vds(String userCode, Integer templateId, String vmId, Integer vmNumber, String vmNode, Instant startDate, Instant expiredDate) {
         this.userCode = userCode;
         this.templateId = templateId;
         this.vmId = vmId;
-        this.vmPassword = vmPassword;
         this.vmNumber = vmNumber;
         this.vmNode = vmNode;
         this.autoPayment = false;
         this.active = true;
+        this.startDate = startDate;
         this.expiredDate = expiredDate;
     }
 }

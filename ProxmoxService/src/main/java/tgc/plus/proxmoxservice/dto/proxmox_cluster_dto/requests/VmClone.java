@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class VmCloneData {
+public class VmClone {
 
     @JsonProperty("newid")
     private Long newId;
@@ -14,7 +14,7 @@ public class VmCloneData {
     @JsonProperty("full")
     private boolean fullCopy;
 
-    public VmCloneData(Long newId, boolean fullCopy) {
+    public VmClone(Long newId, boolean fullCopy) {
         this.newId = newId;
         this.fullCopy = fullCopy;
     }

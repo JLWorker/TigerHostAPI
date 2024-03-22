@@ -30,11 +30,12 @@ public class SendMail implements Command {
 
     @Override
     public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+
         return userRepository.getUserByUserCode(messageElement.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
                 .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found", messageElement.getUserCode()))))
-                .flatMap(user -> emailSender.sendMessage(messageElement.getPayload().getData(), user.getEmail(), method));
+                .flatMap(user -> emailSender.sendMessage(messageElement.getPayload(), user.getEmail(), method));
     }
 
 }

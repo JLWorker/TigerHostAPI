@@ -25,11 +25,4 @@ public class PasswordRestoreData implements Payload {
     public PasswordRestoreData(String url) {
         this.url = url;
     }
-
-    @Override
-    public Map<String, String> getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("url", this.getUrl());
-        return map;
-    }
 }

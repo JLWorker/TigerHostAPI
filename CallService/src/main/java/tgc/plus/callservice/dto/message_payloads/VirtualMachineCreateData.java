@@ -41,15 +41,4 @@ public class VirtualMachineCreateData implements Payload{
         this.port = port;
         this.ip = ip;
     }
-
-    @Override
-    public Map<String, String> getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("vm_id", this.getPort().toString());
-        map.put("ip", this.getIp());
-        map.put("port", this.getPort().toString());
-        map.put("username", this.getUsername());
-        map.put("password", this.getPassword());
-        return map;
-    }
 }

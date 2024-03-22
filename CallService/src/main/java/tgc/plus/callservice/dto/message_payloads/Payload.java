@@ -15,5 +15,4 @@ import java.util.Map;
         @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData")
 })
 public interface Payload {
-    Map<String, String> getData();
 }

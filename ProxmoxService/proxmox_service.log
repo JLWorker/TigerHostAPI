@@ -464,3 +464,826 @@
 2024-03-20T00:28:30.795+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
 2024-03-20T00:28:33.444+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.942 seconds (process running for 3.766)
 2024-03-20T00:28:33.806+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest 39520157696
+2024-03-20T16:06:15.666+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 44835 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T16:06:15.667+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T16:06:15.668+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T16:06:18.193+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.825 seconds (process running for 3.699)
+2024-03-20T16:06:18.676+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-20T16:15:48.564+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 46039 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T16:15:48.564+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T16:15:48.565+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T16:15:51.020+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.73 seconds (process running for 3.515)
+2024-03-20T16:16:22.502+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 46612 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T16:16:22.502+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T16:16:22.504+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T16:16:24.989+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.771 seconds (process running for 3.558)
+2024-03-20T17:00:13.636+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 49460 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:00:13.637+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:00:13.638+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:00:16.334+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.019 seconds (process running for 3.859)
+2024-03-20T17:01:15.461+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 49901 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:01:15.462+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:01:15.464+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:01:18.139+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.001 seconds (process running for 3.873)
+2024-03-20T17:01:18.812+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest User - root
+2024-03-20T17:01:40.087+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 50406 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:01:40.089+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:01:40.090+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:01:42.849+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.086 seconds (process running for 3.89)
+2024-03-20T17:04:22.055+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 50892 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:04:22.056+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:04:22.057+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:04:24.730+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.999 seconds (process running for 3.817)
+2024-03-20T17:17:19.475+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 52555 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:17:19.476+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:17:19.477+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:17:22.119+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.947 seconds (process running for 3.84)
+2024-03-20T17:17:22.656+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest 400 Bad Request from POST /nodes/tgc/qemu/179/clone
+2024-03-20T17:17:50.836+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 53100 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:17:50.836+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:17:50.838+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:17:53.759+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.222 seconds (process running for 4.012)
+2024-03-20T17:17:54.238+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest 400 Bad Request from POST /nodes/tgc/qemu/179/clone
+2024-03-20T17:19:42.470+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 53732 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:19:42.471+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:19:42.472+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:19:45.002+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.836 seconds (process running for 3.668)
+2024-03-20T17:19:45.548+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest 500 Internal Server Error from POST /nodes/tgc/qemu/179/agent/set-user-password
+2024-03-20T17:20:02.105+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 54247 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-20T17:20:02.106+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-20T17:20:02.107+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-20T17:20:05.070+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.26 seconds (process running for 4.087)
+2024-03-20T17:20:05.698+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Success send new password for user - root
+2024-03-21T00:42:35.427+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 77278 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T00:42:35.428+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T00:42:35.429+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T00:42:38.527+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.426 seconds (process running for 4.331)
+2024-03-21T11:31:52.998+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 7970 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T11:31:52.999+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T11:31:53.000+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T11:31:55.882+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.23 seconds (process running for 4.043)
+2024-03-21T11:33:44.476+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 8561 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T11:33:44.476+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T11:33:44.478+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T11:33:47.118+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.938 seconds (process running for 3.711)
+2024-03-21T11:34:11.688+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 9005 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T11:34:11.689+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T11:34:11.690+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T11:34:14.305+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.992 seconds (process running for 3.837)
+2024-03-21T11:34:43.273+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 9455 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T11:34:43.274+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T11:34:43.274+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T11:34:45.866+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.881 seconds (process running for 3.688)
+2024-03-21T12:07:31.170+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 11547 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T12:07:31.170+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T12:07:31.171+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T12:07:34.060+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.171 seconds (process running for 3.944)
+2024-03-21T12:08:33.653+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 12116 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T12:08:33.654+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T12:08:33.655+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T12:08:36.276+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.949 seconds (process running for 3.763)
+2024-03-21T12:14:22.462+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 13105 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T12:14:22.463+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T12:14:22.464+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T12:14:25.433+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.308 seconds (process running for 4.231)
+2024-03-21T12:14:25.957+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest User - root
+2024-03-21T13:35:08.237+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 18279 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:35:08.237+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:35:08.238+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:35:11.390+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.452 seconds (process running for 4.263)
+2024-03-21T13:38:53.399+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 18866 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:38:53.400+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:38:53.401+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:38:56.059+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.945 seconds (process running for 3.734)
+2024-03-21T13:40:33.062+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 19467 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:40:33.062+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:40:33.063+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:40:35.765+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.001 seconds (process running for 3.846)
+2024-03-21T13:41:53.990+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 19943 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:41:53.990+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:41:53.991+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:41:56.559+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.868 seconds (process running for 3.645)
+2024-03-21T13:42:35.437+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 20395 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:42:35.438+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:42:35.439+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:42:37.967+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.838 seconds (process running for 3.595)
+2024-03-21T13:46:56.341+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 21084 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:46:56.342+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:46:56.343+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:46:58.866+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.812 seconds (process running for 3.634)
+2024-03-21T13:48:04.392+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 21765 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:48:04.392+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:48:04.393+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:48:07.006+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.929 seconds (process running for 3.779)
+2024-03-21T13:50:36.459+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 22405 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:50:36.459+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:50:36.460+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:50:39.139+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.954 seconds (process running for 3.711)
+2024-03-21T13:52:25.902+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 23360 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:52:25.903+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:52:25.904+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:52:28.457+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.844 seconds (process running for 3.615)
+2024-03-21T13:52:28.819+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Success send request, vm - 168
+2024-03-21T13:52:29.013+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Mount point - /home
+2024-03-21T13:52:29.014+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Mount point - /
+2024-03-21T13:52:29.218+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Success send new password for user - root
+2024-03-21T13:52:29.424+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest User - root
+2024-03-21T13:52:29.478+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Machine ram station 247898112
+2024-03-21T13:52:29.521+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplicationTests Starting ProxmoxServiceApplicationTests using Java 17.0.8 with PID 23360 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:52:29.522+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplicationTests Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:52:29.522+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplicationTests No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:52:29.919+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplicationTests Started ProxmoxServiceApplicationTests in 0.421 seconds (process running for 5.077)
+2024-03-21T13:54:10.836+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 25585 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:54:10.836+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:54:10.837+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:54:13.446+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.907 seconds (process running for 3.677)
+2024-03-21T13:54:46.533+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 26024 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:54:46.533+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:54:46.535+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:54:49.085+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.846 seconds (process running for 3.904)
+2024-03-21T13:56:28.073+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 26471 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:56:28.074+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:56:28.076+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:56:30.988+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.227 seconds (process running for 3.973)
+2024-03-21T13:56:31.445+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest User - root
+2024-03-21T13:56:44.551+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 26855 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:56:44.552+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:56:44.553+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:56:47.472+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.211 seconds (process running for 4.056)
+2024-03-21T13:57:59.144+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 27320 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:57:59.144+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:57:59.145+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:58:01.777+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.911 seconds (process running for 3.67)
+2024-03-21T13:59:05.642+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 27803 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:59:05.643+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:59:05.644+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:59:08.675+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.331 seconds (process running for 4.117)
+2024-03-21T13:59:52.337+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 28303 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T13:59:52.338+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T13:59:52.339+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T13:59:55.201+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.149 seconds (process running for 3.952)
+2024-03-21T14:01:51.686+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 28779 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T14:01:51.687+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T14:01:51.689+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T14:01:54.508+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.121 seconds (process running for 3.872)
+2024-03-21T14:04:42.086+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 29365 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T14:04:42.087+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T14:04:42.088+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T14:04:44.966+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.15 seconds (process running for 3.888)
+2024-03-21T14:05:28.605+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 29945 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T14:05:28.606+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T14:05:28.607+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T14:05:31.399+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.06 seconds (process running for 3.903)
+2024-03-21T15:03:28.045+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 32045 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T15:03:28.045+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:03:28.046+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:03:29.639+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 1.94 seconds (process running for 2.398)
+2024-03-21T15:07:26.031+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 33542 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:07:26.032+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:07:26.033+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:07:28.678+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.937 seconds (process running for 3.785)
+2024-03-21T15:15:48.352+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 34436 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:15:48.353+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:15:48.354+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:15:51.032+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.0 seconds (process running for 3.818)
+2024-03-21T15:16:10.287+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 35004 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:16:10.287+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:16:10.288+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:16:12.809+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.803 seconds (process running for 3.609)
+2024-03-21T15:25:15.345+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 35959 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:25:15.346+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:25:15.347+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:25:18.078+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.022 seconds (process running for 3.849)
+2024-03-21T15:25:46.921+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 36396 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:25:46.922+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:25:46.923+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:25:49.679+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.033 seconds (process running for 3.882)
+2024-03-21T15:32:34.506+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 37426 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:32:34.506+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:32:34.507+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:32:37.040+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.814 seconds (process running for 3.7)
+2024-03-21T15:35:42.621+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 38181 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:35:42.621+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:35:42.622+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:35:45.442+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.126 seconds (process running for 4.028)
+2024-03-21T15:38:22.095+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 38878 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:38:22.095+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:38:22.096+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:38:24.702+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.889 seconds (process running for 3.747)
+2024-03-21T15:38:25.064+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-21T15:45:25.377+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 39653 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:45:25.378+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:45:25.379+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:45:27.917+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.836 seconds (process running for 3.616)
+2024-03-21T15:54:22.925+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 40285 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:54:22.925+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:54:22.926+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:54:26.058+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.408 seconds (process running for 4.175)
+2024-03-21T15:57:27.383+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 41017 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:57:27.384+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:57:27.385+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:57:29.845+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.761 seconds (process running for 3.591)
+2024-03-21T15:57:43.968+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 41447 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T15:57:43.969+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T15:57:43.970+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T15:57:46.524+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.843 seconds (process running for 3.623)
+2024-03-21T15:57:46.885+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-21T16:11:16.852+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 42377 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:11:16.852+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:11:16.853+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:11:19.954+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.409 seconds (process running for 4.204)
+2024-03-21T16:12:50.890+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 42903 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:12:50.891+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:12:50.892+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:12:53.773+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.163 seconds (process running for 3.978)
+2024-03-21T16:14:14.197+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 43533 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:14:14.198+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:14:14.199+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:14:17.051+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.137 seconds (process running for 3.921)
+2024-03-21T16:15:29.694+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 44060 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:15:29.695+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:15:29.696+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:15:32.467+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.07 seconds (process running for 3.862)
+2024-03-21T16:16:15.595+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 44578 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:16:15.596+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:16:15.596+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:16:18.299+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.985 seconds (process running for 3.776)
+2024-03-21T16:18:39.619+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 45120 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:18:39.620+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:18:39.621+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:18:42.305+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.964 seconds (process running for 3.765)
+2024-03-21T16:19:32.712+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 45627 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:19:32.713+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:19:32.714+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:19:35.323+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.903 seconds (process running for 3.677)
+2024-03-21T16:20:21.164+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 46092 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:20:21.164+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:20:21.165+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:20:23.696+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.843 seconds (process running for 3.639)
+2024-03-21T16:20:24.051+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-21T16:22:55.232+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 46656 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:22:55.233+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:22:55.234+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:22:57.802+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.885 seconds (process running for 3.679)
+2024-03-21T16:22:58.275+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-21T16:23:04.924+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 46992 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:23:04.924+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:23:04.925+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:23:07.666+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.03 seconds (process running for 3.875)
+2024-03-21T16:23:19.342+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 47488 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:23:19.343+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:23:19.344+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:23:22.114+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 3.065 seconds (process running for 3.902)
+2024-03-21T16:23:39.726+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 47986 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:23:39.727+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:23:39.728+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:23:42.444+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.999 seconds (process running for 3.755)
+2024-03-21T16:23:42.847+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Max system disk - 39520157696
+2024-03-21T16:35:21.605+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Starting ProxmoxUtilsTest using Java 17.0.8 with PID 49251 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T16:35:21.606+1000 DEBUG tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T16:35:21.607+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T16:35:24.238+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Started ProxmoxUtilsTest in 2.931 seconds (process running for 3.713)
+2024-03-21T16:35:24.735+1000 INFO tgc.plus.proxmoxservice.services.utils.ProxmoxUtilsTest Success send request, vm - 108
+2024-03-21T20:42:42.400+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 58461 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T20:42:42.401+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T20:42:42.403+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T20:42:44.699+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 2.67 seconds (process running for 3.579)
+2024-03-21T20:42:45.699+1000 ERROR tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest executeMany; bad SQL grammar [INSERT INTO vds (user_code, vm_id, auto_payment, active) VALUES ($1, $2, $3, $4)]
+2024-03-21T20:43:28.799+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 59086 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T20:43:28.800+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T20:43:28.801+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T20:43:31.554+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.055 seconds (process running for 3.844)
+2024-03-21T20:43:31.852+1000 ERROR tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest executeMany; bad SQL grammar [INSERT INTO vds (user_code, vm_id, auto_payment, active) VALUES ($1, $2, $3, $4)]
+2024-03-21T20:47:52.502+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 59755 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T20:47:52.503+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T20:47:52.504+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T20:47:55.225+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.025 seconds (process running for 3.823)
+2024-03-21T20:47:55.504+1000 ERROR tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest executeMany; bad SQL grammar [INSERT INTO vds (user_code, vm_id, auto_payment, active) VALUES ($1, $2, $3, $4)]
+2024-03-21T20:48:21.672+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 60364 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T20:48:21.673+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T20:48:21.674+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T20:48:24.333+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 2.956 seconds (process running for 3.714)
+2024-03-21T20:48:24.617+1000 ERROR tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest executeMany; bad SQL grammar [INSERT INTO vds (user_code, vm_id, auto_payment, active) VALUES ($1, $2, $3, $4)]
+2024-03-21T20:53:43.263+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 60912 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T20:53:43.264+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T20:53:43.265+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T20:53:46.151+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.189 seconds (process running for 3.979)
+2024-03-21T20:53:46.491+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T21:17:11.789+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 62396 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:17:11.790+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:17:11.791+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:17:13.705+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.218 seconds (process running for 2.962)
+2024-03-21T21:17:14.601+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_number, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_period ON vds.id = vds_period.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T21:17:39.266+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 63012 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:17:39.266+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:17:39.268+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:17:41.912+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.942 seconds (process running for 3.72)
+2024-03-21T21:17:42.151+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_number, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_period ON vds.id = vds_period.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T21:18:56.446+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 63498 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:18:56.447+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:18:56.448+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:18:59.071+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.904 seconds (process running for 3.664)
+2024-03-21T21:18:59.286+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Column name 'vm_id' does not exist in column names [vm_number, start_date, expired_date, price, price_month, tariff_id, period_id, os_id]
+2024-03-21T21:20:09.818+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 64066 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:20:09.818+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:20:09.819+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:20:12.521+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.016 seconds (process running for 3.778)
+2024-03-21T21:20:12.747+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Column name 'price_period' does not exist in column names [vm_id, start_date, expired_date, price, price_month, tariff_id, period_id, os_id]
+2024-03-21T21:20:44.465+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 64603 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:20:44.465+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:20:44.466+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:20:47.094+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.918 seconds (process running for 3.695)
+2024-03-21T21:20:47.306+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Column name 'ios_id' does not exist in column names [vm_id, start_date, expired_date, price, price_month, tariff_id, period_id, os_id]
+2024-03-21T21:21:17.726+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 65127 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:21:17.727+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:21:17.728+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:21:20.547+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.13 seconds (process running for 3.914)
+2024-03-21T21:21:20.785+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_0
+2024-03-21T21:23:45.773+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 65801 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:23:45.773+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:23:45.774+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:23:48.480+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.04 seconds (process running for 3.809)
+2024-03-21T21:23:48.804+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T21:28:35.220+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 66542 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:28:35.221+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:28:35.222+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:28:37.966+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.052 seconds (process running for 3.821)
+2024-03-21T21:28:38.307+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T21:30:41.098+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 67161 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:30:41.098+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:30:41.099+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:30:43.928+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.136 seconds (process running for 3.919)
+2024-03-21T21:30:44.338+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T21:32:01.657+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 67700 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:32:01.657+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:32:01.659+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:32:04.446+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.077 seconds (process running for 3.827)
+2024-03-21T21:32:04.836+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T21:34:00.342+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 68384 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:34:00.343+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:34:00.344+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:34:03.061+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.002 seconds (process running for 3.746)
+2024-03-21T21:34:03.282+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_540943302
+2024-03-21T21:34:03.283+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_542684186
+2024-03-21T21:34:03.283+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_542960767
+2024-03-21T21:34:03.284+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_544355707
+2024-03-21T21:34:03.284+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_547468170
+2024-03-21T21:34:03.284+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_549944370
+2024-03-21T21:34:03.284+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_551608180
+2024-03-21T21:34:03.285+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_497148101
+2024-03-21T21:34:03.285+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_548440878
+2024-03-21T21:34:03.285+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_551132825
+2024-03-21T21:34:03.286+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_549679982
+2024-03-21T21:34:03.286+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_545065755
+2024-03-21T21:34:03.286+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_550523145
+2024-03-21T21:34:03.287+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_540277175
+2024-03-21T21:34:03.287+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_545292742
+2024-03-21T21:34:03.287+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_549185787
+2024-03-21T21:34:03.287+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_539942289
+2024-03-21T21:34:03.288+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_551394966
+2024-03-21T21:34:03.288+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_540617612
+2024-03-21T21:34:03.288+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_547688635
+2024-03-21T21:34:03.288+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_549413338
+2024-03-21T21:34:03.289+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_543871179
+2024-03-21T21:34:03.289+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_545839936
+2024-03-21T21:34:03.289+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User Vm - vm_554832928
+2024-03-21T21:49:47.783+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 69644 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:49:47.784+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:49:47.785+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:49:50.840+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.342 seconds (process running for 4.087)
+2024-03-21T21:49:51.065+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_539182496
+2024-03-21T21:49:51.066+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_539550521
+2024-03-21T21:49:51.066+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546811071
+2024-03-21T21:49:51.066+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546056065
+2024-03-21T21:49:51.067+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548966198
+2024-03-21T21:49:51.067+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_542422663
+2024-03-21T21:49:51.067+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_538663390
+2024-03-21T21:49:51.067+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_543577374
+2024-03-21T21:49:51.068+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546312104
+2024-03-21T21:49:51.068+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_555431070
+2024-03-21T21:49:51.068+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541232790
+2024-03-21T21:49:51.068+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548214158
+2024-03-21T21:49:51.069+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547028624
+2024-03-21T21:49:51.069+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544132183
+2024-03-21T21:49:51.069+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547953308
+2024-03-21T21:49:51.069+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_550843122
+2024-03-21T21:49:51.069+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_537009636
+2024-03-21T21:49:51.070+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_545569255
+2024-03-21T21:49:51.070+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544578958
+2024-03-21T21:49:51.070+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541545029
+2024-03-21T21:49:51.070+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546562676
+2024-03-21T21:49:51.071+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548712528
+2024-03-21T21:49:51.071+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541841461
+2024-03-21T21:49:51.071+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_542144732
+2024-03-21T21:49:51.071+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544804015
+2024-03-21T21:49:51.072+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547233441
+2024-03-21T21:50:59.886+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 70178 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:50:59.887+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:50:59.888+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:51:02.769+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.165 seconds (process running for 3.921)
+2024-03-21T21:51:03.014+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_539182496
+2024-03-21T21:51:03.015+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_539550521
+2024-03-21T21:51:03.015+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546811071
+2024-03-21T21:51:03.016+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546056065
+2024-03-21T21:51:03.016+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548966198
+2024-03-21T21:51:03.016+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_542422663
+2024-03-21T21:51:03.017+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_538663390
+2024-03-21T21:51:03.017+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_543577374
+2024-03-21T21:51:03.017+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546312104
+2024-03-21T21:51:03.018+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_555431070
+2024-03-21T21:51:03.018+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541232790
+2024-03-21T21:51:03.018+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548214158
+2024-03-21T21:51:03.018+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547028624
+2024-03-21T21:51:03.019+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544132183
+2024-03-21T21:51:03.019+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547953308
+2024-03-21T21:51:03.019+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_550843122
+2024-03-21T21:51:03.020+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_537009636
+2024-03-21T21:51:03.020+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_545569255
+2024-03-21T21:51:03.020+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544578958
+2024-03-21T21:51:03.020+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541545029
+2024-03-21T21:51:03.021+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_546562676
+2024-03-21T21:51:03.021+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_548712528
+2024-03-21T21:51:03.022+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_541841461
+2024-03-21T21:51:03.022+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_542144732
+2024-03-21T21:51:03.022+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_544804015
+2024-03-21T21:51:03.022+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest User VmId - vm_547233441
+2024-03-21T21:51:03.027+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Success, get - 26 elements
+2024-03-21T21:54:25.136+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 71017 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:54:25.137+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:54:25.138+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:54:27.815+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.969 seconds (process running for 3.714)
+2024-03-21T21:54:28.040+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_i, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T21:56:37.964+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 71595 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:56:37.965+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:56:37.966+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:56:40.697+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.091 seconds (process running for 3.857)
+2024-03-21T21:58:25.116+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 72169 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:58:25.117+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:58:25.118+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:58:27.912+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.084 seconds (process running for 3.807)
+2024-03-21T21:58:28.145+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_i, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T21:58:57.955+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 72641 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:58:57.956+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:58:57.960+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:59:00.883+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.229 seconds (process running for 3.978)
+2024-03-21T21:59:01.165+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_i, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T21:59:52.589+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 73176 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T21:59:52.589+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T21:59:52.590+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T21:59:55.377+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.08 seconds (process running for 3.824)
+2024-03-21T21:59:55.634+1000 ERROR tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest executeMany; bad SQL grammar [SELECT vds.vm_i, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-21T22:01:09.007+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 73747 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T22:01:09.007+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T22:01:09.008+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T22:01:11.621+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.896 seconds (process running for 3.636)
+2024-03-21T22:03:17.119+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 74326 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T22:03:17.120+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T22:03:17.121+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T22:03:19.956+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 3.152 seconds (process running for 3.936)
+2024-03-21T22:04:22.543+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Starting CustomDatabaseClientRepositoryTest using Java 17.0.8 with PID 74946 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T22:04:22.544+1000 DEBUG tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T22:04:22.545+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T22:04:25.251+1000 INFO tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepositoryTest Started CustomDatabaseClientRepositoryTest in 2.988 seconds (process running for 3.724)
+2024-03-21T23:45:07.430+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 81196 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T23:45:07.431+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:45:07.432+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:45:10.297+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.182 seconds (process running for 4.005)
+2024-03-21T23:45:10.593+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T23:45:25.220+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 81719 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T23:45:25.221+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:45:25.222+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:45:28.479+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.555 seconds (process running for 4.307)
+2024-03-21T23:45:28.821+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T23:47:27.092+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:47:27.092+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:47:27.093+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:47:28.665+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 1.867 seconds (process running for 2.269)
+2024-03-21T23:48:09.588+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:48:09.589+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:48:09.589+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:48:09.986+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.429 seconds (process running for 43.591)
+2024-03-21T23:48:26.882+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:48:26.882+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:48:26.882+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:48:27.201+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.343 seconds (process running for 60.805)
+2024-03-21T23:50:58.145+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Starting VdsRepositoryOperationsTest using Java 17.0.8 with PID 86147 (started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService)
+2024-03-21T23:50:58.145+1000 DEBUG tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:50:58.146+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:51:01.470+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Started VdsRepositoryOperationsTest in 3.628 seconds (process running for 4.399)
+2024-03-21T23:51:01.802+1000 INFO tgc.plus.proxmoxservice.repositories.VdsRepositoryOperationsTest Success save
+2024-03-21T23:53:02.204+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:53:02.204+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:53:02.204+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:53:02.636+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.465 seconds (process running for 336.24)
+2024-03-21T23:53:51.218+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:53:51.218+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:53:51.218+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:53:51.530+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.335 seconds (process running for 385.134)
+2024-03-21T23:57:01.521+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:57:01.521+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:57:01.521+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:57:01.854+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.362 seconds (process running for 575.458)
+2024-03-21T23:57:03.310+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:57:03.310+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:57:03.310+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:57:03.559+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.271 seconds (process running for 577.164)
+2024-03-21T23:57:06.022+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-21T23:57:06.022+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-21T23:57:06.022+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-21T23:57:06.289+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.29 seconds (process running for 579.893)
+2024-03-22T00:00:41.773+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:00:41.773+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:00:41.773+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:00:42.125+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.377 seconds (process running for 795.729)
+2024-03-22T00:00:43.590+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:00:43.590+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:00:43.590+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:00:43.833+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.266 seconds (process running for 797.437)
+2024-03-22T00:00:57.733+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:00:57.733+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:00:57.733+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:00:58.017+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.311 seconds (process running for 811.622)
+2024-03-22T00:05:07.573+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:05:07.573+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:05:07.573+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:05:07.907+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.36 seconds (process running for 1061.512)
+2024-03-22T00:05:09.369+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:05:09.369+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:05:09.370+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:05:09.610+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.26 seconds (process running for 1063.215)
+2024-03-22T00:05:47.165+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:05:47.165+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:05:47.165+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:05:47.456+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.312 seconds (process running for 1101.06)
+2024-03-22T00:05:48.683+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T00:05:48.931+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:05:48.931+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:05:48.931+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:05:49.167+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.259 seconds (process running for 1102.771)
+2024-03-22T00:05:50.256+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T00:06:06.677+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:06:06.677+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:06:06.677+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:06:06.900+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.242 seconds (process running for 1120.505)
+2024-03-22T00:14:40.624+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:14:40.624+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:14:40.625+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:14:41.048+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.472 seconds (process running for 1133.887)
+2024-03-22T00:15:09.967+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 83032 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T00:15:09.967+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T00:15:09.967+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T00:15:10.194+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.245 seconds (process running for 1163.034)
+2024-03-22T14:23:05.988+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:23:05.990+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:23:05.991+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:23:07.919+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 2.321 seconds (process running for 2.783)
+2024-03-22T14:25:25.700+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:25:25.700+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:25:25.700+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:25:26.001+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.329 seconds (process running for 140.864)
+2024-03-22T14:25:37.483+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:25:37.484+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:25:37.484+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:25:37.757+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.299 seconds (process running for 152.621)
+2024-03-22T14:26:13.709+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:26:13.709+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:26:13.709+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:26:13.969+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.282 seconds (process running for 188.833)
+2024-03-22T14:26:20.304+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:26:20.875+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:26:20.875+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:26:20.875+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:26:21.239+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.41 seconds (process running for 196.103)
+2024-03-22T14:27:12.571+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:28:30.059+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:28:30.059+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:28:30.059+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:28:30.363+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.335 seconds (process running for 325.227)
+2024-03-22T14:28:46.912+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:28:46.912+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:28:46.913+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:28:47.427+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.559 seconds (process running for 342.291)
+2024-03-22T14:28:48.906+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:28:48.906+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:28:48.907+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:28:49.230+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.356 seconds (process running for 344.094)
+2024-03-22T14:28:53.912+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:29:12.151+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:29:12.151+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:29:12.151+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:29:12.430+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.302 seconds (process running for 367.294)
+2024-03-22T14:29:33.902+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:29:33.902+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:29:33.902+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:29:34.239+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.361 seconds (process running for 389.103)
+2024-03-22T14:29:35.705+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:29:35.705+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:29:35.705+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:29:35.966+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.285 seconds (process running for 390.83)
+2024-03-22T14:29:40.144+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:29:40.438+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:29:40.438+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:29:40.438+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:29:40.804+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.389 seconds (process running for 395.668)
+2024-03-22T14:29:45.806+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:32:00.845+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:32:48.187+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:32:48.188+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:32:48.188+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:32:48.476+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.312 seconds (process running for 583.339)
+2024-03-22T14:32:51.956+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:32:51.956+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:32:51.956+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:32:52.259+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.334 seconds (process running for 587.123)
+2024-03-22T14:32:54.388+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:33:42.844+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:33:42.844+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:33:42.844+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:33:43.079+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.256 seconds (process running for 637.943)
+2024-03-22T14:33:51.757+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:33:51.993+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:33:51.993+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:33:51.993+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:33:52.296+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.333 seconds (process running for 647.159)
+2024-03-22T14:34:47.912+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:34:47.912+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:34:47.912+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:34:48.132+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.24 seconds (process running for 702.996)
+2024-03-22T14:35:10.684+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:35:10.684+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:35:10.684+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:35:11.057+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.405 seconds (process running for 725.92)
+2024-03-22T14:35:12.527+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:35:12.527+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:35:12.527+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:35:12.797+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.295 seconds (process running for 727.661)
+2024-03-22T14:35:13.007+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:35:13.008+1000 INFO tgc.plus.proxmoxservice.api.RestControllerAdvice Something went wrong
+2024-03-22T14:35:15.521+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:35:15.521+1000 INFO tgc.plus.proxmoxservice.api.RestControllerAdvice Something went wrong
+2024-03-22T14:36:13.441+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:13.441+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:13.441+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:13.709+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.293 seconds (process running for 788.572)
+2024-03-22T14:36:15.171+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:15.171+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:15.171+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:15.398+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.246 seconds (process running for 790.261)
+2024-03-22T14:36:19.215+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:36:19.216+1000 INFO tgc.plus.proxmoxservice.api.RestControllerAdvice Something went wrong
+2024-03-22T14:36:19.680+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:19.680+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:19.680+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:19.979+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.32 seconds (process running for 794.843)
+2024-03-22T14:36:35.473+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:35.473+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:35.474+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:35.834+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.383 seconds (process running for 810.697)
+2024-03-22T14:36:37.324+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:37.324+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:37.324+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:37.622+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.324 seconds (process running for 812.486)
+2024-03-22T14:36:39.928+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:36:39.929+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:36:39.929+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:36:40.213+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.317 seconds (process running for 815.077)
+2024-03-22T14:36:41.681+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:37:48.894+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:37:48.894+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:37:48.894+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:37:50.481+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:37:50.481+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:37:50.481+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:37:50.703+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.238 seconds (process running for 885.567)
+2024-03-22T14:37:52.723+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:39:04.395+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:39:04.395+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:39:04.396+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:39:04.714+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.342 seconds (process running for 959.578)
+2024-03-22T14:39:06.196+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:39:06.196+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:39:06.196+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:39:06.441+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.267 seconds (process running for 961.305)
+2024-03-22T14:40:05.491+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:40:05.491+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:40:05.491+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:40:05.721+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.251 seconds (process running for 1020.585)
+2024-03-22T14:40:12.038+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:40:12.038+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:40:12.038+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:40:12.322+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.311 seconds (process running for 1027.186)
+2024-03-22T14:40:14.773+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:40:43.888+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:40:43.888+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:40:43.888+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:40:44.230+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.369 seconds (process running for 1059.094)
+2024-03-22T14:40:47.723+1000 ERROR tgc.plus.proxmoxservice.facades.VmFacade executeMany; bad SQL grammar [SELECT vds.v_id, vds.start_date, vds.expired_date, vds_payment.price,vds_payment.price_month, vds_tariff.tariff_id, vds_tariff.period_id, vds_tariff.os_id from vds JOIN vds_tariff ON vds.id = vds_tariff.vds_id JOIN vds_payment ON vds.id = vds_payment.vds_id WHERE vds.user_code= :userCode]
+2024-03-22T14:41:25.227+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:41:25.228+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:41:25.228+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:41:25.463+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.256 seconds (process running for 1100.327)
+2024-03-22T14:41:36.985+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:41:36.985+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:41:36.985+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:41:37.283+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.32 seconds (process running for 1112.147)
+2024-03-22T14:45:41.838+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:45:41.838+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:45:41.838+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:45:43.864+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:45:43.864+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:45:43.864+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:45:44.160+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.316 seconds (process running for 1359.023)
+2024-03-22T14:46:23.544+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:46:23.544+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:46:23.544+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:46:23.765+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.243 seconds (process running for 1398.629)
+2024-03-22T14:46:26.656+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:46:26.656+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:46:26.656+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:46:26.877+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.24 seconds (process running for 1401.741)
+2024-03-22T14:47:12.514+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:47:12.514+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:47:12.514+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:48:18.165+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:48:18.165+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:48:18.165+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:48:18.528+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.385 seconds (process running for 1513.392)
+2024-03-22T14:50:03.253+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:50:03.253+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:50:03.253+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T14:50:03.468+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.237 seconds (process running for 1618.332)
+2024-03-22T14:54:18.681+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T14:54:18.681+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T14:54:18.681+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T15:46:12.012+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T15:46:12.012+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T15:46:12.012+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T15:46:12.272+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.282 seconds (process running for 4987.136)
+2024-03-22T15:59:09.781+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T15:59:09.781+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T15:59:09.781+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T16:01:35.372+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T16:01:35.372+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T16:01:35.372+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T16:01:35.680+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.324 seconds (process running for 5910.543)
+2024-03-22T16:02:04.232+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T16:02:04.233+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T16:02:04.233+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T16:02:04.519+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.308 seconds (process running for 5939.383)
+2024-03-22T16:02:06.017+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T16:02:06.017+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T16:02:06.017+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T16:02:06.237+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.244 seconds (process running for 5941.101)
+2024-03-22T17:40:49.745+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:40:49.746+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:40:49.746+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:40:51.223+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:40:51.224+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:40:51.224+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:40:51.690+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.495 seconds (process running for 6185.593)
+2024-03-22T17:41:10.229+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:41:10.230+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:41:10.230+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:44:46.371+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:44:46.371+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:44:46.371+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:44:47.937+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:44:47.938+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:44:47.938+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:51:50.772+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:51:50.772+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:51:50.772+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:51:52.331+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:51:52.331+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:51:52.331+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:52:55.051+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:52:55.051+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:52:55.051+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:53:00.551+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:53:00.551+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:53:00.551+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T17:53:02.102+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T17:53:02.102+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T17:53:02.102+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:18:17.723+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:18:17.723+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:18:17.723+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:19:09.407+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:19:09.407+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:19:09.407+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:23:47.134+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:23:47.134+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:23:47.134+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:23:47.502+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.383 seconds (process running for 7996.732)
+2024-03-22T18:23:50.004+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:23:50.004+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:23:50.004+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:23:50.232+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.25 seconds (process running for 7999.462)
+2024-03-22T18:58:22.667+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:58:22.667+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:58:22.667+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:58:22.981+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.341 seconds (process running for 10072.211)
+2024-03-22T18:58:24.480+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Starting ProxmoxServiceApplication using Java 17.0.8 with PID 8937 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/ProxmoxService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-22T18:58:24.481+1000 DEBUG tgc.plus.proxmoxservice.ProxmoxServiceApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-22T18:58:24.481+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-22T18:58:24.700+1000 INFO tgc.plus.proxmoxservice.ProxmoxServiceApplication Started ProxmoxServiceApplication in 0.241 seconds (process running for 10073.929)

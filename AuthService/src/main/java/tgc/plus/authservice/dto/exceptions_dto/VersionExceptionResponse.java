@@ -8,12 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VersionResponseException extends ResponseException {
+public class VersionExceptionResponse extends ExceptionResponse {
 
     @JsonProperty
     private Long version;
 
-    public VersionResponseException(String path, String error, Integer status, String message, Long version) {
+    public VersionExceptionResponse(String path, String error, Integer status, String message, Long version) {
         super(path, error, status, message);
         this.version = version;
     }

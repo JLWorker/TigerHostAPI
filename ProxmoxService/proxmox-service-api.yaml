@@ -17,7 +17,7 @@ paths:
     get:
       tags:
         - vm
-      summary: Get virtual machine by id
+      summary: Get virtual machine by id (not use)
       description: ''
       operationId: getVmById
       parameters:
@@ -87,12 +87,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetTimestampInfoResponse"
+        400:
+          description: Passwords mismatch
         404:
           description: Virtual machine not found
         401:
           description: No Authorize
 
-  /vm/{vmId}/storage:
+  /vm/{vmId}/check_trial:
+      get:
+        tags:
+          - vm
+        summary: Check the trial period has not expired
+        description: ''
+        operationId: CheckTrialTimeByVmId
+        parameters:
+          - name: vmId
+            in: path
+            required: true
+            schema:
+              type: string
+              example: vm_98827912
+          - $ref: "#/components/parameters/AuthorizationHeader"
+        responses:
+          200:
+            description: Successfully operation
+          403:
+            description: Trial period expired
+          401:
+            description: No Authorize
+
+  /vm/{vmId}/check_storage?newSize={newSize}:
     get:
       tags:
         - vm
@@ -106,21 +131,25 @@ paths:
           schema:
             type: string
             example: vm_98827912
+        - name: newSize
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 25
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         200:
           description: Successfully operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetStorageInfoResponse"
+        400:
+          description: The new storage size is not enough
         404:
           description: Virtual machine not found
         401:
           description: No Authorize
 
 
-  /vm/password:
+  /vm/user/password:
     patch:
       tags:
         - vm
@@ -143,6 +172,33 @@ paths:
           description: Virtual machine not found
         '401':
           description: No authorize
+
+
+
+#  /vm/file:
+#    post:
+#      tags:
+#        - vm
+#      summary: Set password for virtual machine
+#      description: ''
+#      operationId: setPasswordByVmId
+#      parameters:
+#        - $ref: "#/components/parameters/AuthorizationHeader"
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: "#/components/schemas/ChangePasswordRequest"
+#
+#      responses:
+#        '200':
+#          description: Successful operation
+#        '404':
+#          description: Virtual machine not found
+#        '401':
+#          description: No authorize
+#
 
 components:
 
@@ -169,6 +225,10 @@ components:
             type: string
             format: datetime
             example: 07-08-2024:12.65
+        start_date:
+          type: string
+          format: datetime
+          example: 07-08-2024:12.65
         price_month:
             type: integer
             example: 2500
@@ -215,7 +275,7 @@ components:
           type: string
           format: datetime
           example: "08.01.2024"
-        finish_date:
+        expire_date:
           type: string
           format: datetime
           example: "08.06.2024"
@@ -238,7 +298,10 @@ components:
       properties:
         vmId:
           type: string
-          example: vm_987492387
+          example: vm_98972918
+        username:
+          type: string
+          example: petya
         password:
           type: string
           example: Uhjsi9821

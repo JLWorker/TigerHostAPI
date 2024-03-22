@@ -34,13 +34,4 @@ public class VirtualMachineExpireData implements Payload{
         this.expiredDate = expiredDate;
         this.price = price;
     }
-
-    @Override
-    public Map<String, String> getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("vm_id", this.getVmId().toString());
-        map.put("expired_date", this.getExpiredDate());
-        map.put("price", this.getPrice().toString());
-        return map;
-    }
 }

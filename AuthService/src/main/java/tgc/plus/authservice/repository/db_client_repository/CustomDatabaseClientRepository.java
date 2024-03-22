@@ -3,6 +3,7 @@ package tgc.plus.authservice.repository.db_client_repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.tokens_dto.TokenData;
@@ -11,7 +12,7 @@ import tgc.plus.authservice.dto.tokens_dto.TokenMetaData;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Repository
 public class CustomDatabaseClientRepository {
 
     @Autowired

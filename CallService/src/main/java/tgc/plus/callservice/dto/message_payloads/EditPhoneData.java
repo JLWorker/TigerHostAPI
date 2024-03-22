@@ -20,11 +20,4 @@ public class EditPhoneData implements Payload {
     public EditPhoneData(String phone) {
         this.phone = phone;
     }
-
-    @Override
-    public Map<String, String> getData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("phone", this.getPhone());
-        return map;
-    }
 }

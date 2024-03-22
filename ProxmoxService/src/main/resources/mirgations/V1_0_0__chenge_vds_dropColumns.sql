@@ -1,0 +1,1 @@
+alter table vds drop column vm_password;

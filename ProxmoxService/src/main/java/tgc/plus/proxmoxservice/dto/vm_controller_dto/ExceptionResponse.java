@@ -1,7 +1,6 @@
-package tgc.plus.authservice.dto.exceptions_dto;
+package tgc.plus.proxmoxservice.dto.vm_controller_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponseException {
+public class ExceptionResponse {
 
     @JsonProperty
     private String instant;
@@ -28,7 +27,7 @@ public class ResponseException {
     @JsonProperty
     private String message;
 
-    public ResponseException(String path, String error, Integer status, String message) {
+    public ExceptionResponse(String path, String error, Integer status, String message) {
         this.instant = String.valueOf(LocalDateTime.now());
         this.path = path;
         this.error = error;
@@ -36,7 +35,7 @@ public class ResponseException {
         this.message = message;
     }
 
-    public ResponseException(String message) {
+    public ExceptionResponse(String message) {
         this.message = message;
     }
 }
