@@ -19,17 +19,8 @@ public class RestControllerAdvice {
     @ExceptionHandler(WebExchangeBindException.class)
     public Mono<ResponseEntity<ExceptionResponse>> validHandlerException(WebExchangeBindException exception, ServerHttpRequest request) {
         BindingResult bindingResult = exception.getBindingResult();
-        return responseBuilder(Objects.requireNonNull(bindingResult.getFieldError()).getField(), request, HttpStatus.BAD_REQUEST);
+        return responseBuilder(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage(), request, HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(RuntimeException.class)
-//    public Mono<ResponseEntity<ExceptionResponse>> runtimeHandlerException(RuntimeException exception, ServerHttpRequest request){
-//        log.info(exception.getLocalizedMessage());
-//        if (exception instanceof ServiceException)
-//            return responseBuilder(exception.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR);
-//        else
-//            return responseBuilder(exception.getMessage(), request, HttpStatus.NOT_FOUND);
-//    }
 
     private Mono<ResponseEntity<ExceptionResponse>> responseBuilder(String errorMessage, ServerHttpRequest req, HttpStatus httpStatus){
         return Mono.defer(()->{

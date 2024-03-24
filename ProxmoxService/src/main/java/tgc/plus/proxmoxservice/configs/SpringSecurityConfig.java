@@ -1,6 +1,7 @@
 package tgc.plus.proxmoxservice.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import tgc.plus.proxmoxservice.configs.utils.JwtReactiveAuthenticationManager;
 import tgc.plus.proxmoxservice.configs.utils.JwtServerAuthenticationConverter;
 import tgc.plus.proxmoxservice.configs.utils.JwtServerWebExchangeMatcher;
 import tgc.plus.proxmoxservice.services.TokenService;
+
+import java.security.MessageDigest;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -57,6 +60,12 @@ public class SpringSecurityConfig {
         authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher());
         authenticationWebFilter.setAuthenticationFailureHandler(new JwtAuthenticationHandler(new ObjectMapper()));
         return authenticationWebFilter;
+    }
+
+    @Bean
+    @SneakyThrows
+    public MessageDigest messageDigest(){
+        return MessageDigest.getInstance("SHA-512");
     }
 
 }

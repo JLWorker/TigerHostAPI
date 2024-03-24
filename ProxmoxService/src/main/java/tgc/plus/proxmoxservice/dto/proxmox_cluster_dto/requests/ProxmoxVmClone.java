@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class VmClone {
+public class ProxmoxVmClone {
 
     @JsonProperty("newid")
     private Long newId;
@@ -14,7 +14,7 @@ public class VmClone {
     @JsonProperty("full")
     private boolean fullCopy;
 
-    public VmClone(Long newId, boolean fullCopy) {
+    public ProxmoxVmClone(Long newId, boolean fullCopy) {
         this.newId = newId;
         this.fullCopy = fullCopy;
     }

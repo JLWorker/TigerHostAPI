@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VmUserData {
+@ToString
+public class ProxmoxVmUserData {
 
     @JsonProperty
     private String user;
@@ -18,7 +20,7 @@ public class VmUserData {
     @JsonProperty("login-time")
     private Double enterTime;
 
-    public VmUserData(String user, Double enterTime) {
+    public ProxmoxVmUserData(String user, Double enterTime) {
         this.user = user;
         this.enterTime = enterTime;
     }

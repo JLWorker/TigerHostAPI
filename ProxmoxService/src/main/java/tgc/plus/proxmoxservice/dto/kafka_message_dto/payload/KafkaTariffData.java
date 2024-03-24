@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class TariffData {
+public class KafkaTariffData {
 
     @JsonProperty("tariff_id")
     private Integer tariffId;
@@ -16,7 +16,7 @@ public class TariffData {
     @JsonProperty("period_id")
     private Integer periodId;
 
-    public TariffData(Integer tariffId, Integer periodId) {
+    public KafkaTariffData(Integer tariffId, Integer periodId) {
         this.tariffId = tariffId;
         this.periodId = periodId;
     }

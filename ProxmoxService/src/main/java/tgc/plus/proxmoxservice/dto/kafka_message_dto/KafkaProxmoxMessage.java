@@ -10,7 +10,7 @@ import tgc.plus.proxmoxservice.dto.kafka_message_dto.payload.Payload;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ProxmoxMessage {
+public class KafkaProxmoxMessage {
 
     @JsonProperty("user_code")
     private String userCode;
@@ -18,7 +18,7 @@ public class ProxmoxMessage {
     @JsonProperty("payload")
     private Payload payload;
 
-    public ProxmoxMessage(String userCode, Payload payload) {
+    public KafkaProxmoxMessage(String userCode, Payload payload) {
         this.userCode = userCode;
         this.payload = payload;
     }

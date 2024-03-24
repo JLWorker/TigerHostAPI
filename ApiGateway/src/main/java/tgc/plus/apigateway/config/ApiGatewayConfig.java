@@ -14,10 +14,10 @@ import tgc.plus.apigateway.filters.JwtGatewayFilterFactory;
 public class ApiGatewayConfig {
 
     @Autowired
-    IpAddressProxyFilter ipAddressProxyFilter;
+    private IpAddressProxyFilter ipAddressProxyFilter;
 
     @Autowired
-    JwtGatewayFilterFactory jwtGatewayFilterFactory;
+    private JwtGatewayFilterFactory jwtGatewayFilterFactory;
 
     //add filters for cookies
 
@@ -55,6 +55,12 @@ public class ApiGatewayConfig {
                         .method(HttpMethod.GET)
                         .filters(f->f.filter(jwtGatewayFilterFactory))
                         .uri(ServicesUriList.FEEDBACK_SERVICE.getUrl()))
+
+                .route(r->r.path("/api/vm/**")
+                        .and()
+                        .method(HttpMethod.GET, HttpMethod.POST)
+                        .filters(f->f.filter(jwtGatewayFilterFactory))
+                        .uri(ServicesUriList.PROXMOX_SERVICE.getUrl()))
                 .build();
 
     }

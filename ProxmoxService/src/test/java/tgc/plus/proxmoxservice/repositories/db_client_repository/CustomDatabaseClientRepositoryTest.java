@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
+import tgc.plus.proxmoxservice.api.VmControllerTest;
 import tgc.plus.proxmoxservice.listeners.MessageListener;
 import tgc.plus.proxmoxservice.repositories.VdsRepository;
 

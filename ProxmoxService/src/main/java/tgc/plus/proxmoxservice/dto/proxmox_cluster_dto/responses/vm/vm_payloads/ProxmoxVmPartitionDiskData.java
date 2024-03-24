@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VmPartitionDiskData {
+public class ProxmoxVmPartitionDiskData {
 
     @JsonProperty("mountpoint")
     private String mountPoint;
@@ -21,7 +21,7 @@ public class VmPartitionDiskData {
     @JsonProperty("used-bytes")
     private Long usedPartitionSize;
 
-    public VmPartitionDiskData(String mountPoint, Long totalPartitionSize, Long usedPartitionSize) {
+    public ProxmoxVmPartitionDiskData(String mountPoint, Long totalPartitionSize, Long usedPartitionSize) {
         this.mountPoint = mountPoint;
         this.totalPartitionSize = totalPartitionSize;
         this.usedPartitionSize = usedPartitionSize;

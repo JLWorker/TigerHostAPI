@@ -3,11 +3,13 @@ package tgc.plus.proxmoxservice.dto.vm_controller_dto.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class UserVmElem {
 
     @JsonProperty("vm_id")

@@ -13,7 +13,7 @@ import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.util.retry.Retry;
 import tgc.plus.proxmoxservice.configs.KafkaConsumerConfigs;
-import tgc.plus.proxmoxservice.dto.kafka_message_dto.ProxmoxMessage;
+import tgc.plus.proxmoxservice.dto.kafka_message_dto.KafkaProxmoxMessage;
 import tgc.plus.proxmoxservice.listeners.utils.CommandsDispatcher;
 
 import java.time.Duration;
@@ -42,10 +42,10 @@ public class MessageListener {
     }
 
     private Flux<Void> startListenerPartition(Integer partition) {
-        ReceiverOptions<String, ProxmoxMessage> receiverOptions = kafkaConsumerConfigs.receiverOptions()
+        ReceiverOptions<String, KafkaProxmoxMessage> receiverOptions = kafkaConsumerConfigs.receiverOptions()
                 .assignment(Collections.singleton(new TopicPartition(topic, partition)));
 
-        KafkaReceiver<String, ProxmoxMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
+        KafkaReceiver<String, KafkaProxmoxMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
 
         return kafkaReceiver.receive()
                 .concatMap(msg -> {

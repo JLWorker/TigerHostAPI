@@ -116,6 +116,8 @@ paths:
             description: Trial period expired
           401:
             description: No Authorize
+          404:
+            description: Virtual machine not found
 
   /vm/{vmId}/check_storage?newSize={newSize}:
     get:
@@ -148,6 +150,36 @@ paths:
         401:
           description: No Authorize
 
+  /vm/{vmId}/users:
+    get:
+      tags:
+        - vm
+      summary: Get active users in virtual machine
+      description: ''
+      operationId: getUsersByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  users:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/GetUsersInfoResponse"
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
 
   /vm/user/password:
     patch:
@@ -292,6 +324,18 @@ components:
           type: integer
           format: int64
           example: 987328
+
+    GetUsersInfoResponse:
+        type: object
+        description: "Information about active users in virtual machine"
+        properties:
+          user:
+            type: string
+            example: root
+          login-time:
+            type: number
+            format: double
+            example: 12313213.3342
 
     ChangePasswordRequest:
       type: object

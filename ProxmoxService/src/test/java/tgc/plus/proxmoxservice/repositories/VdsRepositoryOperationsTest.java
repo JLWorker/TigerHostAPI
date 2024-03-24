@@ -13,6 +13,7 @@ import tgc.plus.proxmoxservice.entities.VdsPayment;
 import tgc.plus.proxmoxservice.entities.VdsTariff;
 import tgc.plus.proxmoxservice.listeners.MessageListener;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
@@ -39,13 +40,15 @@ public class VdsRepositoryOperationsTest {
 
     @Test
     public void fastVdsCreator(){
-        List<String> uuids = List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-
         Flux.range(0 ,5).flatMap(el -> {
             Vds randVds = new Vds();
+            Instant startDate = Instant.now();
             randVds.setUserCode("4f17dc26-0171-4efc-a987-d1c4d5b8c9ea");
             randVds.setVmId(String.format("vm_%s", Instant.now().getNano()+random.nextInt(1000)));
-
+            randVds.setStartDate(startDate);
+            randVds.setVmNumber(179);
+            randVds.setVmNode("tgc");
+            randVds.setExpiredDate (startDate.plus(Duration.ofDays(10)));
             VdsPayment vdsPayment = new VdsPayment();
             vdsPayment.setPrice(random.nextInt(10000));
             vdsPayment.setPriceMonth(random.nextInt(1000));

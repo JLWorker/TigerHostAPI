@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class PaymentData {
+public class KafkaPaymentData {
 
     @JsonProperty("payment_id")
     private String paymentId;
@@ -19,7 +19,7 @@ public class PaymentData {
     @JsonProperty("price_month")
     private Integer priceMonth;
 
-    public PaymentData(String paymentId, Integer price, Integer priceMonth) {
+    public KafkaPaymentData(String paymentId, Integer price, Integer priceMonth) {
         this.paymentId = paymentId;
         this.price = price;
         this.priceMonth = priceMonth;

@@ -1,8 +1,10 @@
 package tgc.plus.proxmoxservice.api;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.ProxmoxVmUsersInfo;
 import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.UserAllVms;
 import tgc.plus.proxmoxservice.dto.vm_controller_dto.requests.UserChangePassword;
 import tgc.plus.proxmoxservice.dto.vm_controller_dto.responses.TimestampsVm;
@@ -35,9 +37,14 @@ public class VmController {
         return vmFacade.checkVmStorage(vmId, newStorageSize);
     }
 
-    @PostMapping("/vm/user/password")
-    public Mono<Void> changeUserPassword(@RequestBody UserChangePassword userChangePassword){
+    @PostMapping("/user/password")
+    public Mono<Void> changeUserPassword(@Valid @RequestBody UserChangePassword userChangePassword){
         return vmFacade.changeUserPassword(userChangePassword);
+    }
+
+    @GetMapping("/{vmId}/users")
+    public Mono<ProxmoxVmUsersInfo> getActiveUsers(@PathVariable("vmId") String vmId){
+        return vmFacade.getVmUsers(vmId);
     }
 
 }

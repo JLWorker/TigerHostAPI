@@ -9,14 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.requests.VmClone;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.requests.VmUserSetPassword;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.NodesLoadInfo;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.VmCurrentState;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.VmDiskInfo;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.VmUsersInfo;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.NodesStorageInfo;
-import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.nodes_payloads.NodeLoadData;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.requests.ProxmoxVmClone;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.requests.ProxmoxVmUserSetPassword;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.ProxmoxNodesLoadInfo;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.ProxmoxVmCurrentState;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.ProxmoxVmDiskInfo;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.vm.ProxmoxVmUsersInfo;
+import tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.ProxmoxNodesStorageInfo;
 import tgc.plus.proxmoxservice.listeners.MessageListener;
 import tgc.plus.proxmoxservice.services.utils.paths.NodesClusterPaths;
 import tgc.plus.proxmoxservice.services.utils.paths.VmClusterPaths;
@@ -45,7 +44,7 @@ public class ProxmoxUtilsTest {
     @Test
     public void sendClusterRequestToGetVmInfo(){
 
-        proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_CURRENT, VmCurrentState.class)
+        proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_CURRENT, ProxmoxVmCurrentState.class)
                 .doOnSuccess(res ->{
                     Assertions.assertNotNull(res, "Body result is empty");
                     logger.info("Machine ram station {}", res.getRam().toString());
@@ -57,7 +56,7 @@ public class ProxmoxUtilsTest {
 
     @Test
     public void getVmDisksInfo(){
-      Mono<VmDiskInfo> res =  proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_DISKS_INFO, VmDiskInfo.class);
+      Mono<ProxmoxVmDiskInfo> res =  proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_DISKS_INFO, ProxmoxVmDiskInfo.class);
                 res.doOnSuccess(result -> {
                     Assertions.assertNotNull(result, "Body result is empty");
                     result.getVmDisks().forEach(el -> logger.info("Mount point - {}", el.getMountPoint()));
@@ -66,7 +65,7 @@ public class ProxmoxUtilsTest {
 
     @Test
     public void getNodesLoads(){
-        Mono<NodesLoadInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, NodesClusterPaths.GET_NODES_LOADS, NodesLoadInfo.class);
+        Mono<ProxmoxNodesLoadInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, NodesClusterPaths.GET_NODES_LOADS, ProxmoxNodesLoadInfo.class);
         res.doOnSuccess(result -> {
             Assertions.assertNotNull(result, "Body result is empty");
             result.getNodesLoads().forEach(el -> logger.info("Max system disk - {}", el.getMaxSystemDisk().toString()));
@@ -75,7 +74,7 @@ public class ProxmoxUtilsTest {
 
     @Test
     public void getNodesStorageInfo(){
-        Mono<NodesStorageInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, NodesClusterPaths.GET_NODE_STORAGE, NodesStorageInfo.class);
+        Mono<ProxmoxNodesStorageInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, NodesClusterPaths.GET_NODE_STORAGE, ProxmoxNodesStorageInfo.class);
         res.doOnSuccess(result -> {
             Assertions.assertNotNull(result, "Body result is empty");
             result.getNodesStorages().forEach(el -> logger.info("Max system disk - {}", el.getStorage()));
@@ -84,7 +83,7 @@ public class ProxmoxUtilsTest {
 
     @Test
     public void getVmUsers() {
-        Mono<VmUsersInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_USERS, VmUsersInfo.class);
+        Mono<ProxmoxVmUsersInfo> res = proxmoxUtils.sendGetRequestToCluster(requestVmParams, VmClusterPaths.GET_VM_USERS, ProxmoxVmUsersInfo.class);
         res.doOnSuccess(result -> {
             Assertions.assertFalse(result.getVmUsers().isEmpty(), "Body result is empty");
             result.getVmUsers().forEach(el -> logger.info("User - {}", el.getUser()));
@@ -94,7 +93,7 @@ public class ProxmoxUtilsTest {
     @Test
     public void createVmClone(){
         Long newVmId = new Random().nextLong(105, 199);
-        VmClone newClone = new VmClone(newVmId, true);
+        ProxmoxVmClone newClone = new ProxmoxVmClone(newVmId, true);
         Map<String, Object> params = Map.of("node", node, "vmId", 100);
         proxmoxUtils.sendChangeRequestToCluster(HttpMethod.POST, params, newClone, VmClusterPaths.CLONE_VM)
                 .doOnError(e->logger.info(e.getMessage()))
@@ -104,7 +103,7 @@ public class ProxmoxUtilsTest {
 
     @Test
     public void changePassword(){
-        VmUserSetPassword userSetPassword = new VmUserSetPassword("root", "12345");
+        ProxmoxVmUserSetPassword userSetPassword = new ProxmoxVmUserSetPassword("root", "12345");
         proxmoxUtils.sendChangeRequestToCluster(HttpMethod.POST, requestVmParams, userSetPassword, VmClusterPaths.CHANGE_VM_USER_PASSWORD)
                 .doOnError(e->logger.info(e.getMessage()))
                 .doOnSuccess(res -> logger.info("Success send new password for user - {}", userSetPassword.getUsername()))

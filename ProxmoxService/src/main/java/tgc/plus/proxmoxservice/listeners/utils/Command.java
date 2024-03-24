@@ -1,9 +1,9 @@
 package tgc.plus.proxmoxservice.listeners.utils;
 
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.kafka_message_dto.ProxmoxMessage;
+import tgc.plus.proxmoxservice.dto.kafka_message_dto.KafkaProxmoxMessage;
 
 public interface Command {
-    Mono<Void> execution(ProxmoxMessage proxmoxMessage);
+    Mono<Void> execution(KafkaProxmoxMessage proxmoxMessage);
 
 }

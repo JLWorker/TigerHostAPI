@@ -1,9 +1,7 @@
 package tgc.plus.proxmoxservice.dto.proxmox_cluster_dto.responses.nodes.nodes_payloads;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NodeLoadData{
+public class ProxmoxNodeLoadData {
 
     @JsonProperty("node")
     private String node;
@@ -35,7 +33,7 @@ public class NodeLoadData{
     @JsonProperty("maxmem")
     private Long maxRam;
 
-    public NodeLoadData(String node, String status, Double cpu, Long systemDisk, Long maxSystemDisk, Long ram, Long maxRam) {
+    public ProxmoxNodeLoadData(String node, String status, Double cpu, Long systemDisk, Long maxSystemDisk, Long ram, Long maxRam) {
         this.node = node;
         this.status = status;
         this.cpu = cpu;

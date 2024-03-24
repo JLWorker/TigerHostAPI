@@ -1,7 +1,6 @@
 package tgc.plus.proxmoxservice.dto.kafka_message_dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @JsonTypeName(value = "NewVmData")
-public class NewVmData implements Payload{
+public class KafkaNewVmData implements Payload{
 
     @JsonProperty
     private Integer template;
@@ -22,20 +21,20 @@ public class NewVmData implements Payload{
     private Integer osId;
 
     @JsonProperty("payment_data")
-    private PaymentData paymentData;
+    private KafkaPaymentData kafkaPaymentData;
 
     @JsonProperty("tariff_data")
-    private TariffData tariffData;
+    private KafkaTariffData kafkaTariffData;
 
     @JsonProperty("vds_characters")
-    private VdsCharacteristicData vdsCharacteristicData;
+    private KafkaVdsCharacteristicData kafkaVdsCharacteristicData;
 
-    public NewVmData(Integer template, Integer osId, PaymentData paymentData, TariffData tariffData, VdsCharacteristicData vdsCharacteristicData) {
+    public KafkaNewVmData(Integer template, Integer osId, KafkaPaymentData kafkaPaymentData, KafkaTariffData kafkaTariffData, KafkaVdsCharacteristicData kafkaVdsCharacteristicData) {
         this.template = template;
         this.osId = osId;
-        this.paymentData = paymentData;
-        this.tariffData = tariffData;
-        this.vdsCharacteristicData = vdsCharacteristicData;
+        this.kafkaPaymentData = kafkaPaymentData;
+        this.kafkaTariffData = kafkaTariffData;
+        this.kafkaVdsCharacteristicData = kafkaVdsCharacteristicData;
     }
 
     @Override
@@ -43,9 +42,9 @@ public class NewVmData implements Payload{
         return Map.of(
                 "template", this.template,
                 "os", this.osId,
-                "payment", this.paymentData,
-                "tariff", this.tariffData,
-                "characters", this.vdsCharacteristicData
+                "payment", this.kafkaPaymentData,
+                "tariff", this.kafkaTariffData,
+                "characters", this.kafkaVdsCharacteristicData
         );
     }
 }

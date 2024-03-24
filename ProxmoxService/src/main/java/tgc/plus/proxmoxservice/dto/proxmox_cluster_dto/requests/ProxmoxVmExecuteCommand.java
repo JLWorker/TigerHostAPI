@@ -8,12 +8,12 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class VmExecuteCommand {
+public class ProxmoxVmExecuteCommand {
 
     @JsonProperty
     private List<String> command;
 
-    public VmExecuteCommand(List<String> command) {
+    public ProxmoxVmExecuteCommand(List<String> command) {
         this.command = command;
     }
 }

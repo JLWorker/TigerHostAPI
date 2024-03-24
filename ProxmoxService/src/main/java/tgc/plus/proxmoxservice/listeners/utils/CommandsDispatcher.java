@@ -3,9 +3,8 @@ package tgc.plus.proxmoxservice.listeners.utils;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.proxmoxservice.dto.kafka_message_dto.ProxmoxMessage;
+import tgc.plus.proxmoxservice.dto.kafka_message_dto.KafkaProxmoxMessage;
 import tgc.plus.proxmoxservice.exceptions.listener_exceptions.CommandNotFoundException;
 import tgc.plus.proxmoxservice.listeners.utils.commands.CreateNewVm;
 
@@ -22,7 +21,7 @@ public class CommandsDispatcher {
         commandMap.put(CommandsNames.CREATE_NEW_VM.getName(), new CreateNewVm());
 
     }
-    public Mono<Void> execute(String method, ProxmoxMessage proxmoxMessage){
+    public Mono<Void> execute(String method, KafkaProxmoxMessage proxmoxMessage){
 
         return Mono.defer(()-> {
             if(commandMap.containsKey(method)){

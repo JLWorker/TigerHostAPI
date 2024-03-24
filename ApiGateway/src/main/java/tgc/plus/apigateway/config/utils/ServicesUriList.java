@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 public enum ServicesUriList {
 
     AUTH_SERVICE("http://localhost:8081"),
+    PROXMOX_SERVICE("http://localhost:8085"),
     FEEDBACK_SERVICE("http://localhost:8083");
 
     private final String url;

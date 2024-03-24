@@ -56,8 +56,9 @@ public class ProxmoxUtils {
 
             if (mainNode.getNodeType().equals(JsonNodeType.ARRAY))
                 return Mono.just(mapper.readValue(json, expectedResponse));
-            else
-                return Mono.just(mapper.readValue(mainNode.asText(), expectedResponse));
+            else {
+                return Mono.just(mapper.readValue(mainNode.toString(), expectedResponse));
+            }
         } else
             return getUnexpectedJsonNode("Json is empty");
     }

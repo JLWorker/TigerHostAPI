@@ -2,14 +2,13 @@ package tgc.plus.proxmoxservice.configs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import reactor.kafka.receiver.ReceiverOptions;
-import tgc.plus.proxmoxservice.dto.kafka_message_dto.ProxmoxMessage;
+import tgc.plus.proxmoxservice.dto.kafka_message_dto.KafkaProxmoxMessage;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -49,8 +48,8 @@ public class KafkaConsumerConfigs {
     }
 
     @Bean
-    public ReceiverOptions<String, ProxmoxMessage> receiverOptions(){
-        ReceiverOptions<String, ProxmoxMessage> receiverOptions = ReceiverOptions.create(consumerProps());
+    public ReceiverOptions<String, KafkaProxmoxMessage> receiverOptions(){
+        ReceiverOptions<String, KafkaProxmoxMessage> receiverOptions = ReceiverOptions.create(consumerProps());
         receiverOptions.addAssignListener(receiverPartitions -> log.info("Partitions assign {}", receiverPartitions))
                 .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener))
                 .commitInterval(Duration.ofMillis(1000))

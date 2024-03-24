@@ -1,5 +1,7 @@
 package tgc.plus.proxmoxservice.facades.utils;
 
+import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -11,6 +13,10 @@ import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.ServiceException
 import tgc.plus.proxmoxservice.exceptions.facades_exceptions.vm.VmNotFoundException;
 import tgc.plus.proxmoxservice.repositories.VdsRepository;
 import tgc.plus.proxmoxservice.repositories.db_client_repository.CustomDatabaseClientRepository;
+
+import java.security.MessageDigest;
+import java.security.Security;
+import java.util.Base64;
 
 @Component
 @Slf4j
@@ -42,7 +48,6 @@ public class FacadesUtils {
                 .flatMap(securityContext ->
                     Mono.just((String) securityContext.getAuthentication().getPrincipal()));
     }
-
 
     public <T> Mono<T> getServiceException(String message){
         return Mono.error(new ServiceException(message));
