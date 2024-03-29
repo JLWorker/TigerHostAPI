@@ -21,24 +21,16 @@ public class ProxmoxNodeLoadData {
     @JsonProperty
     private Double cpu;
 
-    @JsonProperty("dick")
-    private Long systemDisk;
-
-    @JsonProperty("maxdisk")
-    private Long maxSystemDisk;
-
     @JsonProperty("mem")
     private Long ram;
 
     @JsonProperty("maxmem")
     private Long maxRam;
 
-    public ProxmoxNodeLoadData(String node, String status, Double cpu, Long systemDisk, Long maxSystemDisk, Long ram, Long maxRam) {
+    public ProxmoxNodeLoadData(String node, String status, Double cpu, Long ram, Long maxRam) {
         this.node = node;
         this.status = status;
         this.cpu = cpu;
-        this.systemDisk = systemDisk;
-        this.maxSystemDisk = maxSystemDisk;
         this.ram = ram;
         this.maxRam = maxRam;
     }

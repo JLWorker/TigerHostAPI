@@ -1,4 +1,4 @@
-package tgc.plus.authservice.api.mobile.utils;
+package tgc.plus.authservice.api.utils;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

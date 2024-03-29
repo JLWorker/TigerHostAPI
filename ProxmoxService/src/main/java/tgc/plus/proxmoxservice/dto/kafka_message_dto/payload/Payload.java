@@ -7,7 +7,7 @@ import java.util.Map;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = KafkaNewVmData.class, name = "NewVmData")
+        @JsonSubTypes.Type(value = KafkaNewVm.class, name = "NewVmData")
 })
 public interface Payload {
     Map<String, Object> getData();

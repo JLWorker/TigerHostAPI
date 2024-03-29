@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.api.utils.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.user_dto.*;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;

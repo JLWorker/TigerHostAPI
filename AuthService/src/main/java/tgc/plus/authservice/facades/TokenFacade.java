@@ -8,8 +8,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.api.utils.IpValid;
 import tgc.plus.authservice.dto.tokens_dto.*;
+import tgc.plus.authservice.exceptions.exceptions_elements.RefreshTokenException;
 import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
@@ -71,7 +72,14 @@ public class TokenFacade {
                         .flatMap(tokenMeta -> customDatabaseClientRepository.getAllUserTokens(userToken.getUserId(), tokenId)
                                 .flatMap(userTokenWithMetaList ->
                                         Mono.just(new TokensDataResponse(new TokenMetaData(tokenMeta.getDeviceName(), tokenMeta.getApplicationType(), tokenMeta.getDeviceIp()),
-                                                userTokenWithMetaList)))));
+                                                userTokenWithMetaList)))))
+                .onErrorResume(e -> {
+                    log.error(e.getMessage());
+                    if (!(e instanceof RefreshTokenException))
+                        return facadeUtils.getServiceException("The service cannot process the request");
+                    else
+                        return Mono.error(e);
+                });
     }
 
 }

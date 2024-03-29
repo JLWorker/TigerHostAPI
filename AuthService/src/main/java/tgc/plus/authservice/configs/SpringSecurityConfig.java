@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
                 .authorizeExchange(exchange ->
                         exchange
                                 .pathMatchers("/api/account/reg", "/api/account/login", "/api/account/recovery", "/api/account/check",
-                                        "/api/tokens/update", "/api/2fa/verify-code").permitAll()
+                                        "/api/tokens/update", "/api/2fa/verify-code", "/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
                                 .pathMatchers("/api/**").authenticated()
                                 .anyExchange().denyAll()
                 )

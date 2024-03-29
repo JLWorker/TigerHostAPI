@@ -54,7 +54,8 @@ public class ApiGatewayConfig {
                         .and()
                         .method(HttpMethod.GET)
                         .filters(f->f.filter(jwtGatewayFilterFactory))
-                        .uri(ServicesUriList.FEEDBACK_SERVICE.getUrl()))
+                        .uri(ServicesUriList.FEEDBACK_SERVICE.getUrl())
+                )
 
                 .route(r->r.path("/api/vm/**")
                         .and()

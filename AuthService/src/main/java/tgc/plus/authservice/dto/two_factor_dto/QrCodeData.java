@@ -1,6 +1,7 @@
 package tgc.plus.authservice.dto.two_factor_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +12,11 @@ import lombok.Setter;
 public class QrCodeData {
 
     @JsonProperty("qr_code")
+    @Schema(example = "iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeAQAAAADlUEq3AAAD......")
     private byte[] qrCode;
 
     @JsonProperty("type")
+    @Schema(example = "image/png")
     private String type;
 
     public QrCodeData(byte[] qrCode, String type) {

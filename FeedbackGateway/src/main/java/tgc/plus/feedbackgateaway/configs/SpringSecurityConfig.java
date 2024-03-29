@@ -32,6 +32,7 @@ public class SpringSecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange.pathMatchers("/api/feedback/**").authenticated()
+                                .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);

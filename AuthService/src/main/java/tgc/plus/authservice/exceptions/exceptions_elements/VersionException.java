@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VersionException extends RuntimeException{
 
+
     private Long newVersion;
 
     private String message;

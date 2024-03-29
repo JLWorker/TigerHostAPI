@@ -53,8 +53,8 @@ public class MessageListener {
                     if (!method.isBlank())
                         return commandsDispatcher.execute(method, msg.value())
                                 .doOnTerminate(msg.receiverOffset()::acknowledge);
-                        else {
-                            log.warn("Message with offset: {} have problem with key method", msg.receiverOffset().offset());
+                    else {
+                            log.warn("Message with offset: {} has problem with key method", msg.receiverOffset().offset());
                             return Mono.empty();
                         }
                 })

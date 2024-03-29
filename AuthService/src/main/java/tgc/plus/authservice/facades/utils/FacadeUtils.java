@@ -124,7 +124,8 @@ public class FacadeUtils {
     }
 
     public Mono<User> getUserByEmailLog(String email) {
-        return userRepository.getUserByEmail(email).defaultIfEmpty(new User())
+        return userRepository.getUserByEmail(email)
+                .defaultIfEmpty(new User())
                 .filter(el -> el.getId() != null)
                 .switchIfEmpty(getNotFoundException(String.format("User with email %s not found", email)));
     }
@@ -141,13 +142,13 @@ public class FacadeUtils {
         return userTokenMono
                 .defaultIfEmpty(new UserToken())
                 .filter(userToken -> userToken.getUserId() != null)
-                .switchIfEmpty(getRefreshTokenException(String.format("Token with id %s does not exist", tokenId), HttpStatus.UNAUTHORIZED));
+                .switchIfEmpty(getRefreshTokenException(String.format("Token with id %s does not exist", tokenId)));
     }
 
     public Mono<UserToken> getUserTokenByRefreshToken(String refreshToken){
         return userTokenRepository.getUserTokenByRefreshToken(refreshToken)
                 .filter(userToken -> userToken.getTokenId() != null)
-                .switchIfEmpty(getRefreshTokenException("Token not exist", HttpStatus.UNAUTHORIZED));
+                .switchIfEmpty(getRefreshTokenException("Token not exist"));
     }
 
     public Mono<UserInfoResponse> getUserInfoByVersion(Long version, String userCode){
@@ -240,14 +241,14 @@ public class FacadeUtils {
         return userTokenRepository.getUserTokenByTokenIdForDeleteToken(tokenId)
                         .then(userTokenRepository.removeUserTokenByTokenId(tokenId)
                                 .filter(res -> res!=0)
-                                .switchIfEmpty(getRefreshTokenException("Token already removed", HttpStatus.NOT_FOUND))
+                                .switchIfEmpty(getNotFoundException("Token already removed"))
                                 .flatMap(res -> Mono.empty()));
     }
 
     public Mono<Void> removeAllUserTokens(String tokenId){
         return getUserTokenByTokenId(tokenId, false)
                         .flatMap(userToken -> userTokenRepository.removeAllUserTokens(tokenId, userToken.getUserId())
-                                .onErrorResume(e->getRefreshTokenException("Tokens already removed", HttpStatus.UNAUTHORIZED))
+                                .onErrorResume(e->getRefreshTokenException("Tokens already removed"))
                                 .flatMap(res -> Mono.empty()));
     }
 
@@ -298,7 +299,7 @@ public class FacadeUtils {
     public Mono<Map<String, String>> updatePairTokens(String refreshToken, Long userId, Boolean checkResult){
         if (!checkResult)
             return userTokenRepository.removeUserTokenByRefreshToken(refreshToken)
-                    .then(getRefreshTokenException("Token expired", HttpStatus.UNAUTHORIZED));
+                    .then(getRefreshTokenException("Token expired"));
 
         else
             return userRepository.getUserById(userId)
@@ -369,11 +370,12 @@ public class FacadeUtils {
         return Mono.error(new VersionException(version, "Version incorrect"));
     }
 
-    private <T> Mono<T> getRefreshTokenException(String message, HttpStatus httpStatus){
-        if (httpStatus.equals(HttpStatus.UNAUTHORIZED))
-             return Mono.error(new RefreshTokenException(message));
-        else
-            return Mono.error(new RefreshTokenException(message, httpStatus));
+    private <T> Mono<T> getRefreshTokenException(String message){
+            return Mono.error(new RefreshTokenException(message));
+    }
+
+    public <T> Mono<T> getServiceException(String message){
+        return Mono.error(new ServiceException(message));
     }
 
     private <T> Mono<T> getRequestException(String message){

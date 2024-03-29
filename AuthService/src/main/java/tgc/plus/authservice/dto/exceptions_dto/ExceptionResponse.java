@@ -1,6 +1,7 @@
 package tgc.plus.authservice.dto.exceptions_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,18 +14,23 @@ import java.time.LocalDateTime;
 public class ExceptionResponse {
 
     @JsonProperty
+    @Schema(example = "2024-03-29T14:16:03.301810896")
     private String instant;
 
     @JsonProperty
+    @Schema(example = "/api/...")
     private String path;
 
     @JsonProperty
+    @Schema(example = "Unauthorized/Not Found....")
     private String error;
 
     @JsonProperty
+    @Schema(example = "403")
     private Integer status;
 
     @JsonProperty
+    @Schema(example = "Error message")
     private String message;
 
     public ExceptionResponse(String path, String error, Integer status, String message) {

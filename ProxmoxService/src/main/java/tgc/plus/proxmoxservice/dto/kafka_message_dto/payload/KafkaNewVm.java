@@ -12,7 +12,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @JsonTypeName(value = "NewVmData")
-public class KafkaNewVmData implements Payload{
+public class KafkaNewVm implements Payload{
 
     @JsonProperty
     private Integer template;
@@ -27,14 +27,14 @@ public class KafkaNewVmData implements Payload{
     private KafkaTariffData kafkaTariffData;
 
     @JsonProperty("vds_characters")
-    private KafkaVdsCharacteristicData kafkaVdsCharacteristicData;
+    private KafkaVdsCharacteristicsData kafkaVdsCharacteristicsData;
 
-    public KafkaNewVmData(Integer template, Integer osId, KafkaPaymentData kafkaPaymentData, KafkaTariffData kafkaTariffData, KafkaVdsCharacteristicData kafkaVdsCharacteristicData) {
+    public KafkaNewVm(Integer template, Integer osId, KafkaPaymentData kafkaPaymentData, KafkaTariffData kafkaTariffData, KafkaVdsCharacteristicsData kafkaVdsCharacteristicsData) {
         this.template = template;
         this.osId = osId;
         this.kafkaPaymentData = kafkaPaymentData;
         this.kafkaTariffData = kafkaTariffData;
-        this.kafkaVdsCharacteristicData = kafkaVdsCharacteristicData;
+        this.kafkaVdsCharacteristicsData = kafkaVdsCharacteristicsData;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class KafkaNewVmData implements Payload{
                 "os", this.osId,
                 "payment", this.kafkaPaymentData,
                 "tariff", this.kafkaTariffData,
-                "characters", this.kafkaVdsCharacteristicData
+                "characters", this.kafkaVdsCharacteristicsData
         );
     }
 }

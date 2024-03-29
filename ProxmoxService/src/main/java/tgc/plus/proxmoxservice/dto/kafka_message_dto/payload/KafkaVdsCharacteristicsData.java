@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class KafkaVdsCharacteristicData {
+public class KafkaVdsCharacteristicsData {
 
     @JsonProperty
     private Integer cpu;
@@ -19,7 +19,7 @@ public class KafkaVdsCharacteristicData {
     @JsonProperty
     private Integer memory;
 
-    public KafkaVdsCharacteristicData(Integer cpu, Integer ram, Integer memory) {
+    public KafkaVdsCharacteristicsData(Integer cpu, Integer ram, Integer memory) {
         this.cpu = cpu;
         this.ram = ram;
         this.memory = memory;

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.flywaydb.core.internal.util.ObjectMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.proxmoxservice.configs.FluxConfig;
 import tgc.plus.proxmoxservice.exceptions.proxmox_exceptions.web_client.UnexpectedJsonNodeType;
@@ -18,7 +16,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class ProxmoxUtils {
+public class WebClientUtils {
 
     @Autowired
     private FluxConfig fluxConfig;

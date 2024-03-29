@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProxmoxNodesStorageInfo {
+public class ProxmoxNodeStoragesInfo {
 
     @JsonProperty("data")
     private List<ProxmoxNodeStorageData> nodesStorages;
 
-    public ProxmoxNodesStorageInfo(List<ProxmoxNodeStorageData> nodesStorages) {
+    public ProxmoxNodeStoragesInfo(List<ProxmoxNodeStorageData> nodesStorages) {
         this.nodesStorages = nodesStorages;
     }
 }

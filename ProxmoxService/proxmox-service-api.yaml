@@ -172,7 +172,7 @@ paths:
               schema:
                 type: "object"
                 properties:
-                  users:
+                  result:
                     type: "array"
                     items:
                       $ref: "#/components/schemas/GetUsersInfoResponse"
