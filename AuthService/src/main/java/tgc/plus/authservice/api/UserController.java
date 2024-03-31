@@ -27,7 +27,7 @@ import tgc.plus.authservice.facades.UserFacade;
 @RestController
 @RequestMapping("/api/account")
 @Tag(name = "api/account", description = "User controller API")
-public class UserController {
+public class UserController extends UserFacade {
 
 
     @Autowired

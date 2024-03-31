@@ -25,7 +25,7 @@ public class ApiGatewayConfig {
     public RouteLocator routeLocator(RouteLocatorBuilder builder){
         return builder.routes()
 
-                .route(r -> r.path("/api/account/login", "/api/2fa/verify-code", "/api/tokens/all")
+                .route(r -> r.path("/api/account/login", "/api/2fa/verify-code", "/api/tokens/all/*")
                         .and()
                         .method(HttpMethod.POST, HttpMethod.GET)
                         .filters(f->f.filter(ipAddressProxyFilter))

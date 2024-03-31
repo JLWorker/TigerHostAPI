@@ -1,4 +1,4 @@
-package tgc.plus.authservice.configs;
+package tgc.plus.providedservice.configs;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -10,9 +10,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import reactor.core.scheduler.Schedulers;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
-import tgc.plus.authservice.configs.utils.CustomPartitioner;
-import tgc.plus.authservice.dto.kafka_message_dto.CallMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
+import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,19 +19,19 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     @Value("${kafka.producer.retries}")
-    Integer retriesConfig;
+    private Integer retriesConfig;
 
     @Value("${kafka.producer.retries_backoff}")
-    Long retriesBackoff;
+    private Long retriesBackoff;
 
     @Value("${kafka.bootstrap-servers}")
-    String serverConfig;
+    private String serverConfig;
 
     @Value("${kafka.sender.scheduler.result.thread}")
-    Integer schedulerResultThread;
+    private Integer schedulerResultThread;
 
     @Value("${kafka.sender.scheduler.result.queue}")
-    Integer schedulerResultQueue;
+    private Integer schedulerResultQueue;
 
     @Bean
     public Map<String, Object> producerConfigs(){
@@ -46,20 +44,20 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         props.put(ProducerConfig.RETRIES_CONFIG, retriesConfig);
         props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retriesBackoff);
-        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);
         return props;
     }
 
     @Bean
-    public SenderOptions<String, KafkaMessage> senderOptions(){
-        SenderOptions<String, KafkaMessage> senderOptions = SenderOptions.create(producerConfigs());
+    public SenderOptions<String, FeedbackMessage> senderOptions(){
+        SenderOptions<String, FeedbackMessage> senderOptions = SenderOptions.create(producerConfigs());
         senderOptions.scheduler(Schedulers.newBoundedElastic(schedulerResultThread, schedulerResultQueue, "sender-option-result"));
         return senderOptions;
     }
 
     @Bean
-    public KafkaSender<String, KafkaMessage> kafkaSender(){
+    public KafkaSender<String, FeedbackMessage> kafkaSender(){
         return KafkaSender.create(senderOptions());
     }
+
 
 }

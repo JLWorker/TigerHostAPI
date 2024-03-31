@@ -30,9 +30,6 @@ public class TwoFactorFacade {
     @Autowired
     TwoFactorService twoFactorService;
 
-    @Autowired
-    TwoFactorRepository twoFactorRepository;
-
     @Transactional
     public Mono<Void> switch2Fa(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {

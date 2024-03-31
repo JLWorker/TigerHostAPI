@@ -162,8 +162,11 @@ public class FacadeUtils {
     }
 
     public Mono<Long> updatePhoneNumber(String phone, String userCode, Long reqVersion){
-          return userRepository.changePhone(phone, userCode, reqVersion)
-                .filter(newVersion -> newVersion != 0)
+          return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
+                  .filter(user -> user.getId()!=null)
+                  .switchIfEmpty(getRefreshTokenException("User not exist"))
+                  .then(userRepository.changePhone(phone, userCode, reqVersion))
+                  .filter(newVersion -> newVersion != 0)
                   .switchIfEmpty(userRepository.getUserByUserCode(userCode)
                           .flatMap(user -> getVersionException(user.getVersion())))
                   .flatMap(newVersion -> {
@@ -174,7 +177,10 @@ public class FacadeUtils {
     }
 
     public Mono<Long> updateEmail(String email, String userCode, Long reqVersion){
-        return userRepository.changeEmail(email, userCode, reqVersion)
+        return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
+                .filter(user -> user.getId()!=null)
+                .switchIfEmpty(getRefreshTokenException("User not exist"))
+                .then(userRepository.changeEmail(email, userCode, reqVersion))
                 .filter(newVersion -> newVersion != 0)
                 .switchIfEmpty(userRepository.getUserByUserCode(userCode)
                         .flatMap(user -> getVersionException(user.getVersion())))

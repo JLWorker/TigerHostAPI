@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,12 +29,12 @@ public class RestControllerAdvice {
                     HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST.value(), Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage()));
     }
     @ExceptionHandler({TwoFactorActiveException.class, RefreshTokenException.class})
-    public ResponseEntity<ExceptionResponse> runtimeHandlerException(Exception exception, HttpServerRequest request) {
+    public ResponseEntity<ExceptionResponse> runtimeHandlerException(Exception exception, ServerHttpRequest request) {
             if (exception instanceof TwoFactorActiveException)
                     return ResponseEntity.status(HttpStatus.ACCEPTED)
                             .header("2FA-Token", ((TwoFactorActiveException) exception).getDeviceToken()).build();
             else{
-                ExceptionResponse response = new ExceptionResponse(request.path(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+                ExceptionResponse response = new ExceptionResponse(request.getPath().value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("Logout", "true").body(response);
             }
     }

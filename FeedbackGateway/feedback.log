@@ -699,3 +699,16 @@
 2024-03-29T19:07:23.408+1000 DEBUG tgc.plus.feedbackgateaway.FeedbackGateawayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
 2024-03-29T19:07:23.408+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication No active profile set, falling back to 1 default profile: "default"
 2024-03-29T19:07:23.698+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication Started FeedbackGateawayApplication in 0.322 seconds (process running for 1962.167)
+2024-03-30T09:14:16.271+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication Starting FeedbackGateawayApplication using Java 17.0.8 with PID 13866 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/FeedbackGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-30T09:14:16.273+1000 DEBUG tgc.plus.feedbackgateaway.FeedbackGateawayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-30T09:14:16.274+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-30T09:14:17.602+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication Started FeedbackGateawayApplication in 1.644 seconds (process running for 2.086)
+2024-03-30T12:01:02.774+1000 ERROR tgc.plus.feedbackgateaway.listeners.MessageListener Redis command timed out
+2024-03-30T12:02:24.743+1000 ERROR tgc.plus.feedbackgateaway.listeners.MessageListener Redis command timed out
+2024-03-30T12:03:50.861+1000 ERROR tgc.plus.feedbackgateaway.listeners.MessageListener Redis command timed out
+2024-03-30T12:05:34.140+1000 ERROR tgc.plus.feedbackgateaway.listeners.MessageListener Redis command timed out
+2024-03-30T12:06:34.177+1000 ERROR tgc.plus.feedbackgateaway.listeners.MessageListener Redis command timed out
+2024-03-30T12:06:36.690+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication Starting FeedbackGateawayApplication using Java 17.0.8 with PID 35694 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/FeedbackGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-30T12:06:36.691+1000 DEBUG tgc.plus.feedbackgateaway.FeedbackGateawayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-30T12:06:36.692+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-30T12:06:38.702+1000 INFO tgc.plus.feedbackgateaway.FeedbackGateawayApplication Started FeedbackGateawayApplication in 2.413 seconds (process running for 2.914)

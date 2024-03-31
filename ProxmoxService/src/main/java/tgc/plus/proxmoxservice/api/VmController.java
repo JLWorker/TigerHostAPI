@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -56,7 +57,7 @@ public class VmController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/{vmId}/time")
-    public Mono<TimestampsVm> getVmTimestamps(@PathVariable("vmId") String vmId){
+    public Mono<TimestampsVm> getVmTimestamps(@Pattern(regexp = "^VM-\\d+$") @PathVariable("vmId") String vmId){
         return vmFacade.getVmTimestamps(vmId);
     }
 
@@ -74,7 +75,7 @@ public class VmController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/{vmId}/check_trial")
-    public Mono<Void> checkVmTrialPeriod(@PathVariable("vmId") String vmId){
+    public Mono<Void> checkVmTrialPeriod(@Pattern(regexp = "^VM-\\d+$") @PathVariable("vmId") String vmId){
         return vmFacade.checkVmTrialPeriod(vmId);
     }
 
@@ -95,7 +96,7 @@ public class VmController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/{vmId}/check_storage")
-    public Mono<Void> checkVmStorage(@PathVariable("vmId") String vmId, @RequestParam("newSize") Integer newStorageSize){
+    public Mono<Void> checkVmStorage(@Pattern(regexp = "^VM-\\d+$") @PathVariable("vmId") String vmId, @RequestParam("newSize") Integer newStorageSize){
         return vmFacade.checkVmStorage(vmId, newStorageSize);
     }
 
@@ -133,7 +134,7 @@ public class VmController {
     })
 
     @GetMapping("/{vmId}/users")
-    public Mono<ProxmoxVmUsersInfo> getActiveUsers(@PathVariable("vmId") String vmId){
+    public Mono<ProxmoxVmUsersInfo> getActiveUsers(@Pattern(regexp = "^VM-\\d+$") @PathVariable("vmId") String vmId){
         return vmFacade.getVmUsers(vmId);
     }
 
