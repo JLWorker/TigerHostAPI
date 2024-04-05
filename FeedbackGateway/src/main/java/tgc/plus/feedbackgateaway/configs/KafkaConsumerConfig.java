@@ -2,7 +2,6 @@ package tgc.plus.feedbackgateaway.configs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.BytesDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import reactor.kafka.receiver.ReceiverOptions;
-import tgc.plus.feedbackgateaway.dto.EventMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -54,8 +53,8 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ReceiverOptions<String, EventMessage> receiverOptions(){
-        ReceiverOptions<String, EventMessage> receiverOptions = ReceiverOptions.create(consumerProps());
+    public ReceiverOptions<String, EventKafkaMessage> receiverOptions(){
+        ReceiverOptions<String, EventKafkaMessage> receiverOptions = ReceiverOptions.create(consumerProps());
         receiverOptions.addAssignListener(receiverPartitions -> log.info("Partitions assign {}", receiverPartitions))
                 .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener))
                 .commitInterval(Duration.ofMillis(1000))

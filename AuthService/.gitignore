@@ -5,7 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/main/resources/
-/auth_service.log
+/*.log
+.gitignore
 
 ### STS ###
 .apt_generated

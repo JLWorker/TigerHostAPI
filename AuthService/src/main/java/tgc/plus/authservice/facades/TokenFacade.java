@@ -2,13 +2,16 @@ package tgc.plus.authservice.facades;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.api.utils.IpValid;
 import tgc.plus.authservice.dto.tokens_dto.*;
+import tgc.plus.authservice.exceptions.exceptions_elements.RefreshTokenException;
+import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
@@ -37,19 +40,29 @@ public class TokenFacade {
                 .flatMap(userToken -> tokenService.checkExpiredRefreshToken(userToken.getExpiredDate())
                         .flatMap(result -> facadeUtils.updatePairTokens(userToken.getRefreshToken(), userToken.getUserId(), result)
                                 .flatMap(tokenPair -> Mono.just(new UpdateTokenResponse(tokenPair.get("access_token"), tokenPair.get("refresh_token"))))))
-                .doOnError(e->log.error(e.getMessage())); //вернуть новую версию всем
+                .doOnError(e->log.error(e.getMessage()));
     }
 
     @Transactional
     public Mono<Void> deleteToken(String tokenId) {
-        return facadeUtils.removeUserToken(tokenId)
-                .doOnError(e -> log.error(e.getMessage())); //вернуть информацию
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+            String userCode = securityContext.getAuthentication().getPrincipal().toString();
+            return facadeUtils.removeUserToken(tokenId)
+                .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName())
+                        .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)))
+                .doOnError(e -> log.error(e.getMessage()));
+        });
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Mono<Void> deleteAllTokens(String tokenId) {
-                return facadeUtils.removeAllUserTokens(tokenId)
-                .doOnError(e -> log.error(e.getMessage())); //вернуть информацию
+        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
+            String userCode = securityContext.getAuthentication().getPrincipal().toString();
+            return facadeUtils.removeAllUserTokens(tokenId)
+                    .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName())
+                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)))
+                    .doOnError(e -> log.error(e.getMessage()));
+        });
     }
 
     @Transactional
@@ -59,7 +72,14 @@ public class TokenFacade {
                         .flatMap(tokenMeta -> customDatabaseClientRepository.getAllUserTokens(userToken.getUserId(), tokenId)
                                 .flatMap(userTokenWithMetaList ->
                                         Mono.just(new TokensDataResponse(new TokenMetaData(tokenMeta.getDeviceName(), tokenMeta.getApplicationType(), tokenMeta.getDeviceIp()),
-                                                userTokenWithMetaList)))));
+                                                userTokenWithMetaList)))))
+                .onErrorResume(e -> {
+                    log.error(e.getMessage());
+                    if (!(e instanceof RefreshTokenException))
+                        return facadeUtils.getServiceException("The service cannot process the request");
+                    else
+                        return Mono.error(e);
+                });
     }
 
 }

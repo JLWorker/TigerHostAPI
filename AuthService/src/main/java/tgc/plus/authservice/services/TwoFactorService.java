@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
+import tgc.plus.authservice.exceptions.exceptions_elements.QrCodeGeneratorException;
 
 @Service
 public class TwoFactorService {
@@ -54,7 +55,7 @@ public class TwoFactorService {
             return Mono.just(new QrCodeData(qrCode, type));
 
         } catch (QrGenerationException e) {
-            throw new RuntimeException(e);
+            return Mono.error(e);
         }
 
     }

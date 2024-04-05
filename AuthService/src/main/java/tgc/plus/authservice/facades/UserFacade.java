@@ -8,21 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-//import tgc.plus.authservice.configs.R2Config;
-import tgc.plus.authservice.api.mobile.utils.IpValid;
+import tgc.plus.authservice.api.utils.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
-import tgc.plus.authservice.dto.VersionsTypes;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorActiveException;
-import tgc.plus.authservice.facades.utils.CommandsName;
+import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;
+import tgc.plus.authservice.facades.utils.CommandsNames;
+import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.UserRepository;
-import tgc.plus.authservice.services.TokenMetaService;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -39,9 +36,6 @@ public class UserFacade {
     UserService userService;
 
     @Autowired
-    TokenMetaService tokenMetaService;
-
-    @Autowired
     FacadeUtils facadeUtils;
 
     @Autowired
@@ -53,7 +47,7 @@ public class UserFacade {
                 .then(facadeUtils.getUserByEmailReg(userData.getEmail()))
                     .then(userService.save(userData))
                             .flatMap(user -> facadeUtils.createMessageForSaveUser(user.getUserCode(), userData.getEmail(), userData.getPassword()))
-                                    .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.SAVE.getName()))
+                                    .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.SAVE.getName()))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 
@@ -69,7 +63,9 @@ public class UserFacade {
                                 return facadeUtils.generate2FaDeviceToken(user.getId())
                                         .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
                             else
-                                return facadeUtils.generatePairTokens(user, deviceData, ipAddr);
+                                return facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName())
+                                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))
+                                                .then(facadeUtils.generatePairTokens(user, deviceData, ipAddr));
                         })))
         .doOnError(e -> {
             if (!(e instanceof TwoFactorActiveException))
@@ -79,36 +75,38 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<UserChangeContactResponse> changePhone(UserChangeContacts userChangeContacts, Long version) {
+    public Mono<Void> changeAccountPhone(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                 String userCode = securityContext.getAuthentication().getPrincipal().toString();
                 return facadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, version)
-                        .flatMap(newVersion -> facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getPhone(), UserChangeContacts.ChangePhone.class.getName())
-                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.UPDATE_PHONE.getName()))
-                                    .thenReturn(new UserChangeContactResponse(Map.of(VersionsTypes.USER_VERSION.getName(), newVersion,
-                                        "phone", userChangeContacts.getPhone()))));
+                        .then(facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getPhone(), UserChangeContacts.ChangePhone.class.getName())
+                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.UPDATE_PHONE.getName()))
+                                .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
+                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
                 }).doOnError(e->log.error(e.getMessage()));
 
     }
 
     @Transactional
-    public Mono<UserChangeContactResponse> changeEmail(UserChangeContacts userChangeContacts, Long version) {
+    public Mono<Void> changeAccountEmail(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, version)
-                    .flatMap(newVersion -> facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getEmail(), UserChangeContacts.ChangeEmail.class.getName())
-                         .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.UPDATE_EMAIL.getName())
-                                .thenReturn( new UserChangeContactResponse(Map.of(VersionsTypes.USER_VERSION.getName(), newVersion,
-                                        "email", userChangeContacts.getEmail())))));
+                    .then(facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getEmail(), UserChangeContacts.ChangeEmail.class.getName())
+                         .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.UPDATE_EMAIL.getName()))
+                            .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
+                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
         }).doOnError(e->log.error(e.getMessage()));
     }
 
-    public Mono<AuthRestorePasswordResponse> changePassword(RestorePassword restorePassword, Long version){
+    @Transactional
+    public Mono<Void> changeAccountPassword(RestorePassword restorePassword, Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                     .then(facadeUtils.simpleChangePassword(version, userCode, restorePassword.getPassword())
-                            .flatMap(newVersion -> Mono.just(new AuthRestorePasswordResponse(newVersion))));
+                            .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
+                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
         }).doOnError(e -> log.error(e.getMessage()));
     }
 
@@ -117,16 +115,18 @@ public class UserFacade {
         return facadeUtils.getUserByEmailLog(restorePassword.getEmail())
                 .flatMap(user -> facadeUtils.generateRecoveryCode(user.getVersion(), user.getUserCode())
                         .flatMap(token -> facadeUtils.createMessageForRestorePsw(token, user.getUserCode())
-                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsName.SEND_RECOVERY_CODE.getName()))))
+                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.SEND_RECOVERY_CODE.getName()))))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 
 
     @Transactional(noRollbackForClassName = "RecoveryCodeExpiredException")
-    public Mono<Void> checkRecoveryCode(RestorePassword restorePassword){
+    public Mono<Void> checkAccountRecoveryCode(RestorePassword restorePassword){
         return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                 .then(facadeUtils.getUserByRecoveryCode(restorePassword.getCode())
-                        .flatMap(user -> facadeUtils.changePasswordForRecovery(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())))
+                        .flatMap(user -> facadeUtils.changePasswordForRecovery(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())
+                                .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
+                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))))
                 .doOnError(e -> log.error(e.getMessage()));
     }
 
@@ -134,9 +134,8 @@ public class UserFacade {
     public Mono<UserInfoResponse> getInfoAboutAccount(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                String userCode =  securityContext.getAuthentication().getPrincipal().toString();
-               return userRepository.getUserByUserCodeAndVersion(userCode, version).flatMap(user ->
-                       Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
-        });
+               return facadeUtils.getUserInfoByVersion(version, userCode);
+        }).doOnError(e -> log.error(e.getMessage()));
     }
 
 

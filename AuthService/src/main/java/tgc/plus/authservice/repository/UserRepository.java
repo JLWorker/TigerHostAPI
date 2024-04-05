@@ -1,12 +1,10 @@
 package tgc.plus.authservice.repository;
 
-import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
-import tgc.plus.authservice.entity.User;
+import tgc.plus.authservice.entities.User;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.entity.UserToken;
 
 import java.time.Instant;
 

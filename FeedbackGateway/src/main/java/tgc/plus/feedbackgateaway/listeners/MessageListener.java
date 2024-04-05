@@ -2,7 +2,6 @@ package tgc.plus.feedbackgateaway.listeners;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.TopicPartition;
-import org.apache.kafka.common.utils.Bytes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -16,7 +15,7 @@ import reactor.kafka.receiver.ReceiverOptions;
 import reactor.util.retry.Retry;
 import tgc.plus.feedbackgateaway.configs.KafkaConsumerConfig;
 import tgc.plus.feedbackgateaway.configs.RedisConfig;
-import tgc.plus.feedbackgateaway.dto.EventMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -35,14 +34,14 @@ public class MessageListener {
     @Value("${kafka.listener.concurrency}")
     Integer listenerConcurrency;
 
-    @Value("${sse.key-live-time.ms}")
+    @Value("${sse.interval.key_ms}")
     Long keyLiveTime;
 
     @Autowired
     RedisConfig redisConfig;
 
     @Autowired
-    ReactiveRedisTemplate<String, EventMessage> redisTemplate;
+    ReactiveRedisTemplate<String, EventKafkaMessage> redisTemplate;
 
     @EventListener(value = ApplicationStartedEvent.class)
     public void kafkaConsumerStarter() {
@@ -52,10 +51,10 @@ public class MessageListener {
 
     private Flux<Void> startListenerPartition(Integer partition) {
 
-        ReceiverOptions<String, EventMessage> receiverOptions = kafkaConsumerConfig.receiverOptions()
+        ReceiverOptions<String, EventKafkaMessage> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .assignment(Collections.singleton(new TopicPartition(topic, partition)));
 
-        KafkaReceiver<String, EventMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
+        KafkaReceiver<String, EventKafkaMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
 
         return kafkaReceiver.receive()
                 .concatMap(msg -> {
@@ -63,11 +62,11 @@ public class MessageListener {
                     if (!userCode.isBlank()) {
                         String uniqueKey = String.format("%s-%d%d", userCode, msg.receiverOffset().offset(), msg.receiverOffset().topicPartition().partition());
                         return redisTemplate.opsForValue().set(uniqueKey, msg.value(), Duration.ofMillis(keyLiveTime))
-                                .doFinally(res ->
-                                    msg.receiverOffset().acknowledge()).then();
+                                .doOnTerminate(msg.receiverOffset()::acknowledge)
+                                .then();
                     }
                     else {
-                        log.warn("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());
+                        log.error("Message with offset: {} have problem with key user_code", msg.receiverOffset().offset());
                         return Mono.empty();
                     }
                 })

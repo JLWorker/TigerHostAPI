@@ -1,0 +1,181 @@
+2024-03-11T01:00:34.492+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 76784 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:00:34.493+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:00:34.493+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:00:35.531+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.434 seconds (process running for 1.89)
+2024-03-11T01:01:08.679+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:01:08.680+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:01:08.680+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:01:09.678+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.292 seconds (process running for 1.686)
+2024-03-11T01:01:39.060+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:01:39.060+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:01:39.060+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:01:39.297+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.266 seconds (process running for 31.304)
+2024-03-11T01:02:03.748+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:02:03.748+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:02:03.748+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:02:03.966+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.246 seconds (process running for 55.974)
+2024-03-11T01:02:45.435+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:02:45.435+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:02:45.435+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:02:45.658+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.251 seconds (process running for 97.665)
+2024-03-11T01:09:18.502+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:09:18.502+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:09:18.502+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:09:18.673+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.195 seconds (process running for 490.68)
+2024-03-11T01:20:39.601+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:20:39.601+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:20:39.601+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:20:39.783+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.206 seconds (process running for 1171.79)
+2024-03-11T01:23:43.395+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:23:43.395+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:23:43.395+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:23:43.603+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.24 seconds (process running for 1355.61)
+2024-03-11T01:26:04.130+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:26:04.130+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:26:04.130+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:26:08.708+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 77425 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:26:08.708+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:26:08.708+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:26:13.573+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 85784 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:26:13.573+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:26:13.574+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:28:05.832+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 86446 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:28:05.833+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:28:05.834+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:28:06.875+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.34 seconds (process running for 1.832)
+2024-03-11T01:28:14.227+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 86446 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:28:14.227+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:28:14.227+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:28:14.444+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.244 seconds (process running for 9.401)
+2024-03-11T01:28:35.897+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 86446 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:28:35.897+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:28:35.897+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:28:36.102+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.232 seconds (process running for 31.059)
+2024-03-11T01:29:12.567+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 86446 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:29:12.567+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:29:12.567+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:29:12.745+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.203 seconds (process running for 67.701)
+2024-03-11T01:29:23.588+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 86446 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T01:29:23.589+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T01:29:23.589+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T01:29:23.842+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.287 seconds (process running for 78.799)
+2024-03-11T15:30:18.378+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 94529 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T15:30:18.378+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T15:30:18.379+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T15:30:19.486+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.416 seconds (process running for 1.86)
+2024-03-11T23:03:35.079+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T23:03:35.080+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T23:03:35.081+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T23:03:36.182+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.434 seconds (process running for 1.9)
+2024-03-11T23:10:45.432+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T23:10:45.433+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T23:10:45.433+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T23:10:45.767+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.386 seconds (process running for 431.485)
+2024-03-11T23:11:45.265+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T23:11:45.265+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T23:11:45.265+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T23:11:45.524+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.292 seconds (process running for 491.242)
+2024-03-11T23:11:46.942+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T23:11:46.942+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T23:11:46.942+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T23:11:47.152+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.237 seconds (process running for 492.87)
+2024-03-11T23:12:42.040+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-11T23:12:42.040+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-11T23:12:42.040+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-11T23:12:42.270+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.256 seconds (process running for 547.988)
+2024-03-12T12:48:28.677+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T12:48:28.677+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T12:48:28.677+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T12:48:28.890+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.244 seconds (process running for 2890.633)
+2024-03-12T12:49:01.358+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T12:49:01.358+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T12:49:01.358+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T12:49:01.568+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.238 seconds (process running for 2923.311)
+2024-03-12T12:53:15.247+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T12:53:15.247+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T12:53:15.247+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T12:53:15.410+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.186 seconds (process running for 3177.154)
+2024-03-12T12:53:29.854+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 119723 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T12:53:29.855+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T12:53:29.855+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T12:53:30.050+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.218 seconds (process running for 3191.793)
+2024-03-12T14:39:25.772+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 135363 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:39:25.773+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:39:25.774+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:39:26.910+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.495 seconds (process running for 1.99)
+2024-03-12T14:48:04.247+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:48:04.248+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:48:04.249+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:48:05.433+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.586 seconds (process running for 2.035)
+2024-03-12T14:48:06.760+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:48:06.761+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:48:06.761+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:48:07.038+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.307 seconds (process running for 3.64)
+2024-03-12T14:48:08.457+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:48:08.457+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:48:08.457+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:48:08.651+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.22 seconds (process running for 5.253)
+2024-03-12T14:48:15.494+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:48:15.495+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:48:15.495+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:48:15.744+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.283 seconds (process running for 12.346)
+2024-03-12T14:50:22.705+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:50:22.705+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:50:22.705+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:50:22.879+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.197 seconds (process running for 139.481)
+2024-03-12T14:53:12.488+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:53:12.488+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:53:12.488+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:53:12.657+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.193 seconds (process running for 309.259)
+2024-03-12T14:54:31.171+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:54:31.171+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:54:31.172+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:54:31.398+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.255 seconds (process running for 388.0)
+2024-03-12T14:58:46.084+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:58:46.085+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:58:46.085+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:58:46.252+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.189 seconds (process running for 642.853)
+2024-03-12T14:59:34.737+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:59:34.737+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:59:34.737+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:59:34.905+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.194 seconds (process running for 691.507)
+2024-03-12T14:59:37.342+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T14:59:37.342+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T14:59:37.342+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T14:59:37.506+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.192 seconds (process running for 694.107)
+2024-03-12T15:00:04.358+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:00:04.359+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:00:04.359+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:00:04.557+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.222 seconds (process running for 721.159)
+2024-03-12T15:01:51.102+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:01:51.102+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:01:51.102+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:01:51.313+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.239 seconds (process running for 827.915)
+2024-03-12T15:02:19.788+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 136850 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:02:19.789+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:02:19.789+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:02:20.134+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.383 seconds (process running for 856.735)
+2024-03-12T15:09:14.642+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 148393 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:09:14.643+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:09:14.644+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:09:15.828+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.526 seconds (process running for 1.925)
+2024-03-12T15:20:47.943+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 153104 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:20:47.944+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:20:47.945+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:20:49.091+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.484 seconds (process running for 1.97)
+2024-03-12T15:22:05.939+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 153104 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:22:05.939+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:22:05.940+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:22:06.300+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 0.397 seconds (process running for 79.178)
+2024-03-12T15:23:39.803+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 156776 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T15:23:39.804+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T15:23:39.805+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T15:23:40.957+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.484 seconds (process running for 1.967)
+2024-03-12T16:04:37.093+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 168493 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T16:04:37.094+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T16:04:37.095+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T16:04:38.280+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.51 seconds (process running for 1.977)
+2024-03-12T17:04:06.382+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Starting MobileApiGatewayApplication using Java 17.0.8 with PID 180589 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MobileApiGateway/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-03-12T17:04:06.382+1000 DEBUG tgc.plus.apigateway.MobileApiGatewayApplication Running with Spring Boot v3.2.3, Spring v6.1.4
+2024-03-12T17:04:06.383+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication No active profile set, falling back to 1 default profile: "default"
+2024-03-12T17:04:07.476+1000 INFO tgc.plus.apigateway.MobileApiGatewayApplication Started MobileApiGatewayApplication in 1.413 seconds (process running for 1.874)

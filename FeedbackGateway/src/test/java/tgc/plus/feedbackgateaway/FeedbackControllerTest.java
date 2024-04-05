@@ -4,20 +4,13 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,10 +20,7 @@ import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 import reactor.kafka.sender.SenderRecord;
-import tgc.plus.feedbackgateaway.api.FeedbackController;
-import tgc.plus.feedbackgateaway.configs.SpringSecurityConfig;
-import tgc.plus.feedbackgateaway.dto.EventMessage;
-import tgc.plus.feedbackgateaway.facade.utils.EventTypes;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -45,7 +35,7 @@ public class FeedbackControllerTest {
     private String topic;
 
     private final static String code = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiIxZDM2NzkyMy1mNjcxLTRmMWUtODcwOC1kOTM2NWVjYzQ3MWUiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcwOTkxMTQwOSwiaWF0IjoxNzA5OTA4MjA5fQ.yz---xJ95_38YmVimNg4DDKxwPxV-szNuKsNOxiwDt4";
-    public static KafkaSender<String, EventMessage> kafkaSender;
+    public static KafkaSender<String, EventKafkaMessage> kafkaSender;
     private final String authHeader = String.format("Bearer_%s", code);
     private final WebClient webClient = WebClient.create("http://localhost:8083");
 
@@ -62,13 +52,13 @@ public class FeedbackControllerTest {
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        SenderOptions<String, EventMessage> senderOptions = SenderOptions.create(props);
+        SenderOptions<String, EventKafkaMessage> senderOptions = SenderOptions.create(props);
         kafkaSender = KafkaSender.create(senderOptions);
     }
 
     @Test
     public void getEvents(){
-        ParameterizedTypeReference<ServerSentEvent<EventMessage>> event = new ParameterizedTypeReference<ServerSentEvent<EventMessage>>(){};
+        ParameterizedTypeReference<ServerSentEvent<EventKafkaMessage>> event = new ParameterizedTypeReference<ServerSentEvent<EventKafkaMessage>>(){};
 
         Disposable disposable = webTestClient.mutate().responseTimeout(Duration.ofMillis(1000000000)).build().get()
                 .uri("http://localhost:8083/feedback/events")
@@ -93,9 +83,9 @@ public class FeedbackControllerTest {
     public void fastEventCreator(){
         Flux<Void> recordsFeedback = Flux.range(0, 10)
                 .flatMapSequential(el -> {
-                    ProducerRecord<String, EventMessage> messageRecord = new ProducerRecord<>(topic, new EventMessage("update_user_info"));
+                    ProducerRecord<String, EventKafkaMessage> messageRecord = new ProducerRecord<>(topic, new EventKafkaMessage("update_user_info"));
                     messageRecord.headers().add("user_code", "1d367923-f671-4f1e-8708-d9365ecc471e".getBytes());
-                    SenderRecord<String, EventMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
+                    SenderRecord<String, EventKafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
                     return kafkaSender.send(Mono.just(senderRecord))
                         .doFinally(signal -> System.out.printf("El - %s, was send%n", el))
                             .then();

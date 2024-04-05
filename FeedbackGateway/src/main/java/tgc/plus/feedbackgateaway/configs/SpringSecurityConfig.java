@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import tgc.plus.feedbackgateaway.configs.utils.*;
+import tgc.plus.feedbackgateaway.services.TokenService;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -30,7 +31,10 @@ public class SpringSecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
-                        exchange.pathMatchers("/feedback/events").authenticated()
+                                exchange
+                                .pathMatchers("/api/feedback/**").authenticated()
+                                .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
+                                .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
         return http.build();

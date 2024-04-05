@@ -1,0 +1,359 @@
+openapi: 3.0.3
+
+info:
+ description: "This api give all information about proxmox service endpoints"
+ version: "1.0.0" # This is your api version
+ title: "Proxmox Service API"
+ 
+tags:
+  - name: vm
+    description: Endpoint for interaction with virtual-machine user
+    externalDocs:
+      description: Find out more
+      url: http://localhost/8080/api/
+    
+paths:
+  /vm/{vmId}:
+    get:
+      tags:
+        - vm
+      summary: Get virtual machine by id (not use)
+      description: ''
+      operationId: getVmById
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleVirtualMachineResponse"
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize  
+   
+  /vm/all:
+    get:
+      tags:
+        - vm
+      summary: Get all virtual machine
+      description: ''
+      operationId: getVmByUserCode
+      parameters:
+         - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user_vms:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/AllVirtualMachinesResponse"
+        404:
+          description: Virtual machines not found
+        401:
+          description: No Authorize
+
+  /vm/{vmId}/time:
+    get:
+      tags:
+        - vm
+      summary: Get timestamp virtual machine
+      description: ''
+      operationId: GetTimestampsByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: vm_98827912
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successfully operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetTimestampInfoResponse"
+        400:
+          description: Passwords mismatch
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
+
+  /vm/{vmId}/check_trial:
+      get:
+        tags:
+          - vm
+        summary: Check the trial period has not expired
+        description: ''
+        operationId: CheckTrialTimeByVmId
+        parameters:
+          - name: vmId
+            in: path
+            required: true
+            schema:
+              type: string
+              example: vm_98827912
+          - $ref: "#/components/parameters/AuthorizationHeader"
+        responses:
+          200:
+            description: Successfully operation
+          403:
+            description: Trial period expired
+          401:
+            description: No Authorize
+          404:
+            description: Virtual machine not found
+
+  /vm/{vmId}/check_storage?newSize={newSize}:
+    get:
+      tags:
+        - vm
+      summary: Get storage info about virtual machine
+      description: ''
+      operationId: GetStorageByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: vm_98827912
+        - name: newSize
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 25
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successfully operation
+        400:
+          description: The new storage size is not enough
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
+
+  /vm/{vmId}/users:
+    get:
+      tags:
+        - vm
+      summary: Get active users in virtual machine
+      description: ''
+      operationId: getUsersByVmId
+      parameters:
+        - name: vmId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/GetUsersInfoResponse"
+        404:
+          description: Virtual machine not found
+        401:
+          description: No Authorize
+
+  /vm/user/password:
+    patch:
+      tags:
+        - vm
+      summary: Set password for virtual machine
+      description: ''
+      operationId: setPasswordByVmId
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Virtual machine not found
+        '401':
+          description: No authorize
+
+
+
+#  /vm/file:
+#    post:
+#      tags:
+#        - vm
+#      summary: Set password for virtual machine
+#      description: ''
+#      operationId: setPasswordByVmId
+#      parameters:
+#        - $ref: "#/components/parameters/AuthorizationHeader"
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: "#/components/schemas/ChangePasswordRequest"
+#
+#      responses:
+#        '200':
+#          description: Successful operation
+#        '404':
+#          description: Virtual machine not found
+#        '401':
+#          description: No authorize
+#
+
+components:
+
+  parameters:
+    AuthorizationHeader :
+      in: header
+      name: Authorization
+      description: Authorization header with access jwt token
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: Bearer_urie0988Jud-**
+
+
+  schemas:
+    AllVirtualMachinesResponse:
+      type: object
+      properties:
+        vm_id:
+            type: string
+            example: vm_98746281638
+        expired_date: 
+            type: string
+            format: datetime
+            example: 07-08-2024:12.65
+        start_date:
+          type: string
+          format: datetime
+          example: 07-08-2024:12.65
+        price_month:
+            type: integer
+            example: 2500
+        price_period:
+            type: integer
+            example: 15000
+        tariff_id:
+            type: integer
+            example: 10
+        period_id:
+            type: integer
+            example: 3
+        os_id:
+            type: integer
+            example: 5
+
+    SingleVirtualMachineResponse:
+      type: object
+      properties:
+        expired_date:
+          type: string
+          format: datetime
+          example: 07-08-2024:12.65
+        price_month:
+          type: integer
+          example: 2500
+        price_period:
+          type: integer
+          example: 15000
+        tariff_id:
+          type: integer
+          example: 10
+        period_id:
+          type: integer
+          example: 3
+        os_id:
+          type: integer
+          example: 5
+
+    GetTimestampInfoResponse:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: datetime
+          example: "08.01.2024"
+        expire_date:
+          type: string
+          format: datetime
+          example: "08.06.2024"
+
+    GetStorageInfoResponse:
+      type: object
+      description: "Contains information about size vm storage in bytes"
+      properties:
+        size:
+          type: integer
+          format: int64
+          example: 62890082719
+        used:
+          type: integer
+          format: int64
+          example: 987328
+
+    GetUsersInfoResponse:
+        type: object
+        description: "Information about active users in virtual machine"
+        properties:
+          user:
+            type: string
+            example: root
+          login-time:
+            type: number
+            format: double
+            example: 12313213.3342
+
+    ChangePasswordRequest:
+      type: object
+      properties:
+        vmId:
+          type: string
+          example: vm_98972918
+        username:
+          type: string
+          example: petya
+        password:
+          type: string
+          example: Uhjsi9821
+        password_confirm:
+          type: string
+          example: Uhjsi9821
+
+
+
+   
+   

@@ -1,5 +1,6 @@
 package tgc.plus.authservice.facades;
 
+import dev.samstevens.totp.exceptions.QrGenerationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -8,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
 import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
-import tgc.plus.authservice.dto.two_factor_dto.TwoFactorSwitchResponse;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
-import tgc.plus.authservice.exceptions.exceptions_clases.TwoFactorCodeException;
+import tgc.plus.authservice.exceptions.exceptions_elements.QrCodeGeneratorException;
+import tgc.plus.authservice.facades.utils.EventsTypesNames;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.services.TokenService;
@@ -29,15 +30,14 @@ public class TwoFactorFacade {
     @Autowired
     TwoFactorService twoFactorService;
 
-    @Autowired
-    TwoFactorRepository twoFactorRepository;
-
     @Transactional
-    public Mono<TwoFactorSwitchResponse> switch2Fa(Long version){
+    public Mono<Void> switch2Fa(Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.switch2FaStatus(userCode, version)
-                    .doOnError(e -> log.error(e.getMessage()));//вынести отправку версии в шлюз
+                    .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName())
+                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)))
+                    .doOnError(e -> log.error(e.getMessage()));
         });
     }
 
@@ -46,7 +46,13 @@ public class TwoFactorFacade {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.generateQrCode(userCode)
-                    .doOnError(e -> log.error(e.getMessage()));
+                    .onErrorResume(e -> {
+                        log.error(e.getMessage());
+                        if (e instanceof QrGenerationException){
+                            return Mono.error(new QrCodeGeneratorException("The server cannot generate QR code"));
+                        }
+                        else return Mono.error(e);
+                    });
         });
     }
 
@@ -55,7 +61,6 @@ public class TwoFactorFacade {
         return tokenService.get2FaTokenData(token)
                 .flatMap(deviceToken -> facadeUtils.verify2FaCode(deviceToken, twoFactorCode.getCode(), twoFactorCode.getDeviceData(), ipAddress))
                 .doOnError(e -> log.error(e.getMessage()));
-
     }
 
 }

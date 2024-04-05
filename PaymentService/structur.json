@@ -1,0 +1,15 @@
+
+{
+  "balance_payment_dto": {
+    "payment_token": "1214324332",
+    "amount": "1000",
+    "description": "balance replenishment"
+
+  },
+
+  "get-payment_id": {}
+
+
+
+
+}
