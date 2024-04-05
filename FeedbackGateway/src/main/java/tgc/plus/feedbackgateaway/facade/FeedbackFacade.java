@@ -12,6 +12,7 @@ import tgc.plus.feedbackgateaway.configs.RedisConfig;
 import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
 import tgc.plus.feedbackgateaway.facade.utils.EventTypes;
 import tgc.plus.feedbackgateaway.facade.utils.FacadeUtils;
+import tgc.plus.feedbackgateaway.facade.utils.MessageAvailableList;
 
 import java.time.Duration;
 
@@ -19,20 +20,17 @@ import java.time.Duration;
 @Slf4j
 public class FeedbackFacade {
 
-    @Autowired
-    RedisConfig redisConfig;
-
     @Value("${sse.interval.heartbeats_s}")
-    Integer intervalHeartbeats;
+    private Integer intervalHeartbeats;
 
     @Value("${sse.interval.events_ms}")
-    Long intervalEvent;
+    private Long intervalEvent;
 
     @Autowired
-    FacadeUtils facadeUtils;
+    private FacadeUtils facadeUtils;
 
     @Autowired
-    ReactiveRedisTemplate<String, EventKafkaMessage> redisTemplate;
+    private ReactiveRedisTemplate<String, EventKafkaMessage> redisTemplate;
 
     public Flux<ServerSentEvent<EventKafkaMessage>> getEventsForDevice(){
 
@@ -41,8 +39,9 @@ public class FeedbackFacade {
 
         Flux<ServerSentEvent<EventKafkaMessage>> messageEvents = Flux.interval(Duration.ofMillis(intervalEvent))
                 .flatMap(el ->facadeUtils.getUserContext().flatMapMany(userCode -> redisTemplate.scan(ScanOptions.scanOptions().match(String.format("%s-*", userCode)).build()))
+                        .mergeWith(redisTemplate.scan(ScanOptions.scanOptions().match(String.format("%s-*", MessageAvailableList.PUBLIC.getKey())).build())))
                         .flatMapSequential(key -> redisTemplate.opsForValue().get(key)
-                                .flatMap(value -> facadeUtils.createEvent(EventTypes.SIMPLE, value))));
+                                .flatMap(value -> facadeUtils.createEvent(EventTypes.SIMPLE, value)));
 
         return heartbeatsEvents.mergeWith(messageEvents);
     }

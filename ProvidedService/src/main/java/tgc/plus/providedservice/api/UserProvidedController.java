@@ -19,6 +19,8 @@ public class UserProvidedController {
     @Autowired
     private ProvidedFacade providedFacade;
 
+    //подумать над продлением - как получать цену итоговую!!
+
     @GetMapping("/all")
     public Mono<AllInfoResponse> getAllInfo(){
         return providedFacade.getAllTariffsInfo();

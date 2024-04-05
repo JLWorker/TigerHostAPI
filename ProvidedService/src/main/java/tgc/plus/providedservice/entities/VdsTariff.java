@@ -16,7 +16,7 @@ import tgc.plus.providedservice.dto.api_dto.admin_api.NewTariff;
 @Component
 @Setter
 @ToString
-public class VdsTariff {
+public class VdsTariff implements TariffEntity {
 
     @Id
     @Column("id")
@@ -25,7 +25,7 @@ public class VdsTariff {
     @Column("tariff_name")
     private String tariffName;
 
-    @Column("price_month")
+    @Column("price_month_kop")
     private Integer priceMonthKop;
 
     @Column("cpu")
@@ -46,6 +46,9 @@ public class VdsTariff {
     @Column("memory_type")
     private Integer memoryType;
 
+    @Column("active")
+    private Boolean active;
+
     public VdsTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType) {
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;
@@ -55,6 +58,7 @@ public class VdsTariff {
         this.cpuType = cpuType;
         this.ramType = ramType;
         this.memoryType = memoryType;
+        this.active = false;
     }
 
     public VdsTariff(NewTariff newTariff) {
@@ -66,7 +70,17 @@ public class VdsTariff {
         this.cpuType = newTariff.getCpuType();
         this.ramType = newTariff.getRamType();
         this.memoryType = newTariff.getMemoryType();
+        this.active = newTariff.getActive();
     }
 
 
+    @Override
+    public Boolean getActiveStatus() {
+        return getActive();
+    }
+
+    @Override
+    public String getUniqueElement() {
+        return getTariffName();
+    }
 }

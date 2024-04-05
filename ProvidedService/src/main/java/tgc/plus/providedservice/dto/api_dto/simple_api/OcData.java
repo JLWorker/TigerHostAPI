@@ -3,10 +3,12 @@ package tgc.plus.providedservice.dto.api_dto.simple_api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tgc.plus.providedservice.entities.OperatingSystem;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class OcData {
 
     @JsonProperty("os_id")

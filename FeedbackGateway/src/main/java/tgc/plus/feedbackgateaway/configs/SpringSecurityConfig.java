@@ -31,7 +31,8 @@ public class SpringSecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
-                        exchange.pathMatchers("/api/feedback/**").authenticated()
+                                exchange
+                                .pathMatchers("/api/feedback/**").authenticated()
                                 .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
                                 .anyExchange().denyAll()
                 )

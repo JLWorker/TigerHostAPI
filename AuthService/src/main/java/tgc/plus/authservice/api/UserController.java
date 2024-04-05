@@ -13,15 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.ResponseExtractor;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.exceptions_dto.ExceptionResponse;
 import tgc.plus.authservice.dto.exceptions_dto.VersionExceptionResponse;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.exceptions.exceptions_elements.VersionException;
 import tgc.plus.authservice.facades.UserFacade;
 
 @RestController
@@ -73,7 +69,7 @@ public class UserController extends UserFacade {
     })
     @PatchMapping("/phone")
     public Mono<Void> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version) {
-        return userFacade.changePhone(userChangeContacts, version);
+        return userFacade.changeAccountPhone(userChangeContacts, version);
     }
 
     @Operation(summary = "Change email in account")
@@ -92,7 +88,7 @@ public class UserController extends UserFacade {
     })
     @PatchMapping("/email")
     public Mono<Void> changeEmail(@RequestBody @Valid @JsonView(UserChangeContacts.ChangeEmail.class) UserChangeContacts userChangeContacts, @RequestHeader("Version") Long version){
-        return userFacade.changeEmail(userChangeContacts, version);
+        return userFacade.changeAccountEmail(userChangeContacts, version);
     }
 
     @Operation(summary = "Change password for account")
@@ -111,7 +107,7 @@ public class UserController extends UserFacade {
     })
     @PatchMapping("/password")
     public Mono<Void> changePassword(@RequestBody @Valid @JsonView(RestorePassword.AuthChange.class) RestorePassword restorePassword, @RequestHeader("Version") Long version){
-        return userFacade.changePassword(restorePassword, version);
+        return userFacade.changeAccountPassword(restorePassword, version);
     }
 
     @Operation(summary = "Get info about account", description = "This endpoint return main account information: email, phone number and 2fa status")
@@ -151,7 +147,7 @@ public class UserController extends UserFacade {
     })
     @PatchMapping("/check")
     public Mono<Void> checkRecoveryCode(@RequestBody @Valid @JsonView(RestorePassword.Check.class) RestorePassword restorePassword){
-        return userFacade.checkRecoveryCode(restorePassword);
+        return userFacade.checkAccountRecoveryCode(restorePassword);
     }
 
 }

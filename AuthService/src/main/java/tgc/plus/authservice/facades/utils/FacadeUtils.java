@@ -222,7 +222,7 @@ public class FacadeUtils {
             if (expiredDate.isBefore(Instant.now())) {
                 return userRepository.clearRecoveryCode(userCode, version)
                         .flatMap(newVersion -> Mono.empty())
-                        .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));//send new version to users;
+                        .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));
             }
             else {
                 String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
@@ -356,17 +356,13 @@ public class FacadeUtils {
 
 
     public Mono<Void> sendMessageInCallService(KafkaMessage message, String method){
-
         ProducerRecord<String, KafkaMessage> messageRecord;
-
         if (method.contains("update"))
             messageRecord = new ProducerRecord<>(eventTopic, "change", message);
         else
             messageRecord = new ProducerRecord<>(eventTopic, "other", message);
-
         messageRecord.headers().add(new RecordHeader("command", method.getBytes()));
         SenderRecord<String, KafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
-
         return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord))
                     .onErrorResume(e -> Mono.error(new KafkaException(e.getMessage())))
                     .then(Mono.empty());

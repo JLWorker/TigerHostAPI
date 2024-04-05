@@ -156,11 +156,9 @@ public class TokenService {
     }
 
     public Mono<Map<String, String>> updateAccessToken(String oldRefreshToken, String userCode, String role){
-
         String newRefreshToken = UUID.randomUUID().toString();
         Instant createDate = Instant.now();
         Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
-
         return createAccessToken(Map.of("user_code", userCode, "role", role), TokensList.SECURITY.getName())
                 .zipWith(userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, createDate))
                         .flatMap(tokens -> Mono.just(Map.of("access_token", tokens.getT1(), "refresh_token", newRefreshToken)));

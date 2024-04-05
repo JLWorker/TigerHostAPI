@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.api.utils.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.user_dto.*;
-import tgc.plus.authservice.entities.User;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;
 import tgc.plus.authservice.facades.utils.CommandsNames;
 import tgc.plus.authservice.facades.utils.EventsTypesNames;
@@ -76,7 +75,7 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<Void> changePhone(UserChangeContacts userChangeContacts, Long version) {
+    public Mono<Void> changeAccountPhone(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
                 String userCode = securityContext.getAuthentication().getPrincipal().toString();
                 return facadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, version)
@@ -89,7 +88,7 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<Void> changeEmail(UserChangeContacts userChangeContacts, Long version) {
+    public Mono<Void> changeAccountEmail(UserChangeContacts userChangeContacts, Long version) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, version)
@@ -101,7 +100,7 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<Void> changePassword(RestorePassword restorePassword, Long version){
+    public Mono<Void> changeAccountPassword(RestorePassword restorePassword, Long version){
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
             return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
@@ -122,7 +121,7 @@ public class UserFacade {
 
 
     @Transactional(noRollbackForClassName = "RecoveryCodeExpiredException")
-    public Mono<Void> checkRecoveryCode(RestorePassword restorePassword){
+    public Mono<Void> checkAccountRecoveryCode(RestorePassword restorePassword){
         return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                 .then(facadeUtils.getUserByRecoveryCode(restorePassword.getCode())
                         .flatMap(user -> facadeUtils.changePasswordForRecovery(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())

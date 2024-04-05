@@ -1,19 +1,18 @@
 package tgc.plus.providedservice.entities;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import tgc.plus.providedservice.dto.api_dto.admin_api.NewCharacteristicType;
 
-@Table("ram_types")
+@Table("cpu_types")
 @NoArgsConstructor
-@Getter
 @Setter
 @ToString
-public class RamType {
+public class CpuAbstractType extends AbstractTypeEntity {
 
     @Id
     @Column("id")
@@ -22,7 +21,12 @@ public class RamType {
     @Column("type")
     private String typeName;
 
-    public RamType(String typeName) {
+    public CpuAbstractType(String typeName) {
         this.typeName = typeName;
     }
+
+    public CpuAbstractType(NewCharacteristicType characteristicType){
+        this.typeName = characteristicType.getTypeName();
+    }
+
 }
