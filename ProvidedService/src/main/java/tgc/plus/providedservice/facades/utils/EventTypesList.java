@@ -11,7 +11,8 @@ public enum EventTypesList {
     UPDATE_RAM_TYPES("update_ram"),
     UPDATE_MEMORY_TYPES("update_memory"),
     UPDATE_OC("update_oc"),
-    UPDATE_PERIODS("update_periods");
+    UPDATE_PERIODS("update_periods"),
+    UPDATE_HYPERVISORS("update_hypervisors");
 
     private final String command;
 

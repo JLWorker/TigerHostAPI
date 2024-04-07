@@ -1,5 +1,6 @@
 package tgc.plus.providedservice.facades.utils;
 
+import com.google.common.hash.Hashing;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,21 +10,19 @@ import reactor.core.publisher.Mono;
 import reactor.kafka.sender.SenderRecord;
 import tgc.plus.providedservice.configs.KafkaProducerConfig;
 import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessage;
-import tgc.plus.providedservice.entities.VdsTariff;
 import tgc.plus.providedservice.exceptions.facade_exceptions.InvalidRequestException;
+import tgc.plus.providedservice.exceptions.facade_exceptions.RelatedElementsException;
 import tgc.plus.providedservice.exceptions.facade_exceptions.ResourceNotFoundException;
 import tgc.plus.providedservice.exceptions.facade_exceptions.ServerException;
-import tgc.plus.providedservice.repositories.VdsTariffRepository;
 import tgc.plus.providedservice.repositories.custom_database_repository.CustomDatabaseRepository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Component
 public class FacadesUtils {
-
-    @Autowired
-    private VdsTariffRepository vdsTariffRepository;
 
     @Autowired
     private CustomDatabaseRepository customDatabaseRepository;
@@ -34,12 +33,11 @@ public class FacadesUtils {
     @Value("${kafka.topic.feedback-service}")
     private String feedbackTopic;
 
-    public <T> Mono<Void> getBlockForElements(Integer tariffId, Class<T> classType){
+    public <T> Mono<Boolean> getBlockForElements(Integer tariffId, Class<T> classType){
         String table = classType.getAnnotation(Table.class).value();
         return customDatabaseRepository.getBlockForElement(tariffId, table)
-                .filter(res -> res!=0)
-                .switchIfEmpty(getResourceNotFoundException(String.format("Element with id - %s not found", tariffId)))
-                .then();
+                .filter(Objects::nonNull)
+                .switchIfEmpty(getResourceNotFoundException(String.format("Element with id - %s not found", tariffId)));
     }
 
 
@@ -58,6 +56,10 @@ public class FacadesUtils {
 
     public  <T> Mono<T> getResourceNotFoundException(String message){
         return Mono.error(new ResourceNotFoundException(message));
+    }
+
+    public  <T> Mono<T> getRelatedElementsException(String message){
+        return Mono.error(new RelatedElementsException(message));
     }
 
     public <T> Mono<T> getInvalidRequestException(String message){

@@ -2,73 +2,77 @@ package tgc.plus.providedservice.dto.api_dto.admin_api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tgc.plus.providedservice.entities.VdsTariff;
 
 @NoArgsConstructor
 @Setter
 @Getter
-public class NewTariff {
+public class TariffDto {
 
     public interface Create {}
     public interface Change {}
 
+
+    @JsonProperty("id")
+    @JsonView()
+    @Schema(example = "1")
+    private Integer id;
+
     @JsonProperty("tariff_name")
     @Pattern(regexp = "^[a-zA-Zа-яА-Я\\d+\\s+]{3,100}$", message = "Invalid tariff name")
     @JsonView({Create.class, Change.class})
+    @Schema(example = "Tariff №1")
     private String tariffName;
 
     @JsonProperty("price_month")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid month price")
     @JsonView({Create.class, Change.class})
+    @Schema(example = "15000")
     private Integer priceMonthKop;
 
     @JsonProperty("cpu")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid cpu parameter")
     @JsonView({Create.class})
+    @Schema(example = "4")
     private Integer cpu;
 
     @JsonProperty("ram")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid ram parameter")
     @JsonView({Create.class})
+    @Schema(example = "16")
     private Integer ram;
 
     @JsonProperty("memory")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid memory parameter")
     @JsonView({Create.class})
+    @Schema(example = "100")
     private Integer memory;
 
     @JsonProperty("cpu_type")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid cpuType parameter")
     @JsonView({Create.class, Change.class})
+    @Schema(example = "1")
     private Integer cpuType;
 
     @JsonProperty("ram_type")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid ramType parameter")
     @JsonView({Create.class, Change.class})
+    @Schema(example = "1")
     private Integer ramType;
 
     @JsonProperty("memory_type")
-    @NotBlank
-    @Pattern(regexp = "^\\d+$", message = "Invalid memoryType parameter")
     @JsonView({Create.class, Change.class})
+    @Schema(example = "1")
     private Integer memoryType;
 
     @JsonProperty("active")
-    @NotBlank
     @JsonView({Create.class, Change.class})
+    @Schema(example = "true")
     private Boolean active;
 
-    public NewTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType, Boolean active) {
+    public TariffDto(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType, Boolean active) {
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;
         this.cpu = cpu;
@@ -80,8 +84,20 @@ public class NewTariff {
         this.active = active;
     }
 
+    public TariffDto(VdsTariff vdsTariff) {
+        this.id = vdsTariff.getId();
+        this.tariffName = vdsTariff.getTariffName();
+        this.priceMonthKop = vdsTariff.getPriceMonthKop();
+        this.cpu = vdsTariff.getCpu();
+        this.ram = vdsTariff.getRam();
+        this.memory = vdsTariff.getMemory();
+        this.cpuType = vdsTariff.getCpuType();
+        this.ramType = vdsTariff.getRamType();
+        this.memoryType = vdsTariff.getMemoryType();
+        this.active = vdsTariff.getActive();
+    }
 
-    public NewTariff(String tariffName, Integer priceMonthKop, Integer cpuType, Integer ramType, Integer memoryType, Boolean active) {
+    public TariffDto(String tariffName, Integer priceMonthKop, Integer cpuType, Integer ramType, Integer memoryType, Boolean active) {
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;
         this.cpuType = cpuType;

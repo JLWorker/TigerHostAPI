@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.providedservice.configs.R2Config;
-import tgc.plus.providedservice.entities.AbstractTypeEntity;
+import tgc.plus.providedservice.entities.AbstractCharacteristicType;
 
 
 import static org.springframework.data.relational.core.query.Criteria.where;
@@ -27,28 +27,22 @@ public class CharacteristicRepository {
         template = r2Config.r2dbcEntityTemplate();
     }
 
-    public <T extends AbstractTypeEntity> Mono<Void> saveCharacteristicType(T data, Class<T> typeClass){
+    public <T extends AbstractCharacteristicType> Mono<Void> saveCharacteristicType(T data, Class<T> typeClass){
         return template.insert(typeClass)
                 .using(data)
                 .then();
 
     }
 
-    public <T extends AbstractTypeEntity> Flux<T> getCharacteristicTypes(Class<T> typeClass){
+    public <T extends AbstractCharacteristicType> Flux<T> getCharacteristicTypes(Class<T> typeClass){
         return template.select(typeClass).all();
     }
 
-    public <T extends AbstractTypeEntity> Mono<Void> updateCharacteristicType(String newTypeName, Integer typeId, Class<T> classType){
+    public <T extends AbstractCharacteristicType> Mono<Void> updateCharacteristicType(String newTypeName, Integer typeId, Class<T> classType){
         return template.update(classType)
                 .matching(Query.query(where("id").is(typeId)))
                 .apply(Update.update("type", newTypeName))
                 .then();
-    }
-
-    public <T extends AbstractTypeEntity> Mono<Void> deleteCharacteristicType(Integer typeId, Class<T> typeClass){
-        return template.delete(typeClass)
-                .matching(Query.query(where("id").is(typeId)))
-                .all().then();
     }
 
 }

@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
                 .authorizeExchange(exchange ->
                         exchange
                                 .pathMatchers("/api/provided/admin/**").permitAll()
-//                                .pathMatchers("/api/provided/**").authenticated()
+                                .pathMatchers("/api/provided/**").permitAll()
                                 .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
                                 .anyExchange().denyAll()
                 )

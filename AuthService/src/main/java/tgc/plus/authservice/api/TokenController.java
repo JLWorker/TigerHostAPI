@@ -93,7 +93,7 @@ public class TokenController {
                     @Header(name = "Logout", description = "User from access token not exist or refresh token fot this device has already deleted, need logout", schema = @Schema(example = "true"))
             },description = "Invalid access token"),
             @ApiResponse(responseCode = "500", content = @Content(), description = "Error in work inside service"),
-            @ApiResponse(responseCode = "200", description = "Success delete")
+            @ApiResponse(responseCode = "200", description = "Success get info")
     })
     @GetMapping("/all/{currentTokenId}")
     public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @PathVariable("currentTokenId") String tokenId, ServerHttpRequest request){

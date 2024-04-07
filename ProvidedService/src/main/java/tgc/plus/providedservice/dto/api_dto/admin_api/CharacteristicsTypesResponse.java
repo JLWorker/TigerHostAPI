@@ -11,15 +11,15 @@ import java.util.List;
 public class CharacteristicsTypesResponse {
 
     @JsonProperty("cpu_types")
-    private List<CharacteristicType> cpuCharacteristicTypes;
+    private List<CharacteristicTypeDto> cpuCharacteristicTypes;
 
     @JsonProperty("ram_types")
-    private List<CharacteristicType> ramCharacteristicTypes;
+    private List<CharacteristicTypeDto> ramCharacteristicTypes;
 
     @JsonProperty("memory_types")
-    private List<CharacteristicType> memoryCharacteristicTypes;
+    private List<CharacteristicTypeDto> memoryCharacteristicTypes;
 
-    public CharacteristicsTypesResponse(List<CharacteristicType> cpuCharacteristicTypes, List<CharacteristicType> ramCharacteristicTypes, List<CharacteristicType> memoryCharacteristicTypes) {
+    public CharacteristicsTypesResponse(List<CharacteristicTypeDto> cpuCharacteristicTypes, List<CharacteristicTypeDto> ramCharacteristicTypes, List<CharacteristicTypeDto> memoryCharacteristicTypes) {
         this.cpuCharacteristicTypes = cpuCharacteristicTypes;
         this.ramCharacteristicTypes = ramCharacteristicTypes;
         this.memoryCharacteristicTypes = memoryCharacteristicTypes;
