@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -43,7 +44,7 @@ public class JwtAuthenticationHandler implements ServerAuthenticationFailureHand
                 else
                     response.getHeaders().add("Logout", "true");
 
-                response.getHeaders().add("Content-Type", "application/json");
+                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
                 ExceptionResponse responseException = new ExceptionResponse(request.getPath().toString(),

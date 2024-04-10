@@ -53,6 +53,7 @@ dependencies {
     implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.6.2'
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.4.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.1.0-jre'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.kafka:spring-kafka'
@@ -77,4 +78,5 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+
 }

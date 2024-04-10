@@ -7,15 +7,14 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import reactor.core.publisher.Mono;
-import tgc.plus.providedservice.dto.api_dto.admin_api.NewPeriod;
+import tgc.plus.providedservice.dto.api_dto.admin_api.PeriodsDto;
 
 @Table("periods")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Period implements TariffEntity {
+public class Period implements ProvidedServiceEntity {
 
     @Id
     @Column("id")
@@ -36,17 +35,11 @@ public class Period implements TariffEntity {
         this.active = false;
     }
 
-    public Period(NewPeriod period){
+    public Period(PeriodsDto period){
         this.countMonth = period.getCountMonth();
         this.discountPercent = period.getDiscountPercent();
         this.active = period.getActive();
     }
-
-    @Override
-    public Boolean getActiveStatus() {
-        return this.getActive();
-    }
-
     @Override
     public String getUniqueElement() {
         return this.getCountMonth().toString();

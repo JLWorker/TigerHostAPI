@@ -26,6 +26,9 @@ import tgc.plus.proxmoxservice.facades.VmFacade;
 @Tag(name = "api/vm", description = "Virtual machine controller api")
 public class VmController {
 
+    //добавить проверки на наличие пользователей с тарифами, периодами для админ панели provided!
+
+
     @Autowired
     private VmFacade vmFacade;
 

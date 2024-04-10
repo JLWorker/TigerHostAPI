@@ -19,8 +19,6 @@ public class ApiGatewayConfig {
     @Autowired
     private JwtGatewayFilterFactory jwtGatewayFilterFactory;
 
-    //add filters for cookies
-
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder){
         return builder.routes()
@@ -58,10 +56,12 @@ public class ApiGatewayConfig {
                 )
 
                 .route(r->r.path("/api/vm/**")
-                        .and()
-                        .method(HttpMethod.GET, HttpMethod.POST)
                         .filters(f->f.filter(jwtGatewayFilterFactory))
                         .uri(ServicesUriList.PROXMOX_SERVICE.getUrl()))
+
+                .route(r->r.path("/api/provided/**")
+                .filters(f->f.filter(jwtGatewayFilterFactory))
+                .uri(ServicesUriList.PROVIDED_SERVICE.getUrl()))
                 .build();
 
     }

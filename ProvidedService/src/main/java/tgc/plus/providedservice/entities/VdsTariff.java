@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
-import tgc.plus.providedservice.dto.api_dto.admin_api.NewTariff;
+import tgc.plus.providedservice.dto.api_dto.admin_api.TariffDto;
 
 @Table("vds_tariffs")
 @Getter
@@ -16,7 +16,7 @@ import tgc.plus.providedservice.dto.api_dto.admin_api.NewTariff;
 @Component
 @Setter
 @ToString
-public class VdsTariff implements TariffEntity {
+public class VdsTariff implements ProvidedServiceEntity {
 
     @Id
     @Column("id")
@@ -46,10 +46,13 @@ public class VdsTariff implements TariffEntity {
     @Column("memory_type")
     private Integer memoryType;
 
+    @Column("hypervisor_id")
+    private Integer hypervisorId;
+
     @Column("active")
     private Boolean active;
 
-    public VdsTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType) {
+    public VdsTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType, Integer hypervisorId) {
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;
         this.cpu = cpu;
@@ -58,29 +61,26 @@ public class VdsTariff implements TariffEntity {
         this.cpuType = cpuType;
         this.ramType = ramType;
         this.memoryType = memoryType;
+        this.hypervisorId = hypervisorId;
         this.active = false;
     }
 
-    public VdsTariff(NewTariff newTariff) {
-        this.tariffName = newTariff.getTariffName();
-        this.priceMonthKop = newTariff.getPriceMonthKop();
-        this.cpu = newTariff.getCpu();
-        this.ram = newTariff.getRam();
-        this.memory = newTariff.getMemory();
-        this.cpuType = newTariff.getCpuType();
-        this.ramType = newTariff.getRamType();
-        this.memoryType = newTariff.getMemoryType();
-        this.active = newTariff.getActive();
-    }
-
-
-    @Override
-    public Boolean getActiveStatus() {
-        return getActive();
+    public VdsTariff(TariffDto tariffDto) {
+        this.tariffName = tariffDto.getTariffName();
+        this.priceMonthKop = tariffDto.getPriceMonthKop();
+        this.cpu = tariffDto.getCpu();
+        this.ram = tariffDto.getRam();
+        this.memory = tariffDto.getMemory();
+        this.cpuType = tariffDto.getCpuType();
+        this.ramType = tariffDto.getRamType();
+        this.memoryType = tariffDto.getMemoryType();
+        this.hypervisorId = tariffDto.getHypervisorId();
+        this.active = tariffDto.getActive();
     }
 
     @Override
     public String getUniqueElement() {
         return getTariffName();
     }
+
 }

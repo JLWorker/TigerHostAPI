@@ -57,7 +57,7 @@ public class R2Config extends AbstractR2dbcConfiguration {
     @Bean
     public @NotNull ConnectionFactory connectionFactory() {
         return ConnectionFactories.get(ConnectionFactoryOptions.builder()
-                .option(DRIVER, "pool")
+                .option(DRIVER, POOLING_DRIVER)
                 .option(PROTOCOL, "postgresql")
                 .option(HOST, host)
                 .option(PORT, Integer.valueOf(port))

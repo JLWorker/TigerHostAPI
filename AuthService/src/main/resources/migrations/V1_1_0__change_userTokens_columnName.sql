@@ -1,0 +1,1 @@
+ALTER TABLE user_tokens RENAME COLUMN active_date TO create_date;

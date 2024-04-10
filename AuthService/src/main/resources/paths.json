@@ -1,0 +1,204 @@
+{
+  "account": {
+
+    "reg": {
+          "method": "POST",
+          "body": {
+                  "user_data": {
+                    "email": "****",
+                    "password": "****",
+                    "password_confirm": "****"
+                  },
+                  "device_data": {
+                    "name": "*****",
+                    "application_type": "mobile/web"
+                  }
+          },
+          "response": {
+            "body": {
+              "access_token": "*****",
+              "refresh_token": "*****"
+            }
+          }
+    },
+
+    "login": {
+              "method": "POST",
+              "body": {
+                "user_data": {
+                  "email": "****",
+                  "password": "****"
+                },
+                "device_info": {
+                  "name": "*****",
+                  "application_type": "mobile/web"
+                }
+              },
+              "response": {
+                "body": {
+                  "access_token": "*****",
+                  "refresh_token": "*****"
+                }
+              }
+    },
+
+    "phone": {
+      "method": ["PUT", "GET"],
+      "header": {
+        "access_token": "*******"
+      },
+      "body": {
+        "phone": "*******"
+      },
+      "response POST": {
+        "status": 200
+      },
+      "response GET": {
+        "phone": "*******"
+      }
+    },
+
+    "email": {
+      "method": ["PUT"],
+      "header": {
+        "access_token": "*******"
+      },
+      "body": {
+        "email": "*******"
+      },
+      "response POST": {
+        "status": 200
+      }
+    },
+
+
+    "recovery": {
+            "method": "PUT",
+            "body": {
+              "email": "*******"
+            },
+            "response": {
+              "status": 200
+            }
+    },
+
+    "check": {
+        "method": "POST",
+        "body": {
+          "code": "*******",
+          "password": "********",
+          "password_confirm": "********"
+
+        },
+        "response": {
+          "status": 200
+        }
+    }
+  },
+
+  "tokens":{
+
+    "update": {
+        "method": "PUT",
+        "body": {
+          "refresh_token": "*******"
+        },
+        "response": {
+          "refresh_token": "******",
+          "access_token": "*******"
+        }
+    },
+
+    "token": {
+          "methods": ["GET", "DELETE"],
+          "header": {
+            "access_token": "*******"
+          },
+          "body": {
+            "token_id": "******"
+          },
+          "response DELETE": {
+            "status": 200
+          },
+
+          "response GET": {
+            "token_data": {
+                "token_id": "******",
+                "device_ip": "*******",
+                "device_name": "*******",
+                "application_type": "****"
+            }
+          }
+    },
+
+    "tokenAll": {
+        "methods": ["GET", "DELETE"],
+        "header": {
+          "access_token": "*******"
+        },
+        "response DELETE": {
+          "status": 200
+        },
+
+        "response GET": {
+          "tokens": [
+            {
+              "token_id": "******",
+              "device_ip": "*******",
+              "device_name": "*******",
+              "application_type": "****"
+            },
+            {
+              "token_id": "******",
+              "device_ip": "*******",
+              "device_name": "*******",
+              "application_type": "****"
+            }
+          ]
+        }
+    }
+  },
+
+  "2auth": {
+
+    "create": {
+      "methods": "POST",
+      "body": {
+        "device_id": "******"
+      },
+      "response": {
+        "status": 200
+      }
+    },
+
+    "check": {
+      "methods": "POST",
+      "body": {
+        "code": "******",
+        "device_id": "******"
+      },
+      "response": {
+        "status": 200
+      }
+    },
+
+    "switch": {
+      "header": {
+        "access_token": "*******"
+      },
+      "method": "POST",
+      "response": {
+        "status": 200
+      }
+    }
+
+  }
+}
+
+
+
+//починка JsonView
+
+//проверка общения между брокерами
+
+//обработка исклбючений на call_service

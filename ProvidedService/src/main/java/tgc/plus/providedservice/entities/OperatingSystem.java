@@ -7,14 +7,14 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import tgc.plus.providedservice.dto.api_dto.admin_api.NewOperatingSystem;
+import tgc.plus.providedservice.dto.api_dto.admin_api.OperatingSystemDto;
 
 @Table("operating_systems")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class OperatingSystem implements TariffEntity {
+public class OperatingSystem implements ProvidedServiceEntity {
 
     @Id
     @Column("id")
@@ -32,7 +32,7 @@ public class OperatingSystem implements TariffEntity {
     @Column("template_id")
     private Integer templateId;
 
-    @Column("price")
+    @Column("price_kop")
     private Integer priceKop;
 
     @Column("active")
@@ -44,9 +44,10 @@ public class OperatingSystem implements TariffEntity {
         this.bitDepth = bitDepth;
         this.templateId = templateId;
         this.priceKop = priceKop;
+        this.active = false;
     }
 
-    public OperatingSystem(NewOperatingSystem operatingSystem){
+    public OperatingSystem(OperatingSystemDto operatingSystem){
         this.osName = operatingSystem.getName();
         this.version = operatingSystem.getVersion();
         this.bitDepth = operatingSystem.getBitDepth();
@@ -54,12 +55,6 @@ public class OperatingSystem implements TariffEntity {
         this.priceKop = operatingSystem.getPriceKop();
         this.active = operatingSystem.getActive();
     }
-
-    @Override
-    public Boolean getActiveStatus() {
-        return getActive();
-    }
-
     @Override
     public String getUniqueElement() {
         return getTemplateId().toString();
