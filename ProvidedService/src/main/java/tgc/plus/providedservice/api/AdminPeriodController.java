@@ -1,5 +1,6 @@
 package tgc.plus.providedservice.api;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import tgc.plus.providedservice.dto.api_dto.admin_api.ChangePeriodDto;
 import tgc.plus.providedservice.dto.api_dto.admin_api.PeriodsDto;
 import tgc.plus.providedservice.entities.Period;
 import tgc.plus.providedservice.facades.AdminProvidedFacade;
@@ -40,7 +42,7 @@ public class AdminPeriodController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PostMapping()
-    public Mono<Void> createPeriod(@RequestBody @Valid PeriodsDto periodsDto){
+    public Mono<Void> createPeriod(@Valid @RequestBody PeriodsDto periodsDto){
         return adminProvidedFacade.createElement(new Period(periodsDto), Period.class, EventTypesList.UPDATE_PERIODS);
     }
 
@@ -78,7 +80,24 @@ public class AdminPeriodController {
         return adminProvidedFacade.deleteElement(periodId, Period.class);
     }
 
-    //подумать над изменением периода!!!
+    //период отображать только при покупке
+    @Operation(summary = "Change period")
+    @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "401", content = @Content(), headers = {
+                    @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
+                    @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
+            }, description = "Invalid access token"),
+            @ApiResponse(responseCode = "400", content = @Content(), description = "Period with count month already exist or validation exception"),
+            @ApiResponse(responseCode = "404", content = @Content(), description = "Period with id not found"),
+            @ApiResponse(responseCode = "500", content = @Content(), description = "Internal errors in request processing"),
+            @ApiResponse(responseCode = "200", description = "Success operation")
+    })
+    @PatchMapping("/{period_id}")
+    public Mono<Void> changePeriod(@PathVariable(value = "period_id") Integer periodId, @RequestBody @Valid ChangePeriodDto periodsDto){
+        return adminProvidedFacade.changePeriod(periodId, periodsDto);
+    }
+
 
     @Operation(summary = "Get all periods with any visibility status")
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")

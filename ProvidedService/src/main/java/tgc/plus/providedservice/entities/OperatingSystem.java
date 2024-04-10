@@ -44,6 +44,7 @@ public class OperatingSystem implements ProvidedServiceEntity {
         this.bitDepth = bitDepth;
         this.templateId = templateId;
         this.priceKop = priceKop;
+        this.active = false;
     }
 
     public OperatingSystem(OperatingSystemDto operatingSystem){

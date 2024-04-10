@@ -24,9 +24,9 @@ public class Hypervisor implements ProvidedServiceEntity {
     @Column("active")
     private Boolean active;
 
-    public Hypervisor(String name, Boolean active) {
+    public Hypervisor(String name) {
         this.name = name;
-        this.active = active;
+        this.active = false;
     }
 
     public Hypervisor(HypervisorDto hypervisorDto){

@@ -32,8 +32,8 @@ public class SpringSecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
-                                .pathMatchers("/api/provided/admin/**").permitAll()
-                                .pathMatchers("/api/provided/**").permitAll()
+                                .pathMatchers("/api/provided/admin/**").hasAnyRole(RoleList.ADMIN.name())
+                                .pathMatchers("/api/provided/**").authenticated()
                                 .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
                                 .anyExchange().denyAll()
                 )

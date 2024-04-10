@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 import tgc.plus.providedservice.entities.Period;
 
 @NoArgsConstructor
 @Getter
-public class PeriodData {
+public class PeriodDataDto {
 
     @JsonProperty("period_id")
     @Schema(example = "2")
@@ -24,7 +22,7 @@ public class PeriodData {
     @Schema(example = "10")
     private Integer discountPercent;
 
-    public PeriodData(Period period) {
+    public PeriodDataDto(Period period) {
         this.periodId = period.getId();
         this.countMonth = period.getCountMonth();
         this.discountPercent = period.getDiscountPercent();

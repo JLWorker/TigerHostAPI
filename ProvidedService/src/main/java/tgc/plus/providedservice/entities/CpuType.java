@@ -1,5 +1,7 @@
 package tgc.plus.providedservice.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -8,23 +10,26 @@ import org.springframework.data.relational.core.mapping.Table;
 import tgc.plus.providedservice.dto.api_dto.admin_api.CharacteristicTypeDto;
 
 @Table("cpu_types")
-@Setter
 @ToString
+@NoArgsConstructor
 public class CpuType extends AbstractCharacteristicType {
 
-    @Id
-    @Column("id")
-    private Integer id;
-
-    @Column("type")
-    private String typeName;
+    public CpuType(CharacteristicTypeDto characteristicTypeDto) {
+        super(characteristicTypeDto);
+    }
 
     public CpuType(String typeName) {
-        this.typeName = typeName;
+        super(typeName);
     }
 
-    public CpuType(CharacteristicTypeDto characteristicType){
-        this.typeName = characteristicType.getTypeName();
+
+    @Override
+    public Boolean getActive() {
+        return null;
     }
 
+    @Override
+    public String getUniqueElement() {
+        return this.getTypeName();
+    }
 }

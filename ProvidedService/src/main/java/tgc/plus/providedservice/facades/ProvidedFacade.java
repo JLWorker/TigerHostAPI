@@ -38,10 +38,8 @@ public class ProvidedFacade {
     @Value("${price.secret}")
     private String priceSecret;
 
-    private final DecimalFormat format = new DecimalFormat("0.00");
-
     @Transactional(readOnly = true)
-    public Mono<TariffData> getTariffById(Integer tariffId){
+    public Mono<TariffDataDto> getTariffById(Integer tariffId){
         return customDatabaseRepository.getTariffDataById(tariffId)
                 .filter(Objects::nonNull)
                 .switchIfEmpty(facadesUtils.getResourceNotFoundException(String.format("Element with id - %s not found", tariffId)))
@@ -57,7 +55,7 @@ public class ProvidedFacade {
     }
 
     @Transactional(readOnly = true)
-    public Mono<List<TariffData>> getTariffsInfo(Integer hypervisorId){
+    public Mono<List<TariffDataDto>> getActiveTariffsInfo(Integer hypervisorId){
         return customDatabaseRepository.getTariffData(hypervisorId)
                 .onErrorResume(e -> {
                     log.error(e.getMessage());
@@ -66,7 +64,7 @@ public class ProvidedFacade {
     }
 
     @Transactional(readOnly = true)
-    public <T extends ProvidedServiceEntity, R> Mono<List<R>> getElemInfo(Class<T> classType, Function<T,R> converter){
+    public <T extends ProvidedServiceEntity, R> Mono<List<R>> getActiveElemInfo(Class<T> classType, Function<T,R> converter){
         return tariffRepository.getInfoAboutActiveElem(classType)
                 .map(converter)
                 .collectList()
@@ -102,17 +100,16 @@ public class ProvidedFacade {
 
     //проверка в payment service
     @Transactional
-    public Mono<FinalPriceResponse> calculateFinalPrice(Integer tariffId, Integer periodId, Integer ocId){
+    public Mono<FinalPriceResponseDto> calculateFinalPrice(Integer tariffId, Integer periodId, Integer ocId){
         return Mono.zip(getElemByIdForInside(tariffId, VdsTariff.class),
                 getElemByIdForInside(periodId, Period.class),
                 getElemByIdForInside(ocId, OperatingSystem.class))
                 .flatMap(result -> {
-                    double fullPrice = Math.abs((result.getT1().getPriceMonthKop()* (1-result.getT2().getDiscountPercent()/100.0)) * result.getT2().getCountMonth()+result.getT3().getPriceKop());
-                    String monthPrice =  format.format(fullPrice / result.getT2().getCountMonth());
-                    log.info(monthPrice);
+                    long fullPrice = Math.round(Math.abs((result.getT1().getPriceMonthKop() * (1-result.getT2().getDiscountPercent()/100.0)) * result.getT2().getCountMonth()+result.getT3().getPriceKop()));
+                    String monthPrice =  String.valueOf(fullPrice / result.getT2().getCountMonth());
                     String hashPriceKop = Hashing.hmacSha256(priceSecret.getBytes()).hashBytes(String.valueOf(fullPrice).getBytes()).toString();
                     String hashPriceMonthKop = Hashing.hmacSha256(priceSecret.getBytes()).hashBytes(monthPrice.getBytes()).toString();
-                    return Mono.just(new FinalPriceResponse(format.format(fullPrice), hashPriceKop, hashPriceMonthKop));
+                    return Mono.just(new FinalPriceResponseDto(String.valueOf(fullPrice), hashPriceKop, hashPriceMonthKop));
                 })
                 .onErrorResume(e -> {
                     if (!(e instanceof ResourceNotFoundException)){

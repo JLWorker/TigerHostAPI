@@ -16,8 +16,6 @@ import tgc.plus.providedservice.entities.Hypervisor;
 @NoArgsConstructor
 public class HypervisorDto {
 
-    public interface Create {}
-    public interface Change {}
 
     @JsonProperty
     @JsonView()
@@ -25,15 +23,15 @@ public class HypervisorDto {
     private Integer id;
 
     @JsonProperty("hypervisor_name")
-    @JsonView({Create.class, Change.class})
+    @NotBlank(message = "Hypervisor name parameter mustn't be null")
     @Schema(example = "Proxmox")
     @Pattern(regexp = "^[a-zA-Zа-яА-Я\\s+]{3,100}$", message = "Invalid hypervisor name")
     private String name;
 
     @JsonProperty
     @NotNull
-    @JsonView({Create.class, Change.class})
     @Schema(example = "true")
+    @NotNull(message = "Active parameter mustn't be null")
     private Boolean active;
 
     public HypervisorDto(Hypervisor hypervisor) {

@@ -10,7 +10,7 @@ import tgc.plus.providedservice.entities.OperatingSystem;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OcData {
+public class OcDataDto {
 
     @JsonProperty("os_id")
     @Schema(example = "1")
@@ -36,7 +36,7 @@ public class OcData {
     @Schema(example = "0")
     private Integer priceKop;
 
-    public OcData(OperatingSystem system) {
+    public OcDataDto(OperatingSystem system) {
         this.osId = system.getId();
         this.osName = system.getOsName();
         this.version = system.getVersion();

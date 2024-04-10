@@ -14,7 +14,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import tgc.plus.providedservice.dto.api_dto.admin_api.ChangeOperatingSystemDto;
 import tgc.plus.providedservice.dto.api_dto.admin_api.OperatingSystemDto;
+import tgc.plus.providedservice.entities.Hypervisor;
 import tgc.plus.providedservice.entities.OperatingSystem;
 import tgc.plus.providedservice.facades.AdminProvidedFacade;
 import tgc.plus.providedservice.facades.utils.EventTypesList;
@@ -58,8 +60,26 @@ public class AdminOperatingSystemController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/{oc_id}")
-    public Mono<Void> changeOperatingSystem(@PathVariable(value = "oc_id") Integer ocId, @RequestBody @Valid @JsonView(OperatingSystemDto.Change.class) OperatingSystemDto operatingSystemDto) {
+    public Mono<Void> changeOperatingSystem(@PathVariable(value = "oc_id") Integer ocId, @RequestBody @Valid ChangeOperatingSystemDto operatingSystemDto) {
         return adminProvidedFacade.changeOperatingSystem(ocId, operatingSystemDto);
+    }
+
+    //добваить изменение видимости
+    @Operation(summary = "Сhange in operating system visibility")
+    @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "401", content = @Content(), headers = {
+                    @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
+                    @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
+            }, description = "Invalid access token"),
+            @ApiResponse(responseCode = "400", content = @Content(), description = "Invalid params in request"),
+            @ApiResponse(responseCode = "404", content = @Content(), description = "Operating system not found"),
+            @ApiResponse(responseCode = "500", content = @Content(), description = "Internal errors in request processing"),
+            @ApiResponse(responseCode = "200", description = "Success operation")
+    })
+    @PatchMapping("/vision/{oc_id}")
+    public Mono<Void> changeOperatingSystemVision(@PathVariable(value = "oc_id") Integer ocId) {
+        return adminProvidedFacade.changeVision(ocId, OperatingSystem.class, EventTypesList.UPDATE_OC);
     }
 
     @Operation(summary = "Delete operating system", description = "You can delete a operating system only if it is not used in user virtual machines")

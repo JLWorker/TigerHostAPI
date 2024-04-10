@@ -17,10 +17,6 @@ import tgc.plus.providedservice.entities.VdsTariff;
 @Getter
 public class TariffDto {
 
-    public interface Create {}
-    public interface Change {}
-
-
     @JsonProperty("id")
     @JsonView()
     @Schema(example = "1")
@@ -28,48 +24,53 @@ public class TariffDto {
 
     @JsonProperty("tariff_name")
     @Pattern(regexp = "^[a-zA-Zа-яА-Я\\d+\\s+]{3,100}$", message = "Invalid tariff name")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "Tariff №1")
+    @NotBlank(message = "Tariff name parameter mustn't be null or empty")
     private String tariffName;
 
     @JsonProperty("price_month")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "15000")
+    @NotNull(message = "Price month parameter mustn't be null")
     private Integer priceMonthKop;
 
     @JsonProperty("cpu")
-    @JsonView({Create.class})
     @Schema(example = "4")
+    @NotNull(message = "Cpu parameter mustn't be null")
     private Integer cpu;
 
     @JsonProperty("ram")
-    @JsonView({Create.class})
     @Schema(example = "16")
+    @NotNull(message = "Ram parameter mustn't be null")
     private Integer ram;
 
     @JsonProperty("memory")
-    @JsonView({Create.class})
     @Schema(example = "100")
+    @NotNull(message = "Memory parameter mustn't be null")
     private Integer memory;
 
     @JsonProperty("cpu_type")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "1")
+    @NotNull(message = "Cpu type parameter mustn't be null")
     private Integer cpuType;
 
     @JsonProperty("ram_type")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "1")
+    @NotNull(message = "Ram type parameter mustn't be null")
     private Integer ramType;
 
     @JsonProperty("memory_type")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "1")
+    @NotNull(message = "Memory type parameter mustn't be null")
     private Integer memoryType;
 
+    @JsonProperty("hypervisor_id")
+    @Schema(example = "1")
+    @NotNull(message = "Hypervisor id parameter mustn't be null")
+    private Integer hypervisorId;
+
     @JsonProperty("active")
-    @JsonView({Create.class, Change.class})
     @Schema(example = "true")
+    @NotNull(message = "Active parameter mustn't be null")
     private Boolean active;
 
     public TariffDto(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType, Boolean active) {

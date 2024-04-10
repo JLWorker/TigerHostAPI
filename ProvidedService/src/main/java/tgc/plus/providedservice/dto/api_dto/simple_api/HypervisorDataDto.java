@@ -8,7 +8,7 @@ import tgc.plus.providedservice.entities.Hypervisor;
 
 @Getter
 @NoArgsConstructor
-public class HypervisorData {
+public class HypervisorDataDto {
 
     @JsonProperty("hypervisor_id")
     @Schema(example = "1")
@@ -18,7 +18,7 @@ public class HypervisorData {
     @Schema(example = "Proxmox")
     private String name;
 
-    public HypervisorData(Hypervisor hypervisor){
+    public HypervisorDataDto(Hypervisor hypervisor){
         this.id = hypervisor.getId();
         this.name = hypervisor.getName();
     }

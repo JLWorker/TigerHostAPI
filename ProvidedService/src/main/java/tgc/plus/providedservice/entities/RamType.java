@@ -1,5 +1,7 @@
 package tgc.plus.providedservice.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -8,23 +10,25 @@ import org.springframework.data.relational.core.mapping.Table;
 import tgc.plus.providedservice.dto.api_dto.admin_api.CharacteristicTypeDto;
 
 @Table("ram_types")
-@Setter
 @ToString
+@NoArgsConstructor
 public class RamType extends AbstractCharacteristicType {
 
-    @Id
-    @Column("id")
-    private Integer id;
-
-    @Column("type")
-    private String typeName;
+    public RamType(CharacteristicTypeDto characteristicTypeDto) {
+        super(characteristicTypeDto);
+    }
 
     public RamType(String typeName) {
-        this.typeName = typeName;
+        super(typeName);
     }
 
-    public RamType(CharacteristicTypeDto characteristicType){
-        this.typeName = characteristicType.getTypeName();
+    @Override
+    public Boolean getActive() {
+        return null;
     }
 
+    @Override
+    public String getUniqueElement() {
+        return getTypeName();
+    }
 }

@@ -55,22 +55,19 @@ public class JwtGatewayFilterFactory implements GatewayFilter {
                     return chain.filter(exchange);
             }
             catch (Exception e){
-                if (e instanceof ExpiredJwtException){
-                    AccessTokenExpiredException exception = new AccessTokenExpiredException("Access token expired");
-                    return filtersUtils.getErrorResponse(exchange, exception, HttpStatus.UNAUTHORIZED)
-                            .flatMap(serverWebExchange -> {
-                                serverWebExchange.getRequest().mutate().header("Expired", "true");
-                                return chain.filter(exchange);
-                            }).doOnError(error -> log.error(error.getMessage()));
+                RuntimeException exception;
+                if (e instanceof ExpiredJwtException) {
+                    exception = new AccessTokenExpiredException("Access token expired");
+                    exchange.getResponse().getHeaders().add("Expired", "true");
                 }
                 else {
-                    AccessTokenCorruptionException exception = new AccessTokenCorruptionException(e.getMessage());
-                    return filtersUtils.getErrorResponse(exchange, exception, HttpStatus.UNAUTHORIZED)
-                            .flatMap(serverWebExchange -> {
-                                serverWebExchange.getRequest().mutate().header("Logout", "true");
-                                return chain.filter(exchange);
-                            }).doOnError(error -> log.error(error.getMessage()));
+                    log.error(e.getMessage());
+                    exception = new AccessTokenCorruptionException("Failed to convert token");
+                    exchange.getResponse().getHeaders().add("Logout", "true");
                 }
+                return filtersUtils.getErrorResponse(exchange, exception)
+                        .flatMap(chain::filter);
+
             }
 
         }

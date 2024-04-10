@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.providedservice.configs.R2Config;
-import tgc.plus.providedservice.entities.Hypervisor;
 import tgc.plus.providedservice.entities.ProvidedServiceEntity;
+import tgc.plus.providedservice.entities.VdsTariff;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 
@@ -47,7 +47,7 @@ public class TariffRepository {
                 .then();
     }
 
-    public <T> Mono<Void> deleteTariffElem(Integer elemId, Class<T> targetClass){
+    public <T> Mono<Void> deleteElem(Integer elemId, Class<T> targetClass){
         return template.delete(targetClass)
                 .matching(Query.query(where("id").is(elemId)))
                 .all().then();
@@ -62,8 +62,8 @@ public class TariffRepository {
                 .all();
     }
 
-    public Mono<Long> getHypervisorTariffs(Integer hypervisorId){
-        return template.select(Query.query(where("hypervisor_id").is(hypervisorId)), Hypervisor.class)
+    public Mono<Long> getTariffsByHypervisor(Integer hypervisorId){
+        return template.select(Query.query(where("hypervisor_id").is(hypervisorId)), VdsTariff.class)
                 .count();
     }
 

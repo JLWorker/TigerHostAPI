@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class FinalPriceResponse {
+public class FinalPriceResponseDto {
 
     @JsonProperty("cost_kop")
     @Schema(example = "6148.40")
@@ -23,7 +23,7 @@ public class FinalPriceResponse {
     @Schema(example = "d2eda7b666d9a27b53cba.....")
     private String hashPriceMonthKop;
 
-    public FinalPriceResponse(String priceKop, String hashPriceKop, String hashPriceMonthKop) {
+    public FinalPriceResponseDto(String priceKop, String hashPriceKop, String hashPriceMonthKop) {
         this.priceKop = priceKop;
         this.hashPriceKop = hashPriceKop;
         this.hashPriceMonthKop = hashPriceMonthKop;

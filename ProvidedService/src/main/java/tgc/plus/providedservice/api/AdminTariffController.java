@@ -41,7 +41,7 @@ public class AdminTariffController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PostMapping()
-    public Mono<Void> createTariff(@JsonView(TariffDto.Create.class) @Valid @RequestBody TariffDto tariffDto) {
+    public Mono<Void> createTariff( @Valid @RequestBody TariffDto tariffDto) {
         return adminProvidedFacade.createElement(new VdsTariff(tariffDto), VdsTariff.class, EventTypesList.UPDATE_VDS_TARIFFS);
     }
 
@@ -58,7 +58,7 @@ public class AdminTariffController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/{tariff_id}")
-    public Mono<Void> changeTariff(@Valid @RequestBody @JsonView(TariffDto.Change.class) TariffDto tariffDto, @PathVariable(value = "tariff_id") Integer tariffId) {
+    public Mono<Void> changeTariff(@Valid @RequestBody ChangeTariffDto tariffDto, @PathVariable(value = "tariff_id") Integer tariffId) {
         return adminProvidedFacade.changeTariff(tariffId, tariffDto);
     }
 

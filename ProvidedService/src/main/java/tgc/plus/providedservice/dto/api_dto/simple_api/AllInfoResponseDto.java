@@ -8,18 +8,18 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class AllInfoResponse {
+public class AllInfoResponseDto {
 
     @JsonProperty("tariffs")
-    private List<TariffData> tariffs;
+    private List<TariffDataDto> tariffs;
 
     @JsonProperty("periods")
-    private List<PeriodData> periods;
+    private List<PeriodDataDto> periods;
 
     @JsonProperty("operating_systems")
-    private List<OcData> operatingSystems;
+    private List<OcDataDto> operatingSystems;
 
-    public AllInfoResponse(List<TariffData> tariffs, List<PeriodData> periods, List<OcData> operatingSystems) {
+    public AllInfoResponseDto(List<TariffDataDto> tariffs, List<PeriodDataDto> periods, List<OcDataDto> operatingSystems) {
         this.tariffs = tariffs;
         this.periods = periods;
         this.operatingSystems = operatingSystems;

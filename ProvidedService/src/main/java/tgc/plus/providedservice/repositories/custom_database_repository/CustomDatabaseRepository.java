@@ -1,16 +1,12 @@
 package tgc.plus.providedservice.repositories.custom_database_repository;
 
-import io.r2dbc.spi.Connection;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.convert.MappingR2dbcConverter;
-import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
-import tgc.plus.providedservice.configs.R2Config;
-import tgc.plus.providedservice.dto.api_dto.simple_api.TariffData;
+import tgc.plus.providedservice.dto.api_dto.simple_api.TariffDataDto;
 
 import java.util.List;
 
@@ -23,18 +19,18 @@ public class CustomDatabaseRepository {
     @Autowired
     private MappingR2dbcConverter mappingR2dbcConverter;
 
-    public Mono<List<TariffData>> getTariffData(Integer hypervisorId){
+    public Mono<List<TariffDataDto>> getTariffData(Integer hypervisorId){
             return databaseClient.sql(SqlRequestsList.GET_TARIFFS_WITH_TYPES.getQuery())
-                    .bind("hypervisor_id", hypervisorId)
-                    .map((row, rowMetadata) -> mappingR2dbcConverter.read(TariffData.class, row))
+                    .bind("hypervisorId", hypervisorId)
+                    .map((row, rowMetadata) -> mappingR2dbcConverter.read(TariffDataDto.class, row))
                     .all()
                     .collectList();
     }
 
-    public Mono<TariffData> getTariffDataById(Integer id){
+    public Mono<TariffDataDto> getTariffDataById(Integer id){
         return databaseClient.sql(SqlRequestsList.GET_TARIFF_WITH_TYPES_BY_ID.getQuery())
                 .bind("tariffId", id)
-                .map((row, rowMetadata)-> mappingR2dbcConverter.read(TariffData.class, row))
+                .map((row, rowMetadata)-> mappingR2dbcConverter.read(TariffDataDto.class, row))
                 .first();
     }
 

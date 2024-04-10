@@ -31,18 +31,10 @@ public class CharacteristicRepository {
         return template.insert(typeClass)
                 .using(data)
                 .then();
-
     }
 
     public <T extends AbstractCharacteristicType> Flux<T> getCharacteristicTypes(Class<T> typeClass){
         return template.select(typeClass).all();
-    }
-
-    public <T extends AbstractCharacteristicType> Mono<Void> updateCharacteristicType(String newTypeName, Integer typeId, Class<T> classType){
-        return template.update(classType)
-                .matching(Query.query(where("id").is(typeId)))
-                .apply(Update.update("type", newTypeName))
-                .then();
     }
 
 }

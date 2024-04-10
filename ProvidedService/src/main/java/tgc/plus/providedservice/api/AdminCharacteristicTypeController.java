@@ -74,7 +74,7 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PostMapping("/cpu")
-    public Mono<Void> createCpuType(@RequestBody @JsonView(CharacteristicTypeDto.Create.class) @Valid CharacteristicTypeDto characteristicType){
+    public Mono<Void> createCpuType(@RequestBody @Valid CharacteristicTypeDto characteristicType){
         return adminProvidedFacade.createCharacteristicType(new CpuType(characteristicType), CpuType.class);
     }
 
@@ -91,8 +91,8 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/cpu/{type_id}")
-    public Mono<Void> changeCpuType(@RequestBody @JsonView(CharacteristicTypeDto.Change.class) @Valid CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
-        return adminProvidedFacade.changeCharacteristicType(characteristicType.getTypeName(), typeId, CpuType.class);
+    public Mono<Void> changeCpuType(@RequestBody @Valid CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
+        return adminProvidedFacade.changeCharacteristicType(characteristicType, typeId, CpuType.class);
     }
 
     @Operation(summary = "Delete cpu type", description = "You can delete a cpu type only if it is not used in user vds")
@@ -140,7 +140,7 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PostMapping("/ram")
-    public Mono<Void> createRamType(@RequestBody @JsonView(CharacteristicTypeDto.Create.class) @Valid CharacteristicTypeDto characteristicType){
+    public Mono<Void> createRamType(@RequestBody @Valid CharacteristicTypeDto characteristicType){
         return adminProvidedFacade.createCharacteristicType(new RamType(characteristicType), RamType.class);
     }
 
@@ -158,8 +158,8 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/ram/{type_id}")
-    public Mono<Void> changeRamType(@RequestBody @Valid @JsonView(CharacteristicTypeDto.Change.class) CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
-        return adminProvidedFacade.changeCharacteristicType(characteristicType.getTypeName(), typeId, RamType.class);
+    public Mono<Void> changeRamType(@RequestBody @Valid CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
+        return adminProvidedFacade.changeCharacteristicType(characteristicType, typeId, RamType.class);
     }
 
     @Operation(summary = "Delete ram type", description = "You can delete a ram type only if it is not used in user vds")
@@ -207,7 +207,7 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PostMapping("/mem")
-    public Mono<Void> createMemoryType(@RequestBody @JsonView(CharacteristicTypeDto.Create.class) @Valid CharacteristicTypeDto characteristicType){
+    public Mono<Void> createMemoryType(@RequestBody @Valid CharacteristicTypeDto characteristicType){
         return adminProvidedFacade.createCharacteristicType(new MemoryType(characteristicType), MemoryType.class);
     }
 
@@ -224,8 +224,8 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/mem/{type_id}")
-    public Mono<Void> changeMemoryType(@RequestBody @JsonView(CharacteristicTypeDto.Change.class) @Valid CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
-        return adminProvidedFacade.changeCharacteristicType(characteristicType.getTypeName(), typeId, MemoryType.class);
+    public Mono<Void> changeMemoryType(@RequestBody @Valid CharacteristicTypeDto characteristicType, @PathVariable(value = "type_id") Integer typeId){
+        return adminProvidedFacade.changeCharacteristicType(characteristicType, typeId, MemoryType.class);
     }
 
     @Operation(summary = "Delete memory type", description = "You can delete a memory type only if it is not used in user vds")

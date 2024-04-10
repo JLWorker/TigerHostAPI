@@ -43,8 +43,8 @@ public class UserController {
     })
     @GetMapping("/hyper/{hyper_id}/tariffs")
 
-    public Mono<List<TariffData>> getTariffsInfo(@PathVariable("hyper_id") Integer hypervisorId){
-        return providedFacade.getTariffsInfo(hypervisorId);
+    public Mono<List<TariffDataDto>> getTariffsInfo(@PathVariable("hyper_id") Integer hypervisorId){
+        return providedFacade.getActiveTariffsInfo(hypervisorId);
     }
 
     @Operation(summary = "Get all active periods")
@@ -58,8 +58,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/periods")
-    public Mono<List<PeriodData>> getPeriodsInfo(){
-        return providedFacade.getElemInfo(Period.class, PeriodData::new);
+    public Mono<List<PeriodDataDto>> getPeriodsInfo(){
+        return providedFacade.getActiveElemInfo(Period.class, PeriodDataDto::new);
     }
 
     @Operation(summary = "Get all active operating systems")
@@ -73,8 +73,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/ocs")
-    public Mono<List<OcData>> getOperatingSystemsInfo(){
-        return providedFacade.getElemInfo(OperatingSystem.class, OcData::new);
+    public Mono<List<OcDataDto>> getOperatingSystemsInfo(){
+        return providedFacade.getActiveElemInfo(OperatingSystem.class, OcDataDto::new);
     }
 
 
@@ -91,7 +91,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/tariffs/{id}")
-    public Mono<TariffData> getTariffById(@PathVariable(value = "id") Integer id){
+    public Mono<TariffDataDto> getTariffById(@PathVariable(value = "id") Integer id){
         return providedFacade.getTariffById(id);
     }
 
@@ -108,8 +108,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/periods/{id}")
-    public Mono<PeriodData> getPeriodById(@PathVariable(value = "id") Integer id){
-        return providedFacade.getElemById(id, Period.class, PeriodData::new);
+    public Mono<PeriodDataDto> getPeriodById(@PathVariable(value = "id") Integer id){
+        return providedFacade.getElemById(id, Period.class, PeriodDataDto::new);
     }
 
 
@@ -126,8 +126,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/ocs/{id}")
-    public Mono<OcData> getOperatingSystemById(@PathVariable(value = "id") Integer id){
-        return providedFacade.getElemById(id, OperatingSystem.class, OcData::new);
+    public Mono<OcDataDto> getOperatingSystemById(@PathVariable(value = "id") Integer id){
+        return providedFacade.getElemById(id, OperatingSystem.class, OcDataDto::new);
     }
 
     @Operation(summary = "Get all active hypervisors")
@@ -141,8 +141,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/hyper")
-    public Mono<List<HypervisorData>> getHypervisors(){
-        return providedFacade.getElemInfo(Hypervisor.class, HypervisorData::new);
+    public Mono<List<HypervisorDataDto>> getHypervisors(){
+        return providedFacade.getActiveElemInfo(Hypervisor.class, HypervisorDataDto::new);
     }
 
     @Operation(summary = "Calculate final cost for tariff")
@@ -157,8 +157,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/final_cost")
-    public Mono<FinalPriceResponse> getFinalCostByTariff(@RequestParam("tariff_id") Integer tariffId, @RequestParam("period_id") Integer periodId,
-                                        @RequestParam("oc_id") Integer ocId){
+    public Mono<FinalPriceResponseDto> getFinalCostByTariff(@RequestParam("tariff_id") Integer tariffId, @RequestParam("period_id") Integer periodId,
+                                                            @RequestParam("oc_id") Integer ocId){
         return providedFacade.calculateFinalPrice(tariffId, periodId, ocId);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import tgc.plus.providedservice.dto.api_dto.admin_api.HypervisorDto;
 import tgc.plus.providedservice.entities.Hypervisor;
+import tgc.plus.providedservice.entities.Period;
 import tgc.plus.providedservice.facades.AdminProvidedFacade;
 import tgc.plus.providedservice.facades.utils.EventTypesList;
 
@@ -59,7 +60,7 @@ public class AdminHypervisorController {
         return adminProvidedFacade.getAllRowsElement(Hypervisor.class, HypervisorDto::new);
     }
 
-    @Operation(summary = "Сhange in operating system visibility")
+    @Operation(summary = "Сhange in hypervisor visibility")
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
@@ -67,16 +68,16 @@ public class AdminHypervisorController {
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
             }, description = "Invalid access token"),
             @ApiResponse(responseCode = "400", content = @Content(), description = "Invalid params in request"),
-            @ApiResponse(responseCode = "404", content = @Content(), description = "Operating system not found"),
+            @ApiResponse(responseCode = "404", content = @Content(), description = "Hypervisor not found"),
             @ApiResponse(responseCode = "500", content = @Content(), description = "Internal errors in request processing"),
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @PatchMapping("/{hyper_id}")
-    public Mono<Void> changeOperatingSystem(@PathVariable(value = "hyper_id") Integer hypervisorId, @RequestBody @Valid HypervisorDto hypervisorDto) {
+    public Mono<Void> changeHypervisor(@PathVariable(value = "hyper_id") Integer hypervisorId, @RequestBody @Valid HypervisorDto hypervisorDto) {
         return adminProvidedFacade.changeHypervisor(hypervisorId, hypervisorDto);
     }
 
-    @Operation(summary = "Delete operating system", description = "You can delete a operating system only if it is not used in tariffs")
+    @Operation(summary = "Сhange in hypervisor visibility")
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
@@ -84,8 +85,28 @@ public class AdminHypervisorController {
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
             }, description = "Invalid access token"),
             @ApiResponse(responseCode = "400", content = @Content(), description = "Invalid params in request"),
-            @ApiResponse(responseCode = "404", content = @Content(), description = "Operating system not exist or activity status must be turned off"),
-            @ApiResponse(responseCode = "409", content = @Content(), description = "Operating system related elements are present"),
+            @ApiResponse(responseCode = "404", content = @Content(), description = "Hypervisor not found"),
+            @ApiResponse(responseCode = "500", content = @Content(), description = "Internal errors in request processing"),
+            @ApiResponse(responseCode = "200", description = "Success operation")
+    })
+    @PatchMapping("/vision/{hyper_id}")
+    public Mono<Void> changeHypervisorVision(@PathVariable(value = "hyper_id") Integer hyperId) {
+        return adminProvidedFacade.changeVision(hyperId, Hypervisor.class, EventTypesList.UPDATE_HYPERVISORS);
+    }
+
+
+
+
+    @Operation(summary = "Delete hypervisor", description = "You can delete a hypervisor only if it is not used in tariffs")
+    @Parameter(name = "Authorization", in = ParameterIn.HEADER, example = "Bearer_uthd8674Jdbai9....", description = "ONLY FOR USER WITH ADMIN ROLE!")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "401", content = @Content(), headers = {
+                    @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
+                    @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
+            }, description = "Invalid access token"),
+            @ApiResponse(responseCode = "400", content = @Content(), description = "Invalid params in request"),
+            @ApiResponse(responseCode = "404", content = @Content(), description = "Hypervisor not exist or activity status must be turned off"),
+            @ApiResponse(responseCode = "409", content = @Content(), description = "Hypervisor related elements are present"),
             @ApiResponse(responseCode = "500", content = @Content(), description = "Internal errors in request processing"),
             @ApiResponse(responseCode = "200", description = "Success operation")
     })

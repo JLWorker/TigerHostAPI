@@ -46,10 +46,13 @@ public class VdsTariff implements ProvidedServiceEntity {
     @Column("memory_type")
     private Integer memoryType;
 
+    @Column("hypervisor_id")
+    private Integer hypervisorId;
+
     @Column("active")
     private Boolean active;
 
-    public VdsTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType) {
+    public VdsTariff(String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, Integer cpuType, Integer ramType, Integer memoryType, Integer hypervisorId) {
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;
         this.cpu = cpu;
@@ -58,6 +61,7 @@ public class VdsTariff implements ProvidedServiceEntity {
         this.cpuType = cpuType;
         this.ramType = ramType;
         this.memoryType = memoryType;
+        this.hypervisorId = hypervisorId;
         this.active = false;
     }
 
@@ -70,6 +74,7 @@ public class VdsTariff implements ProvidedServiceEntity {
         this.cpuType = tariffDto.getCpuType();
         this.ramType = tariffDto.getRamType();
         this.memoryType = tariffDto.getMemoryType();
+        this.hypervisorId = tariffDto.getHypervisorId();
         this.active = tariffDto.getActive();
     }
 

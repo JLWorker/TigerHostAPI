@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tgc.plus.providedservice.entities.VdsTariff;
 
 @NoArgsConstructor
 @Getter
-public class TariffData {
+public class TariffDataDto {
 
     @JsonProperty("tariff_id")
     @Schema(example = "1")
@@ -50,7 +49,7 @@ public class TariffData {
     @Schema(example = "SSD")
     private String memoryType;
 
-    public TariffData(Integer tariffId, String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, String cpuType, String ramType, String memoryType) {
+    public TariffDataDto(Integer tariffId, String tariffName, Integer priceMonthKop, Integer cpu, Integer ram, Integer memory, String cpuType, String ramType, String memoryType) {
         this.tariffId = tariffId;
         this.tariffName = tariffName;
         this.priceMonthKop = priceMonthKop;

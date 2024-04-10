@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import tgc.plus.providedservice.dto.api_dto.admin_api.*;
 import tgc.plus.providedservice.entities.*;
-import tgc.plus.providedservice.exceptions.facade_exceptions.InvalidRequestException;
-import tgc.plus.providedservice.exceptions.facade_exceptions.RelatedElementsException;
 import tgc.plus.providedservice.exceptions.facade_exceptions.ResourceNotFoundException;
 import tgc.plus.providedservice.facades.utils.EventTypesList;
 import tgc.plus.providedservice.facades.utils.FacadesUtils;
@@ -21,7 +19,6 @@ import tgc.plus.providedservice.repositories.TariffRepository;
 import tgc.plus.providedservice.repositories.custom_database_repository.CustomDatabaseRepository;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Component
@@ -51,7 +48,7 @@ public class AdminProvidedFacade {
                     if (e instanceof DuplicateKeyException)
                         return facadesUtils.getInvalidRequestException(String.format("Element with parameter - %s already exist", newElem.getUniqueElement()));
                     else if (e instanceof DataIntegrityViolationException)
-                        return facadesUtils.getInvalidRequestException("Invalid types in body params");
+                        return facadesUtils.getInvalidRequestException("No dependencies found for parameters");
                     else {
                         log.error(e.getMessage());
                         return facadesUtils.getServerError();
@@ -88,13 +85,13 @@ public class AdminProvidedFacade {
 
 
     //перед удалением нужна проверка на то, что элемент не реализуется в виртуальных машинах!!!
-    @Transactional
+    @Transactional()
     public <T extends ProvidedServiceEntity> Mono<Void> deleteElement(Integer elemId, Class<T> classType){
         String table = classType.getAnnotation(Table.class).value();
         return customDatabaseRepository.getBlockForNonActiveElement(elemId, table)
                 .filter(res -> res!=0)
                 .switchIfEmpty(facadesUtils.getResourceNotFoundException("Element not exist, or activity status must be turned off"))
-                .then(tariffRepository.deleteTariffElem(elemId, classType))
+                .then(tariffRepository.deleteElem(elemId, classType))
                 .onErrorResume(e -> {
                     if(!(e instanceof ResourceNotFoundException)){
                         log.error(e.getMessage());
@@ -107,7 +104,7 @@ public class AdminProvidedFacade {
 
     @Transactional
     public Mono<Void> deleteHypervisor(Integer hypervisorId){
-        return tariffRepository.getHypervisorTariffs(hypervisorId)
+        return tariffRepository.getTariffsByHypervisor(hypervisorId)
                 .filter(count -> count==0)
                 .switchIfEmpty(facadesUtils.getRelatedElementsException("Elements cannot be deleted because related elements are present"))
                 .then(deleteElement(hypervisorId, Hypervisor.class));
@@ -116,29 +113,54 @@ public class AdminProvidedFacade {
 
     //необходимо создавать новый тариф
     @Transactional
-    public Mono<Void> changeTariff(Integer tariffId, TariffDto tariffDto){
-        return customDatabaseRepository.getCallableBlockForElement(tariffId, VdsTariff.class)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(facadesUtils.getResourceNotFoundException(String.format("Tariff with id - %s not found", tariffId)))
-                .flatMap(tariff -> {
-                    tariff.setTariffName(tariffDto.getTariffName());
-                    tariff.setPriceMonthKop(tariffDto.getPriceMonthKop());
-                    tariff.setActive(tariffDto.getActive());
-                    tariff.setCpuType(tariffDto.getCpuType());
-                    tariff.setRamType(tariffDto.getRamType());
-                    tariff.setMemoryType(tariffDto.getMemoryType());
-                    return tariffRepository.updateElem(tariff);
-                })
-                .then(facadesUtils.sendMessageInFeedbackService(EventTypesList.UPDATE_VDS_TARIFFS, MessageAvailableList.PUBLIC))
-                .onErrorResume(e -> {
-                    if (e instanceof DuplicateKeyException)
-                        return facadesUtils.getInvalidRequestException(String.format("Tariff with parameter - %s already exist", tariffDto.getTariffName()));
-                    if(!(e instanceof ResourceNotFoundException)){
-                        log.error(e.getMessage());
-                        return facadesUtils.getServerError();
-                    }
-                    else
-                        return Mono.error(e);
+    public Mono<Void> changeTariff(Integer tariffId, ChangeTariffDto tariffDto){
+            return facadesUtils.changeElement(tariffId, VdsTariff.class, EventTypesList.UPDATE_VDS_TARIFFS, (tariff) -> {
+                tariff.setTariffName(tariffDto.getTariffName());
+                tariff.setPriceMonthKop(tariffDto.getPriceMonthKop());
+                tariff.setActive(tariffDto.getActive());
+                tariff.setCpuType(tariffDto.getCpuType());
+                tariff.setRamType(tariffDto.getRamType());
+                tariff.setMemoryType(tariffDto.getMemoryType());
+                return tariff;
+            });
+    }
+
+    @Transactional
+    public Mono<Void> changeOperatingSystem(Integer ocId, ChangeOperatingSystemDto operatingSystemDto){
+        return facadesUtils.changeElement(ocId, OperatingSystem.class, EventTypesList.UPDATE_OC, (oc) -> {
+                    oc.setOsName(operatingSystemDto.getName());
+                    oc.setActive(operatingSystemDto.getActive());
+                    oc.setBitDepth(operatingSystemDto.getBitDepth());
+                    oc.setVersion(operatingSystemDto.getVersion());
+                    oc.setPriceKop(operatingSystemDto.getPriceKop());
+                    return oc;
+                });
+    }
+
+    @Transactional
+    public Mono<Void> changePeriod(Integer periodId, ChangePeriodDto periodsDto){
+        return facadesUtils.changeElement(periodId, Period.class, EventTypesList.UPDATE_PERIODS, (period) -> {
+            period.setDiscountPercent(periodsDto.getDiscountPercent());
+            period.setActive(periodsDto.getActive());
+            return period;
+        });
+    }
+
+    @Transactional
+    public <T extends AbstractCharacteristicType> Mono<Void> changeCharacteristicType(CharacteristicTypeDto characteristicTypeDto, Integer typeId, Class<T> entityClass){
+        return facadesUtils.changeElement(typeId, entityClass, EventTypesList.UPDATE_VDS_TARIFFS, (type) -> {
+            type.setTypeName(characteristicTypeDto.getTypeName());
+            return type;
+        });
+    }
+
+
+    @Transactional
+    public Mono<Void> changeHypervisor(Integer hypervisorId, HypervisorDto hypervisorDto){
+        return facadesUtils.changeElement(hypervisorId, Hypervisor.class, EventTypesList.UPDATE_HYPERVISORS, (hypervisor) -> {
+                    hypervisor.setName(hypervisorDto.getName());
+                    hypervisor.setActive(hypervisorDto.getActive());
+                    return hypervisor;
                 });
     }
 
@@ -148,7 +170,7 @@ public class AdminProvidedFacade {
         return characteristicRepository.saveCharacteristicType(data, entityClass)
                 .onErrorResume(e -> {
                     if (e instanceof DuplicateKeyException){
-                        return facadesUtils.getInvalidRequestException(String.format("Type with name - %s already exist", data.getType()));
+                        return facadesUtils.getInvalidRequestException(String.format("Type with name - %s already exist", data.getTypeName()));
                     }
                     else {
                         log.error(e.getMessage());
@@ -157,28 +179,10 @@ public class AdminProvidedFacade {
                 });
     }
 
-    @Transactional
-    public <T extends AbstractCharacteristicType> Mono<Void> changeCharacteristicType(String typeName, Integer typeId, Class<T> entityClass){
-        return facadesUtils.getBlockForElements(typeId, entityClass)
-                .then(characteristicRepository.updateCharacteristicType(typeName, typeId, entityClass))
-                .then(facadesUtils.sendMessageInFeedbackService(EventTypesList.UPDATE_VDS_TARIFFS, MessageAvailableList.PUBLIC))
-                .onErrorResume(e -> {
-                    if (e instanceof DuplicateKeyException){
-                        return facadesUtils.getInvalidRequestException(String.format("Type with name - %s already exist", typeName));
-                    }
-                    else if (!(e instanceof ResourceNotFoundException)){
-                        log.error(e.getMessage());
-                        return facadesUtils.getServerError();
-                    }
-                    else
-                        return Mono.error(e);
-                });
-    }
-
     @Transactional //как и для всех delete перед вызовом данного endpoint стоит проверить машины, которые используют данный тип
     public <T extends AbstractCharacteristicType> Mono<Void> deleteCharacteristicType(Integer typeId, Class<T> entityClass){
-         return facadesUtils.getBlockForElements(typeId, entityClass)
-                .then(tariffRepository.deleteTariffElem(typeId, entityClass))
+        return facadesUtils.getCallableBlockForElements(typeId, entityClass)
+                .then(tariffRepository.deleteElem(typeId, entityClass))
                 .onErrorResume(e -> {
                     if (e instanceof DataIntegrityViolationException)
                         return facadesUtils.getRelatedElementsException(String.format("Type with id - %s cannot remove, because it has connections with other tables", typeId));
@@ -205,62 +209,12 @@ public class AdminProvidedFacade {
     @Transactional(readOnly = true)
     public Mono<CharacteristicsTypesResponse> getCharacteristicsTypes(){
         return Mono.zip(characteristicRepository.getCharacteristicTypes(CpuType.class).map(CharacteristicTypeDto::new).collectList(),
-                characteristicRepository.getCharacteristicTypes(RamType.class).map(CharacteristicTypeDto::new).collectList(),
-                characteristicRepository.getCharacteristicTypes(MemoryType.class).map(CharacteristicTypeDto::new).collectList())
+                        characteristicRepository.getCharacteristicTypes(RamType.class).map(CharacteristicTypeDto::new).collectList(),
+                        characteristicRepository.getCharacteristicTypes(MemoryType.class).map(CharacteristicTypeDto::new).collectList())
                 .flatMap(result -> Mono.just(new CharacteristicsTypesResponse(result.getT1(), result.getT2(), result.getT3())))
                 .onErrorResume(e -> facadesUtils.getServerError());
     }
 
-
-    @Transactional
-    public Mono<Void> changeOperatingSystem(Integer ocId, OperatingSystemDto operatingSystemDto){
-        return customDatabaseRepository.getCallableBlockForElement(ocId, OperatingSystem.class)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(facadesUtils.getResourceNotFoundException(String.format("Oc with id - %s not found", ocId)))
-                .flatMap(oc -> {
-                    oc.setOsName(operatingSystemDto.getName());
-                    oc.setActive(operatingSystemDto.getActive());
-                    oc.setBitDepth(operatingSystemDto.getBitDepth());
-                    oc.setVersion(operatingSystemDto.getVersion());
-                    oc.setPriceKop(operatingSystemDto.getPriceKop());
-                    return tariffRepository.updateElem(oc);
-                })
-                .then(facadesUtils.sendMessageInFeedbackService(EventTypesList.UPDATE_OC, MessageAvailableList.PUBLIC))
-                .onErrorResume(e -> {
-                    if (e instanceof DuplicateKeyException)
-                        return facadesUtils.getInvalidRequestException(String.format("Operating system with template - %s already exist", operatingSystemDto.getTemplateId()));
-                    else if(!(e instanceof ResourceNotFoundException)){
-                        log.error(e.getMessage());
-                        return facadesUtils.getServerError();
-                    }
-                    else
-                        return Mono.error(e);
-                });
-    }
-
-
-    @Transactional
-    public Mono<Void> changeHypervisor(Integer hypervisorId, HypervisorDto hypervisorDto){
-        return customDatabaseRepository.getCallableBlockForElement(hypervisorId, Hypervisor.class)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(facadesUtils.getResourceNotFoundException(String.format("Hypervisor with id - %s not found", hypervisorId)))
-                .flatMap(hypervisor -> {
-                    hypervisor.setName(hypervisorDto.getName());
-                    hypervisor.setActive(hypervisorDto.getActive());
-                    return tariffRepository.updateElem(hypervisor);
-                })
-                .then(facadesUtils.sendMessageInFeedbackService(EventTypesList.UPDATE_HYPERVISORS, MessageAvailableList.PUBLIC))
-                .onErrorResume(e -> {
-                    if (e instanceof DuplicateKeyException)
-                        return facadesUtils.getInvalidRequestException(String.format("Hypervisor with name - %s already exist", hypervisorDto.getName()));
-                    else if(!(e instanceof ResourceNotFoundException)){
-                        log.error(e.getMessage());
-                        return facadesUtils.getServerError();
-                    }
-                    else
-                        return Mono.error(e);
-                });
-    }
 
 
 }
