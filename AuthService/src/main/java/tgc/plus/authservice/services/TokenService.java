@@ -14,13 +14,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.entities.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenCorruptionException;
+import tgc.plus.authservice.exceptions.exceptions_elements.RefreshTokenException;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorTokenException;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
-import tgc.plus.authservice.services.utils.TokensList;
+import tgc.plus.authservice.services.utils.TokenExpiredDate;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
@@ -47,9 +49,6 @@ public class TokenService {
     @Autowired
     private UserTokenRepository userTokenRepository;
 
-    @Autowired
-    TwoFactorRepository twoFactorRepository;
-
     private SecretKey key;
 
     @PostConstruct
@@ -57,18 +56,18 @@ public class TokenService {
        key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public Mono<String> createAccessToken(Map<String, String> claimElements, String expiredType) {
+    public Mono<String> createAccessToken(Map<String, String> claim, String expiredType) {
         return Mono.defer(() -> {
             Instant now = Instant.now();
-            Long tokenExpired=0L;
 
-            switch (expiredType){
-                case "secure": tokenExpired = accessSecurityExpireDate;
-                case "2fa": tokenExpired = access2FaExpiredDate;
-            }
+            long tokenExpired = switch (expiredType) {
+                case "secure" -> accessSecurityExpireDate;
+                case "2fa" -> access2FaExpiredDate;
+                default -> 0L;
+            };
 
             Instant expirationDate = now.plusMillis(tokenExpired);
-            Claims claims = Jwts.claims().add(claimElements).build();
+            Claims claims = Jwts.claims().add(claim).build();
             String accessToken = Jwts.builder()
                     .claims(claims)
                     .expiration(Date.from(expirationDate))
@@ -148,21 +147,25 @@ public class TokenService {
         }).doOnError(e->log.error(e.getMessage()));
     }
 
-    public Mono<Boolean> checkExpiredRefreshToken(Instant expiredDate){
-            if(expiredDate.isBefore(Instant.now()))
-                return Mono.just(false);
-            else
-                return Mono.just(true);
+
+    public Mono<UpdateTokenResponse> updatePairTokens(String userCode, String role, String refreshToken, Instant expiredDate){
+        if (expiredDate.isBefore(Instant.now()))
+            return userTokenRepository.removeUserTokenByRefreshToken(refreshToken)
+                    .then(getRefreshTokenException());
+        else {
+            String newRefreshToken = UUID.randomUUID().toString();
+            Instant createDate = Instant.now();
+            Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
+            return createAccessToken(Map.of("user_code", userCode, "role", role), TokenExpiredDate.SECURITY.getName())
+                    .zipWith(userTokenRepository.updateRefreshToken(refreshToken, newRefreshToken, finishDate, createDate)
+                            .filter(res-> res!=0)
+                            .switchIfEmpty(getRefreshTokenException()))
+                    .flatMap(tokens -> Mono.just(new UpdateTokenResponse(tokens.getT1(), newRefreshToken)));
+        }
     }
 
-    public Mono<Map<String, String>> updateAccessToken(String oldRefreshToken, String userCode, String role){
-        String newRefreshToken = UUID.randomUUID().toString();
-        Instant createDate = Instant.now();
-        Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
-        return createAccessToken(Map.of("user_code", userCode, "role", role), TokensList.SECURITY.getName())
-                .zipWith(userTokenRepository.updateRefreshToken(oldRefreshToken, newRefreshToken, finishDate, createDate))
-                        .flatMap(tokens -> Mono.just(Map.of("access_token", tokens.getT1(), "refresh_token", newRefreshToken)));
-
+    private <T> Mono<T> getRefreshTokenException(){
+        return Mono.error(new RefreshTokenException("Refresh token not exist"));
     }
 
 }

@@ -1,5 +1,6 @@
 package tgc.plus.authservice.repository;
 
+import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,8 @@ public interface TokenMetaRepository extends ReactiveCrudRepository<TokenMeta, L
 
     Mono<TokenMeta> getTokenMetaByTokenId(Long tokenId);
 
-    @Query("UPDATE token_meta SET device_ip= :ipAddress WHERE token_id= :tokenId RETURNING *")
-    Mono<TokenMeta> updateIpAddress(String ipAddress, Long tokenId);
+    @Modifying
+    @Query("UPDATE token_meta SET device_ip= :ipAddress WHERE token_id= :tokenIdMeta")
+    Mono<Void> updateIpAddress(String ipAddress, Long tokenIdMeta);
 
 }

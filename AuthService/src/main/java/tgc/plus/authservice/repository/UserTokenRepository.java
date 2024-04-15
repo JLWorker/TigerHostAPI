@@ -4,6 +4,7 @@ import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.entities.UserToken;
 
@@ -15,7 +16,7 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
 
     Mono<Integer> removeUserTokenByRefreshToken(String refreshToken);
 
-    Mono<Integer> removeUserTokenByTokenId(String tokenId);
+    Mono<Void> removeUserTokenByTokenId(String tokenId);
 
     Mono<UserToken> getUserTokenByTokenId(String tokenId);
 
@@ -25,17 +26,21 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
 
     @Modifying
     @Query("DELETE FROM user_tokens WHERE user_id= :userId and token_id <> :tokenId")
-    Mono<Integer> removeAllUserTokens(String tokenId, Long userId);
+    Mono<Integer> deleteUserTokensExceptTokenId(String tokenId, Long userId);
 
-    @Modifying
+
     @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR UPDATE")
-    Mono<Void> getUserTokenByTokenIdForDeleteToken(String tokenId);
+    Mono<UserToken> getBlockForUserTokenById(String tokenId);
 
-    @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR SHARE")
-    Mono<UserToken> getUserTokenByTokenIdForShare(String tokenId);
+//    @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR SHARE")
+//    Mono<UserToken> getShareBlockForTokensById(String tokenId);
 
     @Modifying
     @Query("DELETE FROM user_tokens WHERE expired_date < now()")
     Mono<Void> remoteUserTokenByTime();
+
+
+    @Query("SELECT * FROM user_tokens JOIN users ON (user_tokens.user_id = users.id) WHERE users.user_code =:userCode FOR UPDATE")
+    Flux<UserToken> getBlockForAllUserTokens(String userCode);
 
 }

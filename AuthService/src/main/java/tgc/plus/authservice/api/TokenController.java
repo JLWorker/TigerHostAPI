@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.exceptions_dto.VersionExceptionResponse;
-import tgc.plus.authservice.dto.tokens_dto.TokensDataResponse;
+import tgc.plus.authservice.dto.tokens_dto.TokenData;
 import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.facades.TokenFacade;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tokens")
@@ -96,7 +98,7 @@ public class TokenController {
             @ApiResponse(responseCode = "200", description = "Success get info")
     })
     @GetMapping("/all/{currentTokenId}")
-    public Mono<TokensDataResponse> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @PathVariable("currentTokenId") String tokenId, ServerHttpRequest request){
+    public Mono<List<TokenData>> getAllTokens(@Pattern(regexp = "^ID-\\d+$") @PathVariable("currentTokenId") String tokenId, ServerHttpRequest request){
         return tokenFacade.getAllTokens(tokenId, request.getHeaders().getFirst("Device-Ip"));
     }
 }

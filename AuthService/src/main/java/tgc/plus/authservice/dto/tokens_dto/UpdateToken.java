@@ -19,4 +19,7 @@ public class UpdateToken {
     public UpdateToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+
+
 }
