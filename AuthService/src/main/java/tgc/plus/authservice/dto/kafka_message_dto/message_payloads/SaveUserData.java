@@ -12,10 +12,10 @@ import lombok.Setter;
 public class SaveUserData implements Payload{
 
     @JsonProperty
-    String email;
+    private String email;
 
     @JsonProperty
-    String password;
+    private String password;
 
     public SaveUserData(String email, String password) {
         this.email = email;

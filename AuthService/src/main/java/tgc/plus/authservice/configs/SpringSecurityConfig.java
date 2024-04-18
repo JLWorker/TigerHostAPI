@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import tgc.plus.authservice.configs.utils.*;
+import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 
@@ -25,10 +26,13 @@ import tgc.plus.authservice.services.UserService;
 public class SpringSecurityConfig {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
@@ -54,7 +58,7 @@ public class SpringSecurityConfig {
     @Bean
     @Primary
     public ReactiveAuthenticationManager reactiveFilterAuthenticationManager(){
-        return new JwtReactiveAuthenticationManager();
+        return new JwtReactiveAuthenticationManager(userRepository);
     }
 
     @Bean

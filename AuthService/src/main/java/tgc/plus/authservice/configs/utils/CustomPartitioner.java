@@ -12,9 +12,6 @@ public class CustomPartitioner implements Partitioner {
 
     private final Integer CHANGE_MESSAGE_PARTITION = 0;
 
-    @Value("${kafka.topic.call-service}")
-    String topic;
-
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
 

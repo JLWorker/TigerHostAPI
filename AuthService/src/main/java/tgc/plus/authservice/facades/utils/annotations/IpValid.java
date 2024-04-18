@@ -1,4 +1,4 @@
-package tgc.plus.authservice.api.utils;
+package tgc.plus.authservice.facades.utils.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

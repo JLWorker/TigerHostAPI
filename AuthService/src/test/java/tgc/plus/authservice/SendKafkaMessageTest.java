@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
-import tgc.plus.authservice.facades.utils.CommandsNames;
+import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.utils.TestUtils;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +32,7 @@ public class SendKafkaMessageTest {
 
         Flux<Void> sendMessages = Flux.range(0, messageCount).flatMapSequential(el -> testUtils.generateRandomUser().flatMap(user ->
                         facadeUtils.createMessageForSaveUser(user.get("uc"), user.get("em"), user.get("ps"))
-                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.SAVE.getName()))
+                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, MailServiceCommand.SAVE.getName()))
                                 .doOnSuccess(res -> atomicInteger.getAndIncrement())))
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnComplete(() -> {

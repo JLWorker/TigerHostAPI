@@ -63,13 +63,13 @@ public class FacadeUtils {
     @Autowired
     TokenMetaRepository tokenMetaRepository;
 
-    @Value("${kafka.topic.call-service}")
+    @Value("${kafka.topic.mail-service}")
     String eventTopic;
 
     @Value("${kafka.topic.feedback-service}")
     String feedbackTopic;
 
-    @Value("${tgc.web.url}")
+    @Value("${recovery.tgc.web.url}")
     String recoverUrl;
 
 
@@ -78,13 +78,6 @@ public class FacadeUtils {
                 return springSecurityConfig.reactiveLoginAuthenticationManager().authenticate(authenticationToken);
     }
 
-    public Mono<Void> checkPasswords(String password, String confirmPassword){
-            if (password.equals(confirmPassword)){
-                return Mono.empty();
-            }
-            else
-                return getRequestException("Passwords mismatch");
-    }
 
 //    public Mono<TokenMeta> checkIpAddress(String ipAddress, Long tokenId){
 //        return tokenMetaRepository.getTokenMetaByTokenId(tokenId)
@@ -92,20 +85,20 @@ public class FacadeUtils {
 //                .switchIfEmpty(tokenMetaRepository.updateIpAddress(ipAddress, tokenId));
 //    }
 
-    public Mono<TokensResponse> verify2FaCode(String deviceToken, String code, DeviceData deviceData, String ipAddr){
-        return twoFactorRepository.getTwoFactorByDeviceToken(deviceToken)
-                .defaultIfEmpty(new TwoFactor())
-                .filter(twoFactor -> twoFactor.getId() != null)
-                .switchIfEmpty(Mono.error(new TwoFactorTokenException("Invalid 2fa token")))
-                .flatMap(twoFactor -> userRepository.getUserById(twoFactor.getUserId()))
-                .flatMap(user -> twoFactorService.verify(code, user.getTwoFactorSecret())
-                        .filter(res -> res)
-                        .switchIfEmpty(Mono.error(new TwoFactorCodeException("Authentication code is incorrect")))
-                        .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken))
-                                .then(createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName()))
-                                .flatMap(feedbackMessage -> sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))
-                                .then(generatePairTokens(user, deviceData, ipAddr)));
-    }
+//    public Mono<TokensResponse> verify2FaCode(String deviceToken, String code, DeviceData deviceData, String ipAddr){
+//        return twoFactorRepository.getTwoFactorByDeviceToken(deviceToken)
+//                .defaultIfEmpty(new TwoFactor())
+//                .filter(twoFactor -> twoFactor.getId() != null)
+//                .switchIfEmpty(Mono.error(new TwoFactorTokenException("Invalid 2fa token")))
+//                .flatMap(twoFactor -> userRepository.getUserById(twoFactor.getUserId()))
+//                .flatMap(user -> twoFactorService.verify(code, user.getTwoFactorSecret())
+//                        .filter(res -> res)
+//                        .switchIfEmpty(Mono.error(new TwoFactorCodeException("Authentication code is incorrect")))
+//                        .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken))
+//                                .then(createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName()))
+//                                .flatMap(feedbackMessage -> sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))
+//                                .then(generatePairTokens(user, deviceData, ipAddr)));
+//    }
 
 
     public Mono<Void> getUserByEmailReg(String email) {
@@ -115,60 +108,60 @@ public class FacadeUtils {
                 .flatMap(el -> Mono.empty());
     }
 
-    public Mono<User> getUserByRecoveryCode(String recoveryCode) {
-        return userRepository.getUserByRecoveryCode(recoveryCode)
-                .defaultIfEmpty(new User())
-                .filter(el -> el.getUserCode() != null)
-                .switchIfEmpty(getNotFoundException("Password already changed"));
-    }
+//    public Mono<User> getUserByRecoveryCode(String recoveryCode) {
+//        return userRepository.getUserByRecoveryCode(recoveryCode)
+//                .defaultIfEmpty(new User())
+//                .filter(el -> el.getUserCode() != null)
+//                .switchIfEmpty(getNotFoundException("Password already changed"));
+//    }
 
-    public Mono<User> getUserByEmailLog(String email) {
-        return userRepository.getUserByEmail(email)
-                .defaultIfEmpty(new User())
-                .filter(el -> el.getId() != null)
-                .switchIfEmpty(getNotFoundException(String.format("User with email %s not found", email)));
-    }
+//    public Mono<User> getUserByEmailLog(String email) {
+//        return userRepository.getUserByEmail(email)
+//                .defaultIfEmpty(new User())
+//                .filter(el -> el.getId() != null)
+//                .switchIfEmpty(getNotFoundException(String.format("User with email %s not found", email)));
+//    }
 
-    public Mono<UserInfoResponse> getUserInfoByVersion(Long version, String userCode){
-        return userRepository.getUserByUserCodeAndVersion(userCode, version)
-                .defaultIfEmpty(new User())
-                .filter(user -> user.getId()!=null)
-                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                        .flatMap(user -> getVersionException(user.getVersion())))
-                .flatMap(user ->
-                        Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
-    }
+//    public Mono<UserInfoResponse> getUserInfoByVersion(Long version, String userCode){
+//        return userRepository.getUserByUserCodeAndVersion(userCode, version)
+//                .defaultIfEmpty(new User())
+//                .filter(user -> user.getId()!=null)
+//                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                        .flatMap(user -> getVersionException(user.getVersion())))
+//                .flatMap(user ->
+//                        Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())));
+//    }
 
-    public Mono<Long> updatePhoneNumber(String phone, String userCode, Long reqVersion){
-          return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
-                  .filter(user -> user.getId()!=null)
-                  .switchIfEmpty(getRefreshTokenException("User not exist"))
-                  .then(userRepository.changePhone(phone, userCode, reqVersion))
-                  .filter(newVersion -> newVersion != 0)
-                  .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                          .flatMap(user -> getVersionException(user.getVersion())))
-                  .flatMap(newVersion -> {
-                      log.info(String.format("Phone was change for userCode %s, new phone - %s", userCode, phone));
-                      return Mono.just(newVersion);
-                  });
+//    public Mono<Long> updatePhoneNumber(String phone, String userCode, Long reqVersion){
+//          return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
+//                  .filter(user -> user.getId()!=null)
+//                  .switchIfEmpty(getRefreshTokenException("User not exist"))
+//                  .then(userRepository.changePhone(phone, userCode, reqVersion))
+//                  .filter(newVersion -> newVersion != 0)
+//                  .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                          .flatMap(user -> getVersionException(user.getVersion())))
+//                  .flatMap(newVersion -> {
+//                      log.info(String.format("Phone was change for userCode %s, new phone - %s", userCode, phone));
+//                      return Mono.just(newVersion);
+//                  });
+//
+//    }
 
-    }
+//    public Mono<Long> updateEmail(String email, String userCode, Long reqVersion){
+//        return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
+//                .filter(user -> user.getId()!=null)
+//                .switchIfEmpty(getRefreshTokenException("User not exist"))
+//                .then(userRepository.changeEmail(email, userCode, reqVersion))
+//                .filter(newVersion -> newVersion != 0)
+//                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                        .flatMap(user -> getVersionException(user.getVersion())))
+//                .flatMap(newVersion -> {
+//                            log.info(String.format("Email was change for userCode %s, new email - %s", userCode, email));
+//                            return Mono.just(newVersion);
+//                });
+//    }
 
-    public Mono<Long> updateEmail(String email, String userCode, Long reqVersion){
-        return userRepository.getUserByUserCode(userCode).defaultIfEmpty(new User())
-                .filter(user -> user.getId()!=null)
-                .switchIfEmpty(getRefreshTokenException("User not exist"))
-                .then(userRepository.changeEmail(email, userCode, reqVersion))
-                .filter(newVersion -> newVersion != 0)
-                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                        .flatMap(user -> getVersionException(user.getVersion())))
-                .flatMap(newVersion -> {
-                            log.info(String.format("Email was change for userCode %s, new email - %s", userCode, email));
-                            return Mono.just(newVersion);
-                });
-    }
-
-    public Mono<Void> switch2FaStatus(String userCode, Long version){
+/*    public Mono<Void> switch2FaStatus(String userCode, Long version){
         return userRepository.getUserByUserCode(userCode)
                 .flatMap(user ->{
                     if (user.getTwoAuthStatus())
@@ -184,42 +177,42 @@ public class FacadeUtils {
                                             .flatMap(updateUser -> getVersionException(updateUser.getVersion()))))
                                     .then();
                 });
-    }
+    }*/
 
 
-    public Mono<Void> change2FaStatus(String userCode, Boolean status, Long version){
-        return userRepository.switchTwoFactorStatus(userCode, status, version)
-                            .filter(newVersion -> newVersion!=0)
-                            .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                                .flatMap(user -> getVersionException(user.getVersion())))
-                            .then();
-    }
+//    public Mono<Void> change2FaStatus(String userCode, Boolean status, Long version){
+//        return userRepository.switchTwoFactorStatus(userCode, status, version)
+//                            .filter(newVersion -> newVersion!=0)
+//                            .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                                .flatMap(user -> getVersionException(user.getVersion())))
+//                            .then();
+//    }
 
 
-    public Mono<Void> changePasswordForRecovery(Long version, String password, Instant expiredDate, String userCode){
-            if (expiredDate.isBefore(Instant.now())) {
-                return userRepository.clearRecoveryCode(userCode, version)
-                        .flatMap(newVersion -> Mono.empty())
-                        .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));
-            }
-            else {
-                String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
-                return userRepository.changePassword(userCode, bcryptPassword, version)
-                        .filter(newVersion -> newVersion!=0)
-                        .switchIfEmpty(getNotFoundException("Password already changed"))
-                        .flatMap(newVersion -> Mono.empty());
+//    public Mono<Void> changePasswordForRecovery(Long version, String password, Instant expiredDate, String userCode){
+//            if (expiredDate.isBefore(Instant.now())) {
+//                return userRepository.clearRecoveryCode(userCode, version)
+//                        .flatMap(newVersion -> Mono.empty())
+//                        .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));
+//            }
+//            else {
+//                String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
+//                return userRepository.changePassword(userCode, bcryptPassword, version)
+//                        .filter(newVersion -> newVersion!=0)
+//                        .switchIfEmpty(getNotFoundException("Password already changed"))
+//                        .flatMap(newVersion -> Mono.empty());
+//
+//            }
+//    }
 
-            }
-    }
-
-    public Mono<Void> simpleChangePassword(Long version, String userCode, String password){
-        String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
-        return userRepository.changePassword(userCode, bcryptPassword, version)
-                .filter(newVersion -> newVersion !=0)
-                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                        .flatMap(user -> getVersionException(user.getVersion())))
-                        .then();
-    }
+//    public Mono<Void> simpleChangePassword(Long version, String userCode, String password){
+//        String bcryptPassword = springSecurityConfig.bCryptPasswordEncoder().encode(password);
+//        return userRepository.changePassword(userCode, bcryptPassword, version)
+//                .filter(newVersion -> newVersion !=0)
+//                .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                        .flatMap(user -> getVersionException(user.getVersion())))
+//                        .then();
+//    }
 
 //    public Mono<Void> removeAllUserTokens(String tokenId, String userCode){
 //        return getUserTokenByTokenId(tokenId, false)
@@ -229,20 +222,20 @@ public class FacadeUtils {
 //    }
 
 
-    public Mono<String> generateRecoveryCode(Long version, String userCode){
-        return Mono.defer(()->{
-            String recoveryCode = UUID.randomUUID().toString();
-            Instant expiredDate = Instant.now().plus(Duration.ofHours(1));
-            return userRepository.changeRecoveryCode(userCode, recoveryCode, expiredDate, version)
-                    .filter(newVersion -> newVersion != 0)
-                    .switchIfEmpty(userRepository.getUserByUserCode(userCode)
-                            .flatMap(user -> getVersionException(user.getVersion())))
-                    .flatMap(newVersion -> {
-                        log.info(String.format("For user %s created recover code", userCode));
-                        return Mono.just(recoveryCode);
-                    });
-        });
-    }
+//    public Mono<String> generateRecoveryCode(Long version, String userCode){
+//        return Mono.defer(()->{
+//            String recoveryCode = UUID.randomUUID().toString();
+//            Instant expiredDate = Instant.now().plus(Duration.ofHours(1));
+//            return userRepository.changeRecoveryCode(userCode, recoveryCode, expiredDate, version)
+//                    .filter(newVersion -> newVersion != 0)
+//                    .switchIfEmpty(userRepository.getUserByUserCode(userCode)
+//                            .flatMap(user -> getVersionException(user.getVersion())))
+//                    .flatMap(newVersion -> {
+//                        log.info(String.format("For user %s created recover code", userCode));
+//                        return Mono.just(recoveryCode);
+//                    });
+//        });
+//    }
 
 
     public Mono<QrCodeData> generateQrCode(String userCode){
@@ -252,51 +245,48 @@ public class FacadeUtils {
                 .flatMap(user -> twoFactorService.generateQrCode(user.getEmail(), user.getTwoFactorSecret()));
     }
 
-    public Mono<String> generate2FaDeviceToken(Long userId){
-        String deviceToken = UUID.randomUUID().toString();
-        return twoFactorRepository.save(new TwoFactor(userId, deviceToken, Instant.now()))
-                .flatMap(user -> tokenService.createAccessToken(Map.of("device_token", deviceToken), TokenExpiredDate.TWO_FACTOR.getName()));
-    }
+//    public Mono<String> generate2FaDeviceToken(Long userId){
+//        String deviceToken = UUID.randomUUID().toString();
+//        return twoFactorRepository.save(new TwoFactor(userId, deviceToken, Instant.now()))
+//                .flatMap(user -> tokenService.createAccessToken(Map.of("device_token", deviceToken), TokenExpiredDate.TWO_FACTOR.getName()));
+//    }
 
-    public Mono<TokensResponse> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
-        return tokenService.createAccessToken(Map.of("user_code", user.getUserCode(), "role", user.getRole()), TokenExpiredDate.SECURITY.getName())
-                .zipWith(tokenService.createRefToken(user.getId()))
-                .flatMap(tokens -> saveMetaDataForToken(deviceData, tokens.getT2().getId(), ipAddr)
-                        .flatMap(tokenMeta -> {
-                            log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
-                            return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(), tokens.getT2().getTokenId(), user.getVersion()));
-                        }));
-    }
+//    public Mono<TokensResponse> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
+//        return tokenService.createAccessToken(Map.of("user_code", user.getUserCode(), "role", user.getRole()), TokenExpiredDate.SECURITY.getName())
+//                .zipWith(tokenService.createRefToken(user.getId()))
+//                .flatMap(tokens -> saveMetaDataForToken(deviceData, tokens.getT2().getId(), ipAddr)
+//                        .flatMap(tokenMeta -> {
+//                            log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
+//                            return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(), tokens.getT2().getTokenId(), user.getVersion()));
+//                        }));
+//    }
 
-    public Mono<TokenMeta> saveMetaDataForToken(DeviceData deviceData, Long tokenId, String ipAddr){
-        return tokenMetaRepository.save(new TokenMeta(tokenId, ipAddr, deviceData.getName(), deviceData.getApplicationType()));
-    }
 
-    public Mono<CallMessage> createMessageForRestorePsw(String token, String userCode){
+    public Mono<MailMessage> createMessageForRestorePsw(String token, String userCode){
         return Mono.defer(()->{
             PasswordRestoreData passwordRestoreData = new PasswordRestoreData(recoverUrl+token);
-            return Mono.just(new CallMessage(userCode, passwordRestoreData));
+            return Mono.just(new MailMessage(userCode, passwordRestoreData));
         });
     }
 
-    public Mono<CallMessage> createMessageForSaveUser(String userCode, String email, String password){
+    public Mono<MailMessage> createMessageForSaveUser(String userCode, String email, String password){
         return Mono.defer(()->{
             SaveUserData saveUserData = new SaveUserData(email, password);
-            return Mono.just(new CallMessage(userCode, saveUserData));
+            return Mono.just(new MailMessage(userCode, saveUserData));
         });
     }
 
 
 
-    public Mono<CallMessage> createMessageForContactUpdate(String userCode, String contact, String type){
+    public Mono<MailMessage> createMessageForContactUpdate(String userCode, String contact, String type){
         return Mono.defer(()->{
             if (type.equals(UserChangeContacts.ChangeEmail.class.getName())){
                 EditEmailData editEmailData = new EditEmailData(contact);
-                return Mono.just(new CallMessage(userCode, editEmailData));
+                return Mono.just(new MailMessage(userCode, editEmailData));
             }
             else {
                 EditPhoneData editPhoneData = new EditPhoneData(contact);
-                return Mono.just(new CallMessage(userCode, editPhoneData));
+                return Mono.just(new MailMessage(userCode, editPhoneData));
             }
         });
     }

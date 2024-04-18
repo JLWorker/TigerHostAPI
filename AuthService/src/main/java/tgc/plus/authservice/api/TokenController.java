@@ -35,18 +35,18 @@ public class TokenController {
     @Autowired
     private TokenFacade tokenFacade;
 
-    @Operation(summary = "Update access token")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions"),
-            @ApiResponse(responseCode = "401", content = @Content(), headers = {
-                    @Header(name = "Logout", description = "Refresh token not exist or expired, need logout", schema = @Schema(example = "true"))
-            },description = "Refresh token not exist or expired"),
-            @ApiResponse(responseCode = "200", description = "Success tokens update")
-    })
-    @PatchMapping("/update")
-    public Mono<UpdateTokenResponse> updateToken(@RequestBody @Valid UpdateToken updateToken){
-        return tokenFacade.updateAccessToken(updateToken);
-    }
+//    @Operation(summary = "Update access token")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions"),
+//            @ApiResponse(responseCode = "401", content = @Content(), headers = {
+//                    @Header(name = "Logout", description = "Refresh token not exist or expired, need logout", schema = @Schema(example = "true"))
+//            },description = "Refresh token not exist or expired"),
+//            @ApiResponse(responseCode = "200", description = "Success tokens update")
+//    })
+//    @PatchMapping("/update")
+//    public Mono<UpdateTokenResponse> updateToken(@RequestBody @Valid UpdateToken updateToken){
+//        return tokenFacade.updateAccessToken(updateToken);
+//    }
 
     @Operation(summary = "Delete token device", description = "Delete token for connected device to account")
     @Parameters(value = {

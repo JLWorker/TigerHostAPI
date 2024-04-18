@@ -12,29 +12,44 @@ import java.time.Instant;
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserByUserCode(String userCode);
-     Mono<User> getUserByUserCodeAndVersion(String userCode, Long version);
-     Mono<User> getUserByEmail(String email);
-     Mono<User> getUserByRecoveryCode(String recoveryCode);
      Mono<User> getUserById(Long id);
 
-     @Query("UPDATE users SET phone= :phone, version = version+1 WHERE user_code = :userCode and version = :reqVersion RETURNING version")
-     Mono<Long> changePhone(String phone, String userCode, Long reqVersion);
+     Mono<User> getUserByEmail(String email);
 
-     @Query("UPDATE users SET email= :email, version = version+1 WHERE user_code = :userCode and version = :reqVersion RETURNING version")
-     Mono<Long> changeEmail(String email, String userCode, Long reqVersion);
+     @Query("SELECT * FROM users WHERE user_code=:userCode FOR SHARE")
+     Mono<User> getBlockForUserByUserCode(String userCode);
 
-     @Query("UPDATE users SET recovery_code= :recoveryCode, code_expired_date= :expiredTime, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
-     Mono<Long> changeRecoveryCode(String userCode, String recoveryCode, Instant expiredTime, Long reqVersion);
+     @Query("SELECT * FROM users WHERE recovery_code=:recoveryCode FOR SHARE")
+     Mono<User> getBlockForUserByRecoveryCode(String recoveryCode);
 
-     @Query("UPDATE users SET password= :password, code_expired_date= null, recovery_code= null, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
-     Mono<Long> changePassword(String userCode, String password, Long reqVersion);
+     @Query("SELECT * FROM users WHERE email=:email FOR SHARE")
+     Mono<User> getBlockForUserByEmail(String email);
 
-     @Query("UPDATE users SET code_expired_date= null, recovery_code= null, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
-     Mono<Long> clearRecoveryCode(String userCode, Long reqVersion);
+     @Modifying
+     @Query("UPDATE users SET phone= :phone  WHERE user_code = :userCode")
+     Mono<Long> changePhone(String phone, String userCode);
 
-     @Query("UPDATE users SET two_auth_status= :status, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
+     @Modifying
+     @Query("UPDATE users SET email= :email WHERE user_code = :userCode")
+     Mono<Long> changeEmail(String email, String userCode);
+
+     @Modifying
+     @Query("UPDATE users SET recovery_code= :recoveryCode, code_expired_date= :expiredTime WHERE user_code= :userCode")
+     Mono<Long> changeRecoveryCode(String userCode, String recoveryCode, Instant expiredTime);
+
+     @Modifying
+     @Query("UPDATE users SET password= :password, code_expired_date= null, recovery_code= null WHERE user_code= :userCode")
+     Mono<Long> changePassword(String userCode, String password);
+
+     @Modifying
+     @Query("UPDATE users SET code_expired_date= null, recovery_code= null WHERE user_code= :userCode")
+     Mono<Long> clearRecoveryCode(String userCode);
+
+     @Modifying
+     @Query("UPDATE users SET two_auth_status= :status WHERE user_code= :userCode")
      Mono<Long> switchTwoFactorStatus(String userCode, Boolean status, Long reqVersion);
 
-     @Query("UPDATE users SET two_auth_status= true, two_factor_secret= :secret, version = version+1 WHERE user_code= :userCode and version= :reqVersion RETURNING version")
+     @Modifying
+     @Query("UPDATE users SET two_auth_status= true, two_factor_secret= :secret WHERE user_code= :userCode")
      Mono<Long> updateTwoFactorSecret(String userCode, String secret, Long reqVersion);
 }

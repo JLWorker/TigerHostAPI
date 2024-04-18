@@ -7,10 +7,10 @@ import java.util.Collection;
 
 public class UserDetail implements UserDetails {
 
-    private Collection<GrantedAuthority> authorities;
-    private String userCode;
-    private String password;
-    private boolean active;
+    private final Collection<GrantedAuthority> authorities;
+    private final String userCode;
+    private final String password;
+    private final boolean active;
 
     public UserDetail(Collection<GrantedAuthority> authorities, String userCode, String password, boolean active) {
         this.authorities = authorities;

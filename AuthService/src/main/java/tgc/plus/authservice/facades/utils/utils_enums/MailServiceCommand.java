@@ -1,9 +1,9 @@
-package tgc.plus.authservice.facades.utils;
+package tgc.plus.authservice.facades.utils.utils_enums;
 
 import lombok.Getter;
 
 @Getter
-public enum CommandsNames {
+public enum MailServiceCommand {
 
     SAVE("save"),
     UPDATE_PHONE("update_ph"),
@@ -13,7 +13,7 @@ public enum CommandsNames {
 
     private final String name;
 
-    CommandsNames(String name) {
+    MailServiceCommand(String name) {
         this.name = name;
     }
 

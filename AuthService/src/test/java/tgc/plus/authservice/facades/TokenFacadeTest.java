@@ -1,7 +1,5 @@
 package tgc.plus.authservice.facades;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,9 +17,6 @@ import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.dto.user_dto.UserData;
 import tgc.plus.authservice.dto.user_dto.UserLogin;
-import tgc.plus.authservice.repository.UserTokenRepository;
-import tgc.plus.authservice.services.TokenService;
-import tgc.plus.authservice.services.utils.TokenExpiredDate;
 
 import java.util.List;
 
@@ -47,18 +41,18 @@ public class TokenFacadeTest {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    @Test
-    public void testUpdate(){
-        UpdateToken updateToken = new UpdateToken("e3e28d10-e0fd-4536-8c21-d2081099aab8");
-        tokenFacade.updateAccessToken(updateToken)
-                .flatMap(updateTokenResponse -> {
-                    logger.info(String.format("Tokens: %s, %s", updateTokenResponse.getAccessToken(), updateTokenResponse.getRefreshToken()));
-                    return Mono.empty();
-                })
-                .doOnError(e ->logger.error(e.getMessage()))
-                .subscribe();
-
-    }
+//    @Test
+//    public void testUpdate(){
+//        UpdateToken updateToken = new UpdateToken("e3e28d10-e0fd-4536-8c21-d2081099aab8");
+//        tokenFacade.updateAccessToken(updateToken)
+//                .flatMap(updateTokenResponse -> {
+//                    logger.info(String.format("Tokens: %s, %s", updateTokenResponse.getAccessToken(), updateTokenResponse.getRefreshToken()));
+//                    return Mono.empty();
+//                })
+//                .doOnError(e ->logger.error(e.getMessage()))
+//                .subscribe();
+//
+//    }
 
     @Test
     public void deleteAllTokens(){

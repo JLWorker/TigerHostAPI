@@ -5,13 +5,11 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import reactor.core.scheduler.Schedulers;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 import tgc.plus.authservice.configs.utils.CustomPartitioner;
-import tgc.plus.authservice.dto.kafka_message_dto.CallMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
 
 import java.util.HashMap;
@@ -21,19 +19,19 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     @Value("${kafka.producer.retries}")
-    Integer retriesConfig;
+    private Integer retriesConfig;
 
     @Value("${kafka.producer.retries_backoff}")
-    Long retriesBackoff;
+    private Long retriesBackoff;
 
     @Value("${kafka.bootstrap-servers}")
-    String serverConfig;
+    private String serverConfig;
 
     @Value("${kafka.sender.scheduler.result.thread}")
-    Integer schedulerResultThread;
+    private Integer schedulerResultThread;
 
     @Value("${kafka.sender.scheduler.result.queue}")
-    Integer schedulerResultQueue;
+    private Integer schedulerResultQueue;
 
     @Bean
     public Map<String, Object> producerConfigs(){

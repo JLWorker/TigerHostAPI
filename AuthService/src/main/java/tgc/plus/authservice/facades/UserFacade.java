@@ -2,24 +2,47 @@ package tgc.plus.authservice.facades;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.utils.IpValid;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.PasswordRestoreData;
+import tgc.plus.authservice.exceptions.exceptions_elements.NotFoundException;
+import tgc.plus.authservice.exceptions.exceptions_elements.RecoveryCodeExpiredException;
+import tgc.plus.authservice.facades.utils.annotations.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
+import tgc.plus.authservice.dto.jwt_claims_dto.TwoFactorTokenClaims;
+import tgc.plus.authservice.dto.kafka_message_dto.FeedbackMessage;
+import tgc.plus.authservice.dto.kafka_message_dto.MailMessage;
+import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDTO;
+import tgc.plus.authservice.dto.kafka_message_dto.headers.MailHeadersDTO;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
+import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.*;
+import tgc.plus.authservice.entities.TwoFactor;
+import tgc.plus.authservice.exceptions.exceptions_elements.InvalidRequestException;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;
-import tgc.plus.authservice.facades.utils.CommandsNames;
-import tgc.plus.authservice.facades.utils.EventsTypesNames;
-import tgc.plus.authservice.facades.utils.FacadeUtils;
+import tgc.plus.authservice.facades.utils.*;
+import tgc.plus.authservice.facades.utils.factories.ContactUserRepositoryFactory;
+import tgc.plus.authservice.facades.utils.utils_enums.FeedbackEventType;
+import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
+import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
+import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
+import tgc.plus.authservice.services.utils.TokenExpiredDate;
 
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -27,28 +50,64 @@ import java.util.List;
 public class UserFacade {
 
     @Autowired
-    UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    TokenService tokenService;
+    private FacadeUtils facadeUtils;
 
     @Autowired
-    UserService userService;
+    private MainFacadeUtils mainFacadeUtils;
 
     @Autowired
-    FacadeUtils facadeUtils;
+    private SpringSecurityConfig springSecurityConfig;
+
+    @Value("${kafka.topic.mail-service}")
+    private String mailTopic;
 
     @Autowired
-    SpringSecurityConfig springSecurityConfig;
+    private UserRepository userRepository;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private TwoFactorRepository twoFactorRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${kafka.topic.feedback-service}")
+    private String feedbackTopic;
+
+    @Value("${recovery.expired_date}")
+    private Integer recoveryExpiredTime;
+
+    @Value("${recovery.tgc.web.url}")
+    private String recoveryUrl;
+
+    @Autowired
+    private ContactUserRepositoryFactory contactUserRepositoryFactory;
 
     @Transactional
     public Mono<Void> registerUser(UserData userData) {
-        return facadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
-                .then(facadeUtils.getUserByEmailReg(userData.getEmail()))
+        return mainFacadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
                     .then(userService.save(userData))
-                            .flatMap(user -> facadeUtils.createMessageForSaveUser(user.getUserCode(), userData.getEmail(), userData.getPassword()))
-                                    .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.SAVE.getName()))
-                .doOnError(e -> log.error(e.getMessage()));
+                    .flatMap(user -> {
+                        MailMessage mailMessage = new MailMessage(user.getUserCode(), new SaveUserData(userData.getEmail(), user.getPassword()));
+                        return mainFacadeUtils.sendMessageInKafkaTopic(mailMessage, mailTopic, new MailHeadersDTO(MailServiceCommand.SAVE.getName()),
+                                PartitioningStrategy.BASIC_MESSAGES);
+                    })
+                    .onErrorResume(e -> {
+                        if (e instanceof DuplicateKeyException){
+                           return mainFacadeUtils.getInvalidRequestException(String.format("User with email %s already exist", userData.getEmail()));
+                        }
+                        else if (!(e instanceof InvalidRequestException)){
+                            log.error(e.getMessage());
+                            return mainFacadeUtils.getServerException();
+                        }
+                        else
+                            return Mono.error(e);
+                    });
     }
 
 
@@ -56,86 +115,126 @@ public class UserFacade {
     public Mono<TokensResponse> loginUser(UserLogin userLogin, @IpValid String ipAddr) {
         UserData userData = userLogin.getUserData();
         DeviceData deviceData = userLogin.getDeviceData();
-        return facadeUtils.getUserByEmailLog(userData.getEmail())
-                .flatMap(user -> facadeUtils.checkCredentials(user.getUserCode(), userData.getPassword(), List.of(new SimpleGrantedAuthority(user.getRole())))
-                        .then(Mono.defer(() -> {
-                            if (user.getTwoAuthStatus())
-                                return facadeUtils.generate2FaDeviceToken(user.getId())
-                                        .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
-                            else
-                                return facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_TOKENS.getName())
-                                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))
-                                                .then(facadeUtils.generatePairTokens(user, deviceData, ipAddr));
-                        })))
-        .doOnError(e -> {
-            if (!(e instanceof TwoFactorActiveException))
+        return springSecurityConfig.reactiveLoginAuthenticationManager()
+                .authenticate(new UsernamePasswordAuthenticationToken(userData.getEmail(), userData.getPassword()))
+                .then(userRepository.getUserByEmail(userData.getEmail()))
+                .flatMap(user -> {
+                    if (user.getTwoAuthStatus()) {
+                        String deviceToken = UUID.randomUUID().toString();
+                        TwoFactor twoFactor = new TwoFactor(user.getId(), deviceToken, Instant.now());
+                        return twoFactorRepository.save(twoFactor)
+                                .then(tokenService.createAccessToken(new TwoFactorTokenClaims(deviceToken), TokenExpiredDate.TWO_FACTOR.getName()))
+                                .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
+                    } else {
+                        return mainFacadeUtils.generatePairTokens(user, deviceData, ipAddr)
+                                .flatMap(response -> mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_TOKENS.getName(), null, FeedbackMessage.class)
+                                        .flatMap(feedbackMessage -> mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)
+                                             .thenReturn(response)));
+                    }
+                })
+                .onErrorResume(e -> {
+                    if (!(e instanceof AuthenticationException) && !(e instanceof TwoFactorActiveException)) {
+                        log.error(e.getMessage());
+                        return mainFacadeUtils.getServerException();
+                    } else
+                        return Mono.error(e);
+                });
+
+    }
+
+    @Transactional
+    public Mono<Void> changeAccountContacts(String newContact, MailServiceCommand command, Payload payload) {
+        return mainFacadeUtils.getPrincipal()
+                .flatMap(userCode -> userRepository.getBlockForUserByUserCode(userCode)
+                    .then(contactUserRepositoryFactory.execSqlQueryForContact(command, newContact, userCode))
+                    .then(mainFacadeUtils.createKafkaMessage(userCode, payload, MailMessage.class)
+                            .zipWith(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class)))
+                    .flatMap(messages -> mainFacadeUtils.sendMessageInKafkaTopic(messages.getT1(), mailTopic, new MailHeadersDTO(command.getName()), PartitioningStrategy.MESSAGES_MAKING_CHANGES)
+                            .then(mainFacadeUtils.sendMessageInKafkaTopic(messages.getT2(), feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
+        )
+        .onErrorResume(e -> {
                 log.error(e.getMessage());
+                return mainFacadeUtils.getServerException();
         });
+    }
 
+
+
+    @Transactional
+    public Mono<Void> changeAccountPassword(RestorePassword restorePassword){
+        return mainFacadeUtils.getPrincipal()
+                .flatMap(userCode -> mainFacadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
+                .then(userRepository.getBlockForUserByUserCode(userCode))
+                .then(userRepository.changePassword(userCode, restorePassword.getPassword()))
+                .then(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class))
+                        .flatMap(feedbackMessage -> mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
+                .onErrorResume(e -> {
+                    if (!(e instanceof InvalidRequestException)){
+                        log.error(e.getMessage());
+                        return mainFacadeUtils.getServerException();
+                    }
+                    else
+                        return Mono.error(e);
+                });
     }
 
     @Transactional
-    public Mono<Void> changeAccountPhone(UserChangeContacts userChangeContacts, Long version) {
-        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
-                String userCode = securityContext.getAuthentication().getPrincipal().toString();
-                return facadeUtils.updatePhoneNumber(userChangeContacts.getPhone(), userCode, version)
-                        .then(facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getPhone(), UserChangeContacts.ChangePhone.class.getName())
-                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.UPDATE_PHONE.getName()))
-                                .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
-                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
-                }).doOnError(e->log.error(e.getMessage()));
-
-    }
-
-    @Transactional
-    public Mono<Void> changeAccountEmail(UserChangeContacts userChangeContacts, Long version) {
-        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
-            String userCode = securityContext.getAuthentication().getPrincipal().toString();
-            return facadeUtils.updateEmail(userChangeContacts.getEmail(), userCode, version)
-                    .then(facadeUtils.createMessageForContactUpdate(userCode, userChangeContacts.getEmail(), UserChangeContacts.ChangeEmail.class.getName())
-                         .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.UPDATE_EMAIL.getName()))
-                            .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
-                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
-        }).doOnError(e->log.error(e.getMessage()));
-    }
-
-    @Transactional
-    public Mono<Void> changeAccountPassword(RestorePassword restorePassword, Long version){
-        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
-            String userCode = securityContext.getAuthentication().getPrincipal().toString();
-            return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
-                    .then(facadeUtils.simpleChangePassword(version, userCode, restorePassword.getPassword())
-                            .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
-                            .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, userCode)));
-        }).doOnError(e -> log.error(e.getMessage()));
-    }
-
-    @Transactional
-    public Mono<Void> generateRecoveryCode(RestorePassword restorePassword){
-        return facadeUtils.getUserByEmailLog(restorePassword.getEmail())
-                .flatMap(user -> facadeUtils.generateRecoveryCode(user.getVersion(), user.getUserCode())
-                        .flatMap(token -> facadeUtils.createMessageForRestorePsw(token, user.getUserCode())
-                                .flatMap(message -> facadeUtils.sendMessageInCallService(message, CommandsNames.SEND_RECOVERY_CODE.getName()))))
-                .doOnError(e -> log.error(e.getMessage()));
+    public Mono<Void> generateRecoveryCode(String email){
+        return userRepository.getBlockForUserByEmail(email)
+                .filter(Objects::nonNull)
+                .switchIfEmpty(mainFacadeUtils.getNotFoundException(String.format("User with email %s not exist", email)))
+                .flatMap(user -> {
+                    String recoveryCode = UUID.randomUUID().toString();
+                    Instant expiredDate = Instant.now().plus(Duration.ofHours(recoveryExpiredTime));
+                    return userRepository.changeRecoveryCode(user.getUserCode(), recoveryCode, expiredDate)
+                            .then(mainFacadeUtils.createKafkaMessage(user.getUserCode(), new PasswordRestoreData(recoveryUrl+recoveryCode), MailMessage.class))
+                            .flatMap(mailMessage -> mainFacadeUtils.sendMessageInKafkaTopic(mailMessage, mailTopic, new MailHeadersDTO(MailServiceCommand.SEND_RECOVERY_CODE.getName()), PartitioningStrategy.BASIC_MESSAGES));
+                })
+                .onErrorResume(e -> {
+                    if (!(e instanceof NotFoundException)){
+                        log.error(e.getMessage());
+                        return mainFacadeUtils.getServerException();
+                    }
+                    else
+                        return Mono.error(e);
+                });
     }
 
 
     @Transactional(noRollbackForClassName = "RecoveryCodeExpiredException")
-    public Mono<Void> checkAccountRecoveryCode(RestorePassword restorePassword){
-        return facadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
-                .then(facadeUtils.getUserByRecoveryCode(restorePassword.getCode())
-                        .flatMap(user -> facadeUtils.changePasswordForRecovery(user.getVersion(), restorePassword.getPassword(), user.getCodeExpiredDate(), user.getUserCode())
-                                .then(facadeUtils.createMessageForUpdateUserInfo(EventsTypesNames.UPDATE_ACCOUNT.getName()))
-                                .flatMap(feedbackMessage -> facadeUtils.sendMessageInFeedbackService(feedbackMessage, user.getUserCode()))))
-                .doOnError(e -> log.error(e.getMessage()));
+    public Mono<Void> checkAccountRecoveryCode(String password, String passwordConfirm, String code){
+        return mainFacadeUtils.checkPasswords(password, passwordConfirm)
+                .then(userRepository.getBlockForUserByRecoveryCode(code))
+                .filter(Objects::nonNull)
+                .switchIfEmpty(mainFacadeUtils.getNotFoundException("Recovery code was used"))
+                .flatMap(user -> {
+                    if(user.getCodeExpiredDate().isBefore(Instant.now()))
+                        return userRepository.clearRecoveryCode(user.getUserCode())
+                                .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));
+                    else
+                        return userRepository.changePassword(user.getUserCode(), bCryptPasswordEncoder.encode(password))
+                                .then(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class))
+                                .flatMap(message -> mainFacadeUtils.sendMessageInKafkaTopic(message, feedbackTopic, new FeedbackHeadersDTO(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES));
+                })
+                .onErrorResume(e -> {
+                    if(!(e instanceof NotFoundException) && !(e instanceof RecoveryCodeExpiredException)){
+                        log.error(e.getMessage());
+                        return mainFacadeUtils.getServerException();
+                    }
+                    else
+                        return Mono.error(e);
+                });
     }
 
     @Transactional(readOnly = true)
-    public Mono<UserInfoResponse> getInfoAboutAccount(Long version){
-        return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
-               String userCode =  securityContext.getAuthentication().getPrincipal().toString();
-               return facadeUtils.getUserInfoByVersion(version, userCode);
-        }).doOnError(e -> log.error(e.getMessage()));
+    public Mono<UserInfoResponse> getInfoAboutAccount(){
+        return mainFacadeUtils.getPrincipal()
+                .flatMap(userCode -> userRepository.getUserByUserCode(userCode))
+                .flatMap(user -> Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())))
+                .onErrorResume(e -> {
+                    log.error(e.getMessage());
+                    return mainFacadeUtils.getServerException();
+                });
     }
 
 

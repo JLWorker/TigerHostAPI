@@ -8,8 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.exceptions.exceptions_elements.ServerException;
 import tgc.plus.authservice.services.UserService;
 
 @Slf4j
@@ -39,8 +41,14 @@ public class LoginReactiveAuthenticationManager implements ReactiveAuthenticatio
     public Mono<UserDetails> authenticateToken(UsernamePasswordAuthenticationToken authenticationToken) {
         if(authenticationToken != null) {
             return userService.findByUsername(authenticationToken.getPrincipal().toString())
-                    .switchIfEmpty(raiseBadCredentials())
-                    .doOnError(e -> log.error(e.getMessage()));
+                    .onErrorResume(e -> {
+                        if(!(e instanceof UsernameNotFoundException)){
+                            log.error(e.getMessage());
+                            return Mono.error(new ServerException("Server cannot process the request"));
+                        }
+                        else
+                            return Mono.error(e);
+                    });
         }
         else {
             return raiseBadCredentials();

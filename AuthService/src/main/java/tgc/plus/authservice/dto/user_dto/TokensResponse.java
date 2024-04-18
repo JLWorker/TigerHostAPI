@@ -23,14 +23,9 @@ public class TokensResponse {
     @Schema(example = "ID-74683729...")
     private String tokenId;
 
-    @JsonProperty("user_version")
-    @Schema(example = "1")
-    private Long userVersion;
-
-    public TokensResponse(String accessToken, String refreshToken, String tokenId, Long userVersion) {
+    public TokensResponse(String accessToken, String refreshToken, String tokenId) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.tokenId = tokenId;
-        this.userVersion = userVersion;
     }
 }

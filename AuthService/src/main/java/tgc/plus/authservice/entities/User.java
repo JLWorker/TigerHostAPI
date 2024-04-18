@@ -25,10 +25,6 @@ public class User {
     @Column("user_code")
     private String userCode;
 
-    @Version
-    @Column("version")
-    private Long version;
-
     @Column("two_auth_status")
     private Boolean twoAuthStatus;
 
