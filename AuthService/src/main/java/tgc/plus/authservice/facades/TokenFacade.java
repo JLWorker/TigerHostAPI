@@ -1,5 +1,6 @@
 package tgc.plus.authservice.facades;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +18,10 @@ import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDTO;
 import tgc.plus.authservice.dto.tokens_dto.*;
 import tgc.plus.authservice.exceptions.exceptions_elements.NotFoundException;
 import tgc.plus.authservice.exceptions.exceptions_elements.RefreshTokenException;
+import tgc.plus.authservice.facades.utils.factories.KafkaMessageFactory;
 import tgc.plus.authservice.facades.utils.utils_enums.FeedbackEventType;
 import tgc.plus.authservice.facades.utils.MainFacadeUtils;
+import tgc.plus.authservice.facades.utils.utils_enums.KafkaMessageType;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
@@ -31,22 +34,15 @@ import java.util.Objects;
 @Service
 @Slf4j
 @Validated
+@RequiredArgsConstructor
 public class TokenFacade {
 
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserTokenRepository userTokenRepository;
-
-    @Autowired
-    private MainFacadeUtils mainFacadeUtils;
-
-    @Autowired
-    private TokenMetaRepository tokenMetaRepository;
-
-    @Autowired
-    private CustomDatabaseClientRepository customDatabaseClientRepository;
+    private final TokenService tokenService;
+    private final UserTokenRepository userTokenRepository;
+    private final MainFacadeUtils mainFacadeUtils;
+    private final KafkaMessageFactory kafkaMessageFactory;
+    private final TokenMetaRepository tokenMetaRepository;
+    private final CustomDatabaseClientRepository customDatabaseClientRepository;
 
     @Value("${kafka.topic.feedback-service}")
     private String feedbackTopic;
@@ -75,10 +71,8 @@ public class TokenFacade {
                     .filter(Objects::nonNull)
                     .switchIfEmpty(mainFacadeUtils.getNotFoundException("Refresh token already removed"))
                     .then(userTokenRepository.removeUserTokenByTokenId(tokenId))
-                    .then(Mono.defer(() ->{
-                        FeedbackMessage feedbackMessage = new FeedbackMessage(null, FeedbackEventType.UPDATE_TOKENS.getName());
-                        return mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES);
-                    }))
+                    .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
+                                    .flatMap(kafkaMessage -> mainFacadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
                     .onErrorResume(e -> {
                         if(!(e instanceof NotFoundException)){
                             log.error(e.getMessage());
@@ -99,10 +93,8 @@ public class TokenFacade {
                     .filter(list -> list.stream().anyMatch(el->el.getTokenId().equals(tokenId)))
                     .switchIfEmpty(mainFacadeUtils.getRefreshTokenException())
                     .flatMap(list -> userTokenRepository.deleteUserTokensExceptTokenId(tokenId, list.get(0).getUserId()))
-                    .then(Mono.defer(() ->{
-                        FeedbackMessage feedbackMessage = new FeedbackMessage(null, FeedbackEventType.UPDATE_TOKENS.getName());
-                        return mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES);
-                    }))
+                    .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
+                            .flatMap(kafkaMessage -> mainFacadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
                     .onErrorResume(e -> {
                          if (!(e instanceof RefreshTokenException)){
                             log.error(e.getMessage());

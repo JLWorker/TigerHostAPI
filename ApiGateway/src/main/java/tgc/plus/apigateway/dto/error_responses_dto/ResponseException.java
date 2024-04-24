@@ -1,4 +1,4 @@
-package tgc.plus.apigateway.dto;
+package tgc.plus.apigateway.dto.error_responses_dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class ResponseException {
     @JsonProperty
     private String message;
 
-    public ResponseException(String path, String error, Integer status, String message) {
+    public ResponseException(String path, String error, Integer status,  String message) {
         this.instant = String.valueOf(LocalDateTime.now());
         this.path = path;
         this.error = error;

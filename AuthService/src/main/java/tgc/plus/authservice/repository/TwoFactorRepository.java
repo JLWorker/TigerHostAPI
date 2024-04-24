@@ -10,7 +10,7 @@ public interface TwoFactorRepository extends ReactiveCrudRepository<TwoFactor, L
 
     Mono<TwoFactor> getTwoFactorByDeviceToken(String deviceToken);
 
-    Mono<Integer> removeTwoFactorByDeviceToken(String deviceToken);
+    Mono<Void> removeTwoFactorByDeviceToken(String deviceToken);
 
     @Modifying
     @Query("DELETE FROM two_factor WHERE create_date < now() - (interval '1 second' * :seconds)")

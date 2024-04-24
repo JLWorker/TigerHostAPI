@@ -1,6 +1,5 @@
 package tgc.plus.apigateway.filters;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +12,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Component
-public class IpAddressProxyFilter implements GatewayFilter {
+public class IpAddressProxyGatewayFilter implements GatewayFilter {
 
     private final String[] headersList = {
             "X-Forwarded-For",

@@ -11,11 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.exceptions_dto.VersionExceptionResponse;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditEmailData;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditPhoneData;
 import tgc.plus.authservice.dto.user_dto.*;
@@ -25,7 +25,7 @@ import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 @RestController
 @RequestMapping("/api/account")
 @Tag(name = "api/account", description = "User controller API")
-public class UserController extends UserFacade {
+public class UserController {
 
 
     @Autowired
@@ -59,7 +59,6 @@ public class UserController extends UserFacade {
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, description = "Access token", example = "Bearer_uhdYUhskn879jd...")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions"),
-            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = VersionExceptionResponse.class)),description = "Incorrect account version"),
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
                     @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
@@ -67,7 +66,7 @@ public class UserController extends UserFacade {
             @ApiResponse(responseCode = "200", description = "Success change phone number")
     })
     @PatchMapping("/phone")
-    public Mono<Void> changePhone(@RequestBody @Valid @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts) {
+    public Mono<Void> changePhone(@RequestBody @Valid @NotNull(message = "Contact can`t be null") @JsonView(UserChangeContacts.ChangePhone.class) UserChangeContacts userChangeContacts) {
         return userFacade.changeAccountContacts(userChangeContacts.getPhone(), MailServiceCommand.UPDATE_PHONE, new EditPhoneData(userChangeContacts.getPhone()));
     }
 
@@ -75,7 +74,6 @@ public class UserController extends UserFacade {
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, description = "Access token", example = "Bearer_uhdYUhskn879jd...")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions"),
-            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = VersionExceptionResponse.class)),description = "Incorrect account version"),
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
                     @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
@@ -91,7 +89,6 @@ public class UserController extends UserFacade {
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, description = "Access token", example = "Bearer_uhdYUhskn879jd...")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions or invalid passwords"),
-            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = VersionExceptionResponse.class)),description = "Incorrect account version"),
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
                     @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))
@@ -106,7 +103,6 @@ public class UserController extends UserFacade {
     @Operation(summary = "Get info about account", description = "This endpoint return main account information: email, phone number and 2fa status")
     @Parameter(name = "Authorization", in = ParameterIn.HEADER, description = "Access token", example = "Bearer_uhdYUhskn879jd...")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = VersionExceptionResponse.class)),description = "Incorrect account version"),
             @ApiResponse(responseCode = "401", content = @Content(), headers = {
                     @Header(name = "Expired", description = "Access token expired, need update", schema = @Schema(example = "true")),
                     @Header(name = "Logout", description = "User from access token not exist, need logout", schema = @Schema(example = "true"))

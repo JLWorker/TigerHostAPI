@@ -26,13 +26,13 @@ public class RestorePassword {
     private String email;
 
     @JsonView({Check.class, AuthChange.class})
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])[a-zA-Zа-яА-Я\\d+]{8,20}$",
             message = "Password invalid")
     @Schema(example = "12345")
     private String password;
 
     @JsonView({Check.class, AuthChange.class})
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).[^!@#$%\\-+^&*|\\\\/\\s]{8,20}$",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])[a-zA-Zа-яА-Я\\d+]{8,20}$",
             message = "Password invalid")
     @JsonProperty("password_confirm")
     @Schema(example = "12345")

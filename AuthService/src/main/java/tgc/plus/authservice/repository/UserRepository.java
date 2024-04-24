@@ -12,17 +12,22 @@ import java.time.Instant;
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserByUserCode(String userCode);
-     Mono<User> getUserById(Long id);
 
      Mono<User> getUserByEmail(String email);
 
-     @Query("SELECT * FROM users WHERE user_code=:userCode FOR SHARE")
+     @Query("SELECT * FROM users WHERE user_code=:userCode AND two_factor_secret IS NOT NULL")
+     Mono<User> getUserByUserCodeAndSecret(String userCode);
+
+     @Query("SELECT * FROM users JOIN two_factor ON (users.id = two_factor.user_id) WHERE two_factor.device_token=:twoFactorToken")
+     Mono<User> getUserByTwoFactorDeviceToken(String twoFactorToken);
+
+     @Query("SELECT * FROM users WHERE user_code=:userCode FOR NO KEY UPDATE ")
      Mono<User> getBlockForUserByUserCode(String userCode);
 
-     @Query("SELECT * FROM users WHERE recovery_code=:recoveryCode FOR SHARE")
+     @Query("SELECT * FROM users WHERE recovery_code=:recoveryCode FOR NO KEY UPDATE ")
      Mono<User> getBlockForUserByRecoveryCode(String recoveryCode);
 
-     @Query("SELECT * FROM users WHERE email=:email FOR SHARE")
+     @Query("SELECT * FROM users WHERE email=:email FOR NO KEY UPDATE ")
      Mono<User> getBlockForUserByEmail(String email);
 
      @Modifying
@@ -39,7 +44,7 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
      @Modifying
      @Query("UPDATE users SET password= :password, code_expired_date= null, recovery_code= null WHERE user_code= :userCode")
-     Mono<Long> changePassword(String userCode, String password);
+     Mono<Void> changePassword(String userCode, String password);
 
      @Modifying
      @Query("UPDATE users SET code_expired_date= null, recovery_code= null WHERE user_code= :userCode")
@@ -47,9 +52,9 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
      @Modifying
      @Query("UPDATE users SET two_auth_status= :status WHERE user_code= :userCode")
-     Mono<Long> switchTwoFactorStatus(String userCode, Boolean status, Long reqVersion);
+     Mono<Long> switchTwoFactorStatus(String userCode, Boolean status);
 
      @Modifying
      @Query("UPDATE users SET two_auth_status= true, two_factor_secret= :secret WHERE user_code= :userCode")
-     Mono<Long> updateTwoFactorSecret(String userCode, String secret, Long reqVersion);
+     Mono<Void> updateTwoFactorSecret(String userCode, String secret);
 }

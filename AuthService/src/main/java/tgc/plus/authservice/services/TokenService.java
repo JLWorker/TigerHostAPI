@@ -1,15 +1,13 @@
 package tgc.plus.authservice.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.netty.util.internal.ThreadLocalRandom;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,15 +16,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaims;
 import tgc.plus.authservice.dto.jwt_claims_dto.TokenClaims;
+import tgc.plus.authservice.dto.jwt_claims_dto.TwoFactorTokenClaims;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.entities.UserToken;
-import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenExpiredException;
-import tgc.plus.authservice.exceptions.exceptions_elements.AccessTokenCorruptionException;
+import tgc.plus.authservice.exceptions.exceptions_elements.AuthTokenExpiredException;
+import tgc.plus.authservice.exceptions.exceptions_elements.AuthTokenInvalidException;
 import tgc.plus.authservice.exceptions.exceptions_elements.RefreshTokenException;
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorTokenException;
 import tgc.plus.authservice.repository.UserTokenRepository;
-import tgc.plus.authservice.services.utils.TokenExpiredDate;
+import tgc.plus.authservice.services.utils.factories.TokenDateFactory;
+import tgc.plus.authservice.services.utils.utils_enums.TokenType;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
@@ -35,25 +36,18 @@ import java.util.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TokenService {
-
-    @Value("${jwt.security.access.expired.ms}")
-    public Long accessSecurityExpireDate;
 
     @Value("${jwt.security.refresh.expired.days}")
     public Integer refreshSecurityExpireDate;
 
-    @Value("${jwt.2fa.access.expired.ms}")
-    public Long access2FaExpiredDate;
-
     @Value("${jwt.token.secret}")
     private String secretKey;
 
-    @Autowired
-    private UserTokenRepository userTokenRepository;
-
-    @Autowired
-    private ObjectMapper mapper;
+    private final UserTokenRepository userTokenRepository;
+    private final ObjectMapper mapper;
+    private final TokenDateFactory tokenDateFactory;
 
     private SecretKey key;
 
@@ -62,25 +56,21 @@ public class TokenService {
        key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public Mono<String> createAccessToken(TokenClaims tokenClaims, String expiredType) {
-        return Mono.defer(() -> {
-            Instant now = Instant.now();
-            long tokenExpired = switch (expiredType) {
-                case "secure" -> accessSecurityExpireDate;
-                case "2fa" -> access2FaExpiredDate;
-                default -> 0L;
-            };
+    public Mono<String> createAccessToken(TokenClaims tokenClaims, TokenType tokenType) {
+            return tokenDateFactory.getTokenDateByType(tokenType)
+                    .flatMap(tokenExpired -> {
+                        Instant now = Instant.now();
+                        Instant expirationDate = now.plusMillis(tokenExpired);
+                        Map<String, String> claims = mapper.convertValue(tokenClaims, new TypeReference<>() {});
+                        String accessToken = Jwts.builder()
+                                .claims(claims)
+                                .expiration(Date.from(expirationDate))
+                                .issuedAt(Date.from(now))
+                                .signWith(key)
+                                .compact();
+                        return Mono.just(accessToken);
+                    });
 
-            Instant expirationDate = now.plusMillis(tokenExpired);
-            Map<String, String> claims = mapper.convertValue(tokenClaims, new TypeReference<>() {});
-            String accessToken = Jwts.builder()
-                    .claims(claims)
-                    .expiration(Date.from(expirationDate))
-                    .issuedAt(Date.from(now))
-                    .signWith(key)
-                    .compact();
-            return Mono.just(accessToken);
-        });
     }
 
     public Mono<UserToken> createRefToken(Long userId) {
@@ -99,45 +89,38 @@ public class TokenService {
        });
     }
 
-    public Mono<Authentication> getAuthentication(String token) {
-        return Mono.defer(()->{
-            try {
-                Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-                String userCode = claims.getPayload().get("user_code", String.class);
-                String role = claims.getPayload().get("role", String.class);
-                if ((userCode == null || userCode.isBlank()) || (role == null || role.isBlank())) {
-                    throw new AccessTokenCorruptionException("Invalid access token");
-                } else {
-                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(claims.getPayload().get("role", String.class)));
-                    return Mono.just((Authentication) new UsernamePasswordAuthenticationToken(userCode, "", authorities));
-                }
-            }
-            catch (JwtException e) {
-                if (e instanceof ExpiredJwtException)
-                    return Mono.error(new AccessTokenExpiredException("Token expired"));
-                else
-                    return Mono.error((new AccessTokenCorruptionException(e.getMessage())));
-            }
+
+    private <T extends TokenClaims> Mono<T> getTokenData(String token, Class<T> targetClass) {
+        return Mono.defer(() -> {
+                    Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+                    return Mono.just(mapper.convertValue(claims.getPayload(), targetClass));
         });
     }
 
+    public Mono<Authentication> getAuthentication(String token) {
+            return getTokenData(token, AccessTokenClaims.class)
+                    .filter(accessTokenClaims -> !accessTokenClaims.getUserCode().isBlank()
+                                || !accessTokenClaims.getRole().isBlank())
+                    .switchIfEmpty(getAuthTokenInvalidException())
+                    .flatMap(accessTokenClaims -> {
+                        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(accessTokenClaims.getRole()));
+                        return Mono.just((Authentication) new UsernamePasswordAuthenticationToken(accessTokenClaims.getUserCode(), "", authorities));
+                    })
+                    .onErrorResume(e -> {
+                        if (e instanceof ExpiredJwtException)
+                            return getAuthTokenExpiredException();
+                        else
+                            return getAuthTokenInvalidException();
+                    });
+        }
+
+
     public Mono<String> get2FaTokenData(String token) {
-        return Mono.defer(()->{
-            try {
-                Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-                String deviceToken = claims.getPayload().get("device_token", String.class);
-                if(deviceToken==null || deviceToken.isBlank())
-                    throw new TwoFactorTokenException("Invalid 2fa token");
-                else
-                    return Mono.just(deviceToken);
-            }
-            catch (JwtException e) {
-                if (e instanceof ExpiredJwtException)
-                    return Mono.error(new TwoFactorTokenException("Session time has expired"));
-                else
-                    return Mono.error(new TwoFactorTokenException("Invalid 2fa token"));
-            }
-        });
+        return getTokenData(token, TwoFactorTokenClaims.class)
+                .filter(twoFactorTokenClaims -> !twoFactorTokenClaims.getDeviceToken().isBlank())
+                .switchIfEmpty(getAuthTokenInvalidException())
+                .flatMap(twoFactorTokenClaims -> Mono.just(twoFactorTokenClaims.getDeviceToken()))
+                .onErrorResume(e -> get2FaTokenException());
     }
 
     public Mono<String> getTokenFromRequest(ServerWebExchange serverWebExchange){
@@ -148,8 +131,8 @@ public class TokenService {
                 return Mono.just(token.substring(bearer.length()));
             }
             else
-                return Mono.error(new AccessTokenCorruptionException("Invalid access token"));
-        }).doOnError(e->log.error(e.getMessage()));
+                return getAuthTokenInvalidException();
+        });
     }
 
 
@@ -161,7 +144,7 @@ public class TokenService {
             String newRefreshToken = UUID.randomUUID().toString();
             Instant createDate = Instant.now();
             Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
-            return createAccessToken(tokenClaims, TokenExpiredDate.SECURITY.getName())
+            return createAccessToken(tokenClaims, TokenType.SECURITY)
                     .zipWith(userTokenRepository.updateRefreshToken(refreshToken, newRefreshToken, finishDate, createDate)
                             .filter(res-> res!=0)
                             .switchIfEmpty(getRefreshTokenException()))
@@ -169,8 +152,22 @@ public class TokenService {
         }
     }
 
-    private <T> Mono<T> getRefreshTokenException(){
+    public  <T> Mono<T> getRefreshTokenException(){
         return Mono.error(new RefreshTokenException("Refresh token not exist"));
     }
+
+    public <T> Mono<T> getAuthTokenInvalidException(){
+        return Mono.error(new AuthTokenInvalidException("Token invalid"));
+    }
+
+    public <T> Mono<T> getAuthTokenExpiredException(){
+        return Mono.error(new AuthTokenExpiredException("Token expired"));
+    }
+
+    public <T> Mono<T> get2FaTokenException(){
+        return Mono.error(new TwoFactorTokenException("Token invalid"));
+    }
+
+
 
 }

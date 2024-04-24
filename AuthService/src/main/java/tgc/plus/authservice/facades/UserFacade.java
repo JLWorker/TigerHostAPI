@@ -1,12 +1,13 @@
 package tgc.plus.authservice.facades;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,6 @@ import tgc.plus.authservice.exceptions.exceptions_elements.RecoveryCodeExpiredEx
 import tgc.plus.authservice.facades.utils.annotations.IpValid;
 import tgc.plus.authservice.configs.SpringSecurityConfig;
 import tgc.plus.authservice.dto.jwt_claims_dto.TwoFactorTokenClaims;
-import tgc.plus.authservice.dto.kafka_message_dto.FeedbackMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.MailMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDTO;
 import tgc.plus.authservice.dto.kafka_message_dto.headers.MailHeadersDTO;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
@@ -30,14 +29,16 @@ import tgc.plus.authservice.exceptions.exceptions_elements.InvalidRequestExcepti
 import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorActiveException;
 import tgc.plus.authservice.facades.utils.*;
 import tgc.plus.authservice.facades.utils.factories.ContactUserRepositoryFactory;
+import tgc.plus.authservice.facades.utils.factories.KafkaMessageFactory;
 import tgc.plus.authservice.facades.utils.utils_enums.FeedbackEventType;
+import tgc.plus.authservice.facades.utils.utils_enums.KafkaMessageType;
 import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
-import tgc.plus.authservice.services.utils.TokenExpiredDate;
+import tgc.plus.authservice.services.utils.utils_enums.TokenType;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -47,34 +48,21 @@ import java.util.UUID;
 @Service
 @Slf4j
 @Validated
+@RequiredArgsConstructor
 public class UserFacade {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private FacadeUtils facadeUtils;
-
-    @Autowired
-    private MainFacadeUtils mainFacadeUtils;
-
-    @Autowired
-    private SpringSecurityConfig springSecurityConfig;
+    private final UserService userService;
+    private final MainFacadeUtils mainFacadeUtils;
+    private final KafkaMessageFactory kafkaMessageFactory;
+    private final SpringSecurityConfig springSecurityConfig;
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final TwoFactorRepository twoFactorRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ContactUserRepositoryFactory contactUserRepositoryFactory;
 
     @Value("${kafka.topic.mail-service}")
     private String mailTopic;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private TwoFactorRepository twoFactorRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${kafka.topic.feedback-service}")
     private String feedbackTopic;
@@ -85,18 +73,12 @@ public class UserFacade {
     @Value("${recovery.tgc.web.url}")
     private String recoveryUrl;
 
-    @Autowired
-    private ContactUserRepositoryFactory contactUserRepositoryFactory;
-
     @Transactional
     public Mono<Void> registerUser(UserData userData) {
         return mainFacadeUtils.checkPasswords(userData.getPassword(), userData.getPasswordConfirm())
                     .then(userService.save(userData))
-                    .flatMap(user -> {
-                        MailMessage mailMessage = new MailMessage(user.getUserCode(), new SaveUserData(userData.getEmail(), user.getPassword()));
-                        return mainFacadeUtils.sendMessageInKafkaTopic(mailMessage, mailTopic, new MailHeadersDTO(MailServiceCommand.SAVE.getName()),
-                                PartitioningStrategy.BASIC_MESSAGES);
-                    })
+                    .flatMap(user -> kafkaMessageFactory.createKafkaMessage(KafkaMessageType.MAIL_MESSAGE, user.getUserCode(), new SaveUserData(userData.getEmail(), userData.getPassword())))
+                            .flatMap(mailMessage -> mainFacadeUtils.sendMessageInKafkaTopic(mailMessage, mailTopic, new MailHeadersDTO(MailServiceCommand.SAVE.getName()), PartitioningStrategy.BASIC_MESSAGES))
                     .onErrorResume(e -> {
                         if (e instanceof DuplicateKeyException){
                            return mainFacadeUtils.getInvalidRequestException(String.format("User with email %s already exist", userData.getEmail()));
@@ -123,11 +105,11 @@ public class UserFacade {
                         String deviceToken = UUID.randomUUID().toString();
                         TwoFactor twoFactor = new TwoFactor(user.getId(), deviceToken, Instant.now());
                         return twoFactorRepository.save(twoFactor)
-                                .then(tokenService.createAccessToken(new TwoFactorTokenClaims(deviceToken), TokenExpiredDate.TWO_FACTOR.getName()))
+                                .then(tokenService.createAccessToken(new TwoFactorTokenClaims(deviceToken), TokenType.TWO_FACTOR))
                                 .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
                     } else {
                         return mainFacadeUtils.generatePairTokens(user, deviceData, ipAddr)
-                                .flatMap(response -> mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_TOKENS.getName(), null, FeedbackMessage.class)
+                                .flatMap(response -> kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
                                         .flatMap(feedbackMessage -> mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)
                                              .thenReturn(response)));
                     }
@@ -143,15 +125,14 @@ public class UserFacade {
     }
 
     @Transactional
-    public Mono<Void> changeAccountContacts(String newContact, MailServiceCommand command, Payload payload) {
+    public Mono<Void> changeAccountContacts(@NotNull(message = "Contact can`t be null") String newContact, MailServiceCommand command, Payload payload) {
         return mainFacadeUtils.getPrincipal()
                 .flatMap(userCode -> userRepository.getBlockForUserByUserCode(userCode)
                     .then(contactUserRepositoryFactory.execSqlQueryForContact(command, newContact, userCode))
-                    .then(mainFacadeUtils.createKafkaMessage(userCode, payload, MailMessage.class)
-                            .zipWith(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class)))
+                    .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.MAIL_MESSAGE, userCode, payload)
+                            .zipWith(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_ACCOUNT.getName(), null)))
                     .flatMap(messages -> mainFacadeUtils.sendMessageInKafkaTopic(messages.getT1(), mailTopic, new MailHeadersDTO(command.getName()), PartitioningStrategy.MESSAGES_MAKING_CHANGES)
-                            .then(mainFacadeUtils.sendMessageInKafkaTopic(messages.getT2(), feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
-        )
+                            .then(mainFacadeUtils.sendMessageInKafkaTopic(messages.getT2(), feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES))))
         .onErrorResume(e -> {
                 log.error(e.getMessage());
                 return mainFacadeUtils.getServerException();
@@ -165,9 +146,7 @@ public class UserFacade {
         return mainFacadeUtils.getPrincipal()
                 .flatMap(userCode -> mainFacadeUtils.checkPasswords(restorePassword.getPassword(), restorePassword.getPasswordConfirm())
                 .then(userRepository.getBlockForUserByUserCode(userCode))
-                .then(userRepository.changePassword(userCode, restorePassword.getPassword()))
-                .then(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class))
-                        .flatMap(feedbackMessage -> mainFacadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
+                .then(userRepository.changePassword(userCode, bCryptPasswordEncoder.encode(restorePassword.getPassword()))))
                 .onErrorResume(e -> {
                     if (!(e instanceof InvalidRequestException)){
                         log.error(e.getMessage());
@@ -187,7 +166,7 @@ public class UserFacade {
                     String recoveryCode = UUID.randomUUID().toString();
                     Instant expiredDate = Instant.now().plus(Duration.ofHours(recoveryExpiredTime));
                     return userRepository.changeRecoveryCode(user.getUserCode(), recoveryCode, expiredDate)
-                            .then(mainFacadeUtils.createKafkaMessage(user.getUserCode(), new PasswordRestoreData(recoveryUrl+recoveryCode), MailMessage.class))
+                            .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.MAIL_MESSAGE, user.getUserCode(), new PasswordRestoreData(recoveryUrl+recoveryCode)))
                             .flatMap(mailMessage -> mainFacadeUtils.sendMessageInKafkaTopic(mailMessage, mailTopic, new MailHeadersDTO(MailServiceCommand.SEND_RECOVERY_CODE.getName()), PartitioningStrategy.BASIC_MESSAGES));
                 })
                 .onErrorResume(e -> {
@@ -207,15 +186,9 @@ public class UserFacade {
                 .then(userRepository.getBlockForUserByRecoveryCode(code))
                 .filter(Objects::nonNull)
                 .switchIfEmpty(mainFacadeUtils.getNotFoundException("Recovery code was used"))
-                .flatMap(user -> {
-                    if(user.getCodeExpiredDate().isBefore(Instant.now()))
-                        return userRepository.clearRecoveryCode(user.getUserCode())
-                                .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired")));
-                    else
-                        return userRepository.changePassword(user.getUserCode(), bCryptPasswordEncoder.encode(password))
-                                .then(mainFacadeUtils.createKafkaMessage(FeedbackEventType.UPDATE_ACCOUNT.getName(), null, FeedbackMessage.class))
-                                .flatMap(message -> mainFacadeUtils.sendMessageInKafkaTopic(message, feedbackTopic, new FeedbackHeadersDTO(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES));
-                })
+                .flatMap(user -> user.getCodeExpiredDate().isBefore(Instant.now()) ? userRepository.clearRecoveryCode(user.getUserCode())
+                                    .then(Mono.error(new RecoveryCodeExpiredException("Recovery code expired"))) :
+                                 userRepository.changePassword(user.getUserCode(), bCryptPasswordEncoder.encode(password)))
                 .onErrorResume(e -> {
                     if(!(e instanceof NotFoundException) && !(e instanceof RecoveryCodeExpiredException)){
                         log.error(e.getMessage());
@@ -229,7 +202,7 @@ public class UserFacade {
     @Transactional(readOnly = true)
     public Mono<UserInfoResponse> getInfoAboutAccount(){
         return mainFacadeUtils.getPrincipal()
-                .flatMap(userCode -> userRepository.getUserByUserCode(userCode))
+                .flatMap(userRepository::getUserByUserCode)
                 .flatMap(user -> Mono.just(new UserInfoResponse(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())))
                 .onErrorResume(e -> {
                     log.error(e.getMessage());

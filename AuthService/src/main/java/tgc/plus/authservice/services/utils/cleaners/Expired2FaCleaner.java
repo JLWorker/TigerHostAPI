@@ -1,4 +1,4 @@
-package tgc.plus.authservice.services.utils;
+package tgc.plus.authservice.services.utils.cleaners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import tgc.plus.authservice.repository.TwoFactorRepository;
 public class Expired2FaCleaner {
 
     @Autowired
-    TwoFactorRepository twoFactorRepository;
+    private TwoFactorRepository twoFactorRepository;
 
     @Value("${jwt.2fa.access.expired.ms}")
     public Integer access2FaExpiredDate;

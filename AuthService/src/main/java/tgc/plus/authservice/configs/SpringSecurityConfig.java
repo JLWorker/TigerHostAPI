@@ -13,9 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.util.pattern.PathPattern;
 import tgc.plus.authservice.configs.utils.*;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenService;
@@ -35,14 +39,19 @@ public class SpringSecurityConfig {
     private UserRepository userRepository;
 
     @Bean
+    public ServerWebExchangeMatcher permitAllServerWebMatchers(){
+        return ServerWebExchangeMatchers.pathMatchers("/api/account/reg", "/api/account/login", "/api/account/recovery", "/api/account/check",
+                "/api/tokens/update", "/api/2fa/verify-code", "/v3/**", "/webjars/**", "/swagger-ui.html");
+    }
+
+    @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
-                                .pathMatchers("/api/account/reg", "/api/account/login", "/api/account/recovery", "/api/account/check",
-                                        "/api/tokens/update", "/api/2fa/verify-code", "/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
+                                .matchers(permitAllServerWebMatchers()).permitAll()
                                 .pathMatchers("/api/**").authenticated()
                                 .anyExchange().denyAll()
                 )
@@ -70,7 +79,7 @@ public class SpringSecurityConfig {
     public AuthenticationWebFilter authenticationWebFilter() {
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(reactiveFilterAuthenticationManager());
         authenticationWebFilter.setServerAuthenticationConverter(new JwtServerAuthenticationConverter(tokenService));
-        authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher());
+        authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher(permitAllServerWebMatchers()));
         authenticationWebFilter.setAuthenticationFailureHandler(new JwtAuthenticationHandler(new ObjectMapper()));
         return authenticationWebFilter;
     }

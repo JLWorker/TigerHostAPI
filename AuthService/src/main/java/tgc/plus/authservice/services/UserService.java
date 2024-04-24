@@ -12,9 +12,8 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.user_dto.UserData;
 import tgc.plus.authservice.entities.User;
 import tgc.plus.authservice.entities.UserDetail;
-import tgc.plus.authservice.exceptions.exceptions_elements.ServerException;
 import tgc.plus.authservice.repository.UserRepository;
-import tgc.plus.authservice.services.utils.RoleList;
+import tgc.plus.authservice.services.utils.utils_enums.RoleList;
 
 import java.util.List;
 import java.util.Objects;

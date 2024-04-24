@@ -8,6 +8,7 @@ import io.r2dbc.spi.ValidationDepth;
 import jakarta.validation.constraints.NotNull;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,6 +20,7 @@ import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reactor.netty.resources.LoopResources;
+import tgc.plus.authservice.services.TokenService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

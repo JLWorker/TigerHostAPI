@@ -1,4 +1,4 @@
-package tgc.plus.authservice.services.utils;
+package tgc.plus.authservice.services.utils.utils_enums;
 
 
 import lombok.Getter;

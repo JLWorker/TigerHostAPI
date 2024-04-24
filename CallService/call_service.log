@@ -1,0 +1,85 @@
+2024-04-21T03:20:22.859+1000 INFO tgc.plus.callservice.MailServiceApplication Starting MailServiceApplication using Java 17.0.8 with PID 25511 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MailService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-04-21T03:20:22.860+1000 DEBUG tgc.plus.callservice.MailServiceApplication Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-04-21T03:20:22.861+1000 INFO tgc.plus.callservice.MailServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-04-21T03:20:24.336+1000 INFO tgc.plus.callservice.MailServiceApplication Started MailServiceApplication in 1.787 seconds (process running for 2.287)
+2024-04-21T03:31:10.340+1000 ERROR tgc.plus.callservice.listeners.utils.CommandsDispatcher Error with message: User with code - 1a72d2ca-7b7d-4798-a2c7-fbe2f5502a84 already exist, cause: null
+2024-04-21T04:21:56.657+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T04:23:07.200+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T04:31:05.843+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T04:32:39.528+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:58:10.320+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:58:10.329+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:58:10.336+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:59:31.875+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:59:31.886+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T05:59:31.894+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:06.148+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:06.166+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:06.173+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:18.637+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:18.644+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T06:01:18.655+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:10:04.565+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:10:39.284+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:13:34.407+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.517+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.529+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.539+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.550+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.563+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.575+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.583+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.591+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.598+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:16:17.605+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.723+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.735+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.745+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.753+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.762+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.772+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.783+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.792+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.799+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:17:23.811+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.448+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.456+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.463+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.475+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.483+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.494+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.502+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.513+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.520+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:18:18.529+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:35:30.076+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:36:47.183+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:38:48.208+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:39:49.270+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:40:35.428+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:46:33.831+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:56:11.158+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:56:11.167+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:56:47.757+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T07:56:47.769+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:18:35.781+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:19:33.063+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:20:56.509+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:22:29.296+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:24:11.225+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:25:21.001+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditPhone Phone for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.051+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.062+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.069+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.075+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.085+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.092+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.102+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.110+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.120+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.128+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-21T08:26:22.134+1000 INFO tgc.plus.callservice.listeners.utils.commands.EditEmail Email for user with code - 08b2d919-7442-49b4-b1db-e5b73afd200c was updated
+2024-04-24T18:36:23.759+1000 INFO tgc.plus.callservice.MailServiceApplication Starting MailServiceApplication using Java 17.0.8 with PID 112405 (/home/makar/IdeaProjects/TigerHost/TigerHostApi/MailService/build/classes/java/main started by makar in /home/makar/IdeaProjects/TigerHost/TigerHostApi)
+2024-04-24T18:36:23.761+1000 DEBUG tgc.plus.callservice.MailServiceApplication Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-04-24T18:36:23.761+1000 INFO tgc.plus.callservice.MailServiceApplication No active profile set, falling back to 1 default profile: "default"
+2024-04-24T18:36:25.121+1000 INFO tgc.plus.callservice.MailServiceApplication Started MailServiceApplication in 1.658 seconds (process running for 2.157)

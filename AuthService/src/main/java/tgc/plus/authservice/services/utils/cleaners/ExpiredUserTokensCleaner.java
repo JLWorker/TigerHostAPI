@@ -1,4 +1,4 @@
-package tgc.plus.authservice.services.utils;
+package tgc.plus.authservice.services.utils.cleaners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class ExpiredUserTokensCleaner {
 
     @Autowired
-    UserTokenRepository userTokenRepository;
+    private UserTokenRepository userTokenRepository;
 
     @Scheduled(timeUnit = TimeUnit.DAYS ,fixedDelayString = "${scheduler.tokens.cleaner.delay.ms}")
     public Mono<Void> cleaner(){

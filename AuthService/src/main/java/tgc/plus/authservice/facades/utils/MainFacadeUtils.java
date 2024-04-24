@@ -17,7 +17,6 @@ import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.headers.KafkaHeadersDTO;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditEmailData;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditPhoneData;
-import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.Payload;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
@@ -28,7 +27,7 @@ import tgc.plus.authservice.exceptions.exceptions_elements.*;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.services.TokenService;
-import tgc.plus.authservice.services.utils.TokenExpiredDate;
+import tgc.plus.authservice.services.utils.utils_enums.TokenType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -54,63 +53,10 @@ public class MainFacadeUtils {
     }
 
 
-//    public Mono<MailMessage> createMessageForRestorePsw(String token, String userCode){
-//        return Mono.defer(()->{
-//            PasswordRestoreData passwordRestoreData = new PasswordRestoreData(recoverUrl+token);
-//            return Mono.just(new MailMessage(userCode, passwordRestoreData));
-//        });
-//    }
-
-    public Mono<MailMessage> createMessageForSaveUser(String userCode, String email, String password){
-        return Mono.defer(()->{
-            SaveUserData saveUserData = new SaveUserData(email, password);
-            return Mono.just(new MailMessage(userCode, saveUserData));
-        });
-    }
-
-    public Mono<FeedbackMessage> createMessageForUpdateUserInfo(String eventType){
-        return Mono.defer(() -> Mono.just(new FeedbackMessage(null, eventType)));
-    }
-
-    public Mono<MailMessage> createMessageForContactUpdate(String userCode, String contact, String type){
-        return Mono.defer(()->{
-            if (type.equals(UserChangeContacts.ChangeEmail.class.getName())){
-                EditEmailData editEmailData = new EditEmailData(contact);
-                return Mono.just(new MailMessage(userCode, editEmailData));
-            }
-            else {
-                EditPhoneData editPhoneData = new EditPhoneData(contact);
-                return Mono.just(new MailMessage(userCode, editPhoneData));
-            }
-        });
-    }
-
-//    public Mono<Void> sendMessageInFeedbackService(FeedbackMessage feedbackMessage, String userCode){
-//        ProducerRecord<String, KafkaMessage> messageRecord = new ProducerRecord<>(feedbackTopic, "other", feedbackMessage);
-//        messageRecord.headers().add("user_code", userCode.getBytes());
-//        SenderRecord<String, KafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
-//        return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord))
-//                .onErrorResume(e -> Mono.error(new KafkaException(e.getMessage())))
-//                .then(Mono.empty());
-//    }
-
     public Mono<String> getPrincipal(){
         return Mono.defer(() -> ReactiveSecurityContextHolder.getContext()
                 .map(securityContext -> securityContext.getAuthentication().getPrincipal().toString()));
     }
-
-    public <T> Mono<T> createKafkaMessage(String identElem, Payload payload, Class<T> classType){
-        return Mono.defer(() -> {
-            try {
-                return Mono.just(classType.getDeclaredConstructor(identElem.getClass(), payload.getClass())
-                        .newInstance(identElem, payload));
-            }
-            catch (Exception e) {
-                return Mono.error(new RuntimeException(e.getMessage()));
-            }
-        });
-    }
-
     public Mono<Void> sendMessageInKafkaTopic(KafkaMessage message, String topic, KafkaHeadersDTO kafkaHeadersDTO, PartitioningStrategy strategy){
         ProducerRecord<String, KafkaMessage> messageRecord = new ProducerRecord<>(topic, strategy.getStrategy(), message);
         Map<String, String> headers = objectMapper.convertValue(kafkaHeadersDTO, new TypeReference<>() {});
@@ -120,7 +66,7 @@ public class MainFacadeUtils {
     }
 
         public Mono<TokensResponse> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
-        return tokenService.createAccessToken(new AccessTokenClaims(user.getUserCode(), user.getRole()), TokenExpiredDate.SECURITY.getName())
+        return tokenService.createAccessToken(new AccessTokenClaims(user.getUserCode(), user.getRole()), TokenType.SECURITY)
                 .zipWith(tokenService.createRefToken(user.getId()))
                 .flatMap(tokens -> tokenMetaRepository.save(new TokenMeta(tokens.getT2().getId(), ipAddr, deviceData.getName(), deviceData.getApplicationType()))
                         .flatMap(tokenMeta -> {
