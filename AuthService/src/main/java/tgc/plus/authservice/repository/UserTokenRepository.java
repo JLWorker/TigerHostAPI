@@ -12,17 +12,17 @@ import java.time.Instant;
 
 @Repository
 public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, Long> {
-    Mono<UserToken> getUserTokenByRefreshToken(String refreshToken);
 
     Mono<Integer> removeUserTokenByRefreshToken(String refreshToken);
 
     Mono<Void> removeUserTokenByTokenId(String tokenId);
 
-    Mono<UserToken> getUserTokenByTokenId(String tokenId);
+    Mono<Void> deleteUserTokenByRefreshToken(String refreshToken);
 
-    @Modifying
-    @Query("UPDATE user_tokens SET refresh_token= :newRefreshToken, expired_date= :expiredDate, create_date= :createDate WHERE refresh_token= :oldRefreshToken")
-    Mono<Integer> updateRefreshToken(String oldRefreshToken, String newRefreshToken, Instant expiredDate, Instant createDate);
+    Mono<Void> deleteAllByUserId(Long userId);
+
+    @Query("UPDATE user_tokens SET refresh_token=:newRefreshToken, expired_date=:expiredDate, create_date=:createDate WHERE refresh_token=:oldRefreshToken RETURNING *")
+    Mono<UserToken> updateRefreshToken(String oldRefreshToken, String newRefreshToken, Instant expiredDate, Instant createDate);
 
     @Modifying
     @Query("DELETE FROM user_tokens WHERE user_id= :userId and token_id <> :tokenId")
@@ -32,8 +32,8 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
     @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR UPDATE")
     Mono<UserToken> getBlockForUserTokenById(String tokenId);
 
-//    @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR SHARE")
-//    Mono<UserToken> getShareBlockForTokensById(String tokenId);
+    @Query("SELECT * FROM user_tokens WHERE refresh_token= :refreshToken FOR UPDATE")
+    Mono<UserToken> getBlockForUserTokenByRefreshToken(String refreshToken);
 
     @Modifying
     @Query("DELETE FROM user_tokens WHERE expired_date < now()")

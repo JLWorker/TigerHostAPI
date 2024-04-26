@@ -14,11 +14,7 @@ public class UpdateTokenResponse {
     @Schema(example = "asdadsadEa43sdasdc86328ksn.....")
     private String accessToken;
 
-    @Schema(example = "d507935-d3ab-4a90-a33f-b7......")
-    private String refreshToken;
-
-    public UpdateTokenResponse(String accessToken, String refreshToken) {
+    public UpdateTokenResponse(String accessToken) {
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
     }
 }

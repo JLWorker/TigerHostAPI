@@ -11,8 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.api.UserController;
-import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
-import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.dto.user_dto.*;
 
 import java.util.List;

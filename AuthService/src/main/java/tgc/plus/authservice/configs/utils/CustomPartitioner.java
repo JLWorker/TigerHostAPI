@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class CustomPartitioner implements Partitioner {
 
-    private final Integer CHANGE_MESSAGE_PARTITION = 0;
+    @Value("${partition.strategy.change-message}")
+    private Integer changeMessagePartition;
 
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
@@ -21,10 +22,10 @@ public class CustomPartitioner implements Partitioner {
         int partitionCounts = cluster.partitionCountForTopic(topic);
 
         if (key.toString().equals("change"))
-            return CHANGE_MESSAGE_PARTITION;
+            return changeMessagePartition;
         else {
             int msgPartition = Math.abs(Utils.murmur2(valueBytes)) % partitionCounts;
-            return msgPartition==CHANGE_MESSAGE_PARTITION ? msgPartition+1 : msgPartition;
+            return msgPartition==changeMessagePartition ? msgPartition+1 : msgPartition;
         }
     }
 

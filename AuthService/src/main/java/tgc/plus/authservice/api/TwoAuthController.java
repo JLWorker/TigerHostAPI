@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
 import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
@@ -21,12 +22,12 @@ import tgc.plus.authservice.dto.user_dto.TokensResponse;
 import tgc.plus.authservice.facades.TwoFactorFacade;
 
 @RestController
-@RequestMapping("/api/2fa")
+@RequestMapping("/api/auth/2fa")
 @Tag(name = "api/2fa", description = "2FA controller api")
 public class TwoAuthController {
 
     @Autowired
-    TwoFactorFacade twoFactorFacade;
+    private TwoFactorFacade twoFactorFacade;
 
     @Operation(summary = "Switch 2fa status in account")
     @Parameters(value = {
@@ -69,7 +70,7 @@ public class TwoAuthController {
             @ApiResponse(responseCode = "200", description = "Successful verify")
     })
     @PostMapping("/verify-code")
-    public Mono<TokensResponse> verify2FaCode(@RequestBody @Valid TwoFactorCode twoFactorCode, @RequestHeader("2FA-Token") String token, ServerHttpRequest request){
-        return twoFactorFacade.verifyCode(twoFactorCode, token, request.getHeaders().getFirst("Device-Ip"));
+    public Mono<TokensResponse> verify2FaCode(@RequestBody @Valid TwoFactorCode twoFactorCode, @RequestHeader("2FA-Token") String token, ServerWebExchange exchange){
+        return twoFactorFacade.verifyCode(twoFactorCode, token, exchange.getRequest().getHeaders().getFirst("Device-Ip"), exchange.getResponse());
     }
 }

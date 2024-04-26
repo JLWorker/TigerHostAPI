@@ -1,4 +1,4 @@
-package tgc.plus.apigateway.filters.utils;
+package tgc.plus.apigateway.filters.utils.utils_enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditEmailData;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditPhoneData;
@@ -23,7 +24,7 @@ import tgc.plus.authservice.facades.UserFacade;
 import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/auth/account")
 @Tag(name = "api/account", description = "User controller API")
 public class UserController {
 
@@ -51,8 +52,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success Login user")
     })
     @PostMapping("/login")
-    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerHttpRequest request) {
-        return userFacade.loginUser(logData, request.getHeaders().getFirst("Device-Ip"));
+    public Mono<TokensResponse> login(@RequestBody @Valid UserLogin logData, ServerWebExchange exchange) {
+        return userFacade.loginUser(logData, exchange.getRequest().getHeaders().getFirst("Device-Ip"), exchange.getResponse());
     }
 
     @Operation(summary = "Change phone in account")

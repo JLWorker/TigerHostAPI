@@ -24,6 +24,7 @@ import tgc.plus.authservice.configs.utils.*;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
+import tgc.plus.authservice.services.utils.utils_enums.RoleElem;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -40,8 +41,8 @@ public class SpringSecurityConfig {
 
     @Bean
     public ServerWebExchangeMatcher permitAllServerWebMatchers(){
-        return ServerWebExchangeMatchers.pathMatchers("/api/account/reg", "/api/account/login", "/api/account/recovery", "/api/account/check",
-                "/api/tokens/update", "/api/2fa/verify-code", "/v3/**", "/webjars/**", "/swagger-ui.html");
+        return ServerWebExchangeMatchers.pathMatchers("/api/auth/account/reg", "/api/auth/account/login", "/api/auth/account/recovery", "/api/auth/account/check",
+                "/api/auth/tokens/update", "/api/auth/2fa/verify-code", "/v3/**", "/webjars/**", "/swagger-ui.html");
     }
 
     @Bean
@@ -52,6 +53,7 @@ public class SpringSecurityConfig {
                 .authorizeExchange(exchange ->
                         exchange
                                 .matchers(permitAllServerWebMatchers()).permitAll()
+                                .pathMatchers("/api/auth/admin/**").hasAuthority(RoleElem.ADMIN.name())
                                 .pathMatchers("/api/**").authenticated()
                                 .anyExchange().denyAll()
                 )

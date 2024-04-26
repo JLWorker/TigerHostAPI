@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.exceptions.exceptions_elements.BanUserException;
 import tgc.plus.authservice.exceptions.exceptions_elements.ServerException;
 import tgc.plus.authservice.services.UserService;
 
@@ -42,7 +43,7 @@ public class LoginReactiveAuthenticationManager implements ReactiveAuthenticatio
         if(authenticationToken != null) {
             return userService.findByUsername(authenticationToken.getPrincipal().toString())
                     .onErrorResume(e -> {
-                        if(!(e instanceof UsernameNotFoundException)){
+                        if(!(e instanceof UsernameNotFoundException) && !(e instanceof BanUserException)){
                             log.error(e.getMessage());
                             return Mono.error(new ServerException("Server cannot process the request"));
                         }

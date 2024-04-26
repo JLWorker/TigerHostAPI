@@ -11,23 +11,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.tokens_dto.TokenData;
-import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.facades.TokenFacade;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tokens")
+@RequestMapping("/api/auth/tokens")
 @Tag(name = "api/tokens", description = "Tokens controller api")
 public class TokenController {
 
@@ -43,8 +40,22 @@ public class TokenController {
             @ApiResponse(responseCode = "200", description = "Success tokens update")
     })
     @PatchMapping("/update")
-    public Mono<UpdateTokenResponse> updateToken(@RequestBody @Valid UpdateToken updateToken){
-        return tokenFacade.updateAccessToken(updateToken);
+    public Mono<UpdateTokenResponse> updateToken(@CookieValue("REFRESH_TOKEN") String refreshToken, ServerHttpResponse serverHttpResponse){
+        return tokenFacade.updateAccessToken(refreshToken, serverHttpResponse);
+    }
+
+
+    @Operation(summary = "Logout device")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", content = @Content(), description = "Request has bad request body, for example - validation exceptions"),
+            @ApiResponse(responseCode = "401", content = @Content(), headers = {
+                    @Header(name = "Logout", description = "Refresh token not exist or expired, need logout", schema = @Schema(example = "true"))
+            },description = "Refresh token not exist or expired"),
+            @ApiResponse(responseCode = "200", description = "Success tokens update")
+    })
+    @PostMapping("/logout")
+    public Mono<Void> logoutDevice(@CookieValue("REFRESH_TOKEN") String refreshToken, ServerHttpResponse serverHttpResponse){
+        return tokenFacade.logoutToken(refreshToken, serverHttpResponse);
     }
 
     @Operation(summary = "Delete token device", description = "Delete token for connected device to account")

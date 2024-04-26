@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import tgc.plus.apigateway.dto.jwt_claims_dto.TokenClaimsDTO;
-import tgc.plus.apigateway.exceptions.ExpiredTokenException;
-import tgc.plus.apigateway.exceptions.InvalidTokenException;
+import tgc.plus.apigateway.exceptions.token_exceptions.InvalidAccessTokenException;
+import tgc.plus.apigateway.exceptions.token_exceptions.InvalidTwoFactorTokenException;
 
 import javax.crypto.SecretKey;
-import java.util.function.Function;
 
 @Component
 public class FiltersUtils {
@@ -34,17 +33,14 @@ public class FiltersUtils {
         return Mono.defer(() -> {
             Jws<Claims> claimsJwt = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return Mono.just(objectMapper.convertValue(claimsJwt.getPayload(), targetType));
-        })
-        .onErrorResume(e -> {
-            if (!(e instanceof ExpiredJwtException))
-                return getInvalidTokenException();
-            else
-                return Mono.error(new ExpiredTokenException("Token expired"));
         });
     }
 
-    public <T> Mono<T> getInvalidTokenException(){
-        return Mono.error(new InvalidTokenException("Token invalid"));
+    public <T> Mono<T> getInvalidAccessTokenException(){
+        return Mono.error(new InvalidAccessTokenException());
+    }
+    public <T> Mono<T> getInvalidTwoFactorTokenException(){
+        return Mono.error(new InvalidTwoFactorTokenException());
     }
 
 

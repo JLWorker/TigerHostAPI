@@ -15,17 +15,12 @@ public class TokensResponse {
     @Schema(example = "asdadsadEa43sdasdc86328ksn.....")
     private String accessToken;
 
-    @JsonProperty("refresh_token")
-    @Schema(example = "d507935-d3ab-4a90-a33f-b7......")
-    private String refreshToken;
-
     @JsonProperty("token_id")
     @Schema(example = "ID-74683729...")
     private String tokenId;
 
-    public TokensResponse(String accessToken, String refreshToken, String tokenId) {
+    public TokensResponse(String accessToken, String tokenId) {
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
         this.tokenId = tokenId;
     }
 }

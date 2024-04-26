@@ -2,6 +2,7 @@ package tgc.plus.authservice.repository;
 
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
+import reactor.core.publisher.Flux;
 import tgc.plus.authservice.entities.User;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,9 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<User> getUserByUserCode(String userCode);
 
      Mono<User> getUserByEmail(String email);
+
+     @Query("SELECT * FROM users WHERE users.registration_date between :startDate AND :finishDate LIMIT :limit")
+     Flux<User> getAllByDateTimeAndCount(Instant startDate, Instant finishDate, Integer limit);
 
      @Query("SELECT * FROM users WHERE user_code=:userCode AND two_factor_secret IS NOT NULL")
      Mono<User> getUserByUserCodeAndSecret(String userCode);

@@ -16,6 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaims;
 import tgc.plus.authservice.dto.jwt_claims_dto.TokenClaims;
 import tgc.plus.authservice.dto.jwt_claims_dto.TwoFactorTokenClaims;
@@ -136,19 +138,18 @@ public class TokenService {
     }
 
 
-    public Mono<UpdateTokenResponse> updatePairTokens(TokenClaims tokenClaims, String refreshToken, Instant expiredDate){
+    public Mono<Tuple2<String, UserToken>> updatePairTokens(TokenClaims tokenClaims, String refreshToken, Instant expiredDate){
         if (expiredDate.isBefore(Instant.now()))
             return userTokenRepository.removeUserTokenByRefreshToken(refreshToken)
                     .then(getRefreshTokenException());
         else {
             String newRefreshToken = UUID.randomUUID().toString();
             Instant createDate = Instant.now();
-            Instant finishDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
+            Instant newExpiredDate = createDate.plusMillis(Duration.ofDays(refreshSecurityExpireDate).toMillis());
             return createAccessToken(tokenClaims, TokenType.SECURITY)
-                    .zipWith(userTokenRepository.updateRefreshToken(refreshToken, newRefreshToken, finishDate, createDate)
-                            .filter(res-> res!=0)
-                            .switchIfEmpty(getRefreshTokenException()))
-                    .flatMap(tokens -> Mono.just(new UpdateTokenResponse(tokens.getT1(), newRefreshToken)));
+                    .zipWith(userTokenRepository.updateRefreshToken(refreshToken, newRefreshToken, newExpiredDate, createDate)
+                            .filter(Objects::nonNull)
+                            .switchIfEmpty(getRefreshTokenException()));
         }
     }
 

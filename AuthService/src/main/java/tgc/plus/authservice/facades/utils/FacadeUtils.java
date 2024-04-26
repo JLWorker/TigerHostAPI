@@ -5,36 +5,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.SenderRecord;
+import reactor.util.function.Tuple2;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
 import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaims;
-import tgc.plus.authservice.dto.kafka_message_dto.MailMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.FeedbackMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
 import tgc.plus.authservice.dto.kafka_message_dto.headers.KafkaHeadersDTO;
-import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditEmailData;
-import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.EditPhoneData;
-import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.SaveUserData;
 import tgc.plus.authservice.dto.user_dto.DeviceData;
-import tgc.plus.authservice.dto.user_dto.TokensResponse;
-import tgc.plus.authservice.dto.user_dto.UserChangeContacts;
 import tgc.plus.authservice.entities.TokenMeta;
 import tgc.plus.authservice.entities.User;
+import tgc.plus.authservice.entities.UserToken;
 import tgc.plus.authservice.exceptions.exceptions_elements.*;
+import tgc.plus.authservice.facades.utils.utils_enums.CookiePayload;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TokenMetaRepository;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.utils.utils_enums.TokenType;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 
 @Component
 @Slf4j
-public class MainFacadeUtils {
+public class FacadeUtils {
 
     @Autowired
     private KafkaProducerConfig kafkaProducerConfig;
@@ -47,6 +47,9 @@ public class MainFacadeUtils {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Value("${cookie.ref.domain}")
+    private String refCookieDomain;
 
     public Mono<Void> checkPasswords(String password, String confirmPassword){
        return (password.equals(confirmPassword)) ? Mono.empty() : getInvalidRequestException("Passwords mismatch");
@@ -65,14 +68,24 @@ public class MainFacadeUtils {
         return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord)).then();
     }
 
-        public Mono<TokensResponse> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
+        public Mono<Tuple2<String, UserToken>> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
         return tokenService.createAccessToken(new AccessTokenClaims(user.getUserCode(), user.getRole()), TokenType.SECURITY)
                 .zipWith(tokenService.createRefToken(user.getId()))
                 .flatMap(tokens -> tokenMetaRepository.save(new TokenMeta(tokens.getT2().getId(), ipAddr, deviceData.getName(), deviceData.getApplicationType()))
-                        .flatMap(tokenMeta -> {
-                            log.info(String.format("User with email - %s, logged, tokens was created", user.getEmail() ));
-                            return Mono.just(new TokensResponse(tokens.getT1(), tokens.getT2().getRefreshToken(), tokens.getT2().getTokenId()));
-                        }));
+                        .thenReturn(tokens));
+    }
+
+    public Mono<Void> addRefCookie(ServerHttpResponse serverHttpResponse, UserToken userToken){
+        ResponseCookie cookie = ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name(), userToken.getRefreshToken())
+                        .httpOnly(true)
+                        .domain(refCookieDomain)
+                        .path("/api/tokens/")
+                        .secure(true)
+                        .sameSite("Lax")
+                        .maxAge(Duration.between(userToken.getCreateDate(), userToken.getExpiredDate()))
+                        .build();
+        serverHttpResponse.addCookie(cookie);
+        return Mono.empty();
     }
 
 

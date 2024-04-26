@@ -52,6 +52,9 @@ public class User {
     @Column("code_expired_date")
     private Instant codeExpiredDate;
 
+    @Column("registration_date")
+    private Instant registrationDate;
+
     @Transient
     private List<UserToken> refreshTokens;
 
@@ -65,5 +68,6 @@ public class User {
         this.twoAuthStatus = false;
         this.codeExpiredDate = null;
         this.recoveryCode = null;
+        this.registrationDate = Instant.now();
     }
 }

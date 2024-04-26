@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.tokens_dto.TokenData;
-import tgc.plus.authservice.dto.tokens_dto.UpdateToken;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
 import tgc.plus.authservice.dto.user_dto.DeviceData;
 import tgc.plus.authservice.dto.user_dto.TokensResponse;
@@ -101,13 +100,13 @@ public class TokenFacadeTest {
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnSuccess(res -> logger.info(res.getTokenId()));
 
-        Mono<UpdateTokenResponse> updateToken = webClient.patch()
-                .uri("/update")
-                .bodyValue(new UpdateToken(refreshToken))
-                .retrieve()
-                .bodyToMono(UpdateTokenResponse.class)
-                .doOnError(e -> logger.error(e.getMessage()))
-                .doOnSuccess(res -> logger.info(res.getRefreshToken()));
+//        Mono<UpdateTokenResponse> updateToken = webClient.patch()
+//                .uri("/update")
+//                .bodyValue(new UpdateToken(refreshToken))
+//                .retrieve()
+//                .bodyToMono(UpdateTokenResponse.class)
+//                .doOnError(e -> logger.error(e.getMessage()))
+//                .doOnSuccess(res -> logger.info(res.getRefreshToken()));
 
         Mono<ResponseEntity<Void>> deleteToken = webClient.delete()
                 .uri("/token/{tokenId}", tokenId)
