@@ -12,7 +12,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
+import tgc.plus.authservice.dto.two_factor_dto.QrCodeDataDto;
 
 @Service
 public class TwoFactorService {
@@ -38,7 +38,7 @@ public class TwoFactorService {
         return Mono.defer(() -> Mono.just(secretGenerator.generate()));
     }
 
-    public Mono<QrCodeData> generateQrCode(String email, String secret){
+    public Mono<QrCodeDataDto> generateQrCode(String email, String secret){
         QrData data = new QrData.Builder()
                 .label(email)
                 .secret(secret)
@@ -51,7 +51,7 @@ public class TwoFactorService {
         try {
             byte[] qrCode = qrGenerator.generate(data);
             String type = qrGenerator.getImageMimeType();
-            return Mono.just(new QrCodeData(qrCode, type));
+            return Mono.just(new QrCodeDataDto(qrCode, type));
 
         } catch (QrGenerationException e) {
             return Mono.error(e);

@@ -7,13 +7,13 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDTO;
-import tgc.plus.authservice.dto.two_factor_dto.QrCodeData;
-import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCode;
-import tgc.plus.authservice.dto.user_dto.TokensResponse;
-import tgc.plus.authservice.exceptions.exceptions_elements.NotFoundException;
-import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorCodeException;
-import tgc.plus.authservice.exceptions.exceptions_elements.TwoFactorTokenException;
+import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDto;
+import tgc.plus.authservice.dto.two_factor_dto.QrCodeDataDto;
+import tgc.plus.authservice.dto.two_factor_dto.TwoFactorCodeDto;
+import tgc.plus.authservice.dto.user_dto.TokensResponseDto;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.NotFoundException;
+import tgc.plus.authservice.exceptions.exceptions_elements.two_factor_exceptions.TwoFactorCodeException;
+import tgc.plus.authservice.exceptions.exceptions_elements.two_factor_exceptions.TwoFactorTokenException;
 import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.facades.utils.factories.KafkaMessageFactory;
 import tgc.plus.authservice.facades.utils.utils_enums.FeedbackEventType;
@@ -54,7 +54,7 @@ public class TwoFactorFacade {
                                   .flatMap(secret -> userRepository.updateTwoFactorSecret(user.getUserCode(), secret));
                 })
                 .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_ACCOUNT.getName(), null))
-                .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDTO(userCode), PartitioningStrategy.BASIC_MESSAGES)))
+                .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDto(userCode), PartitioningStrategy.BASIC_MESSAGES)))
                 .onErrorResume(e -> {
                     log.error(e.getMessage());
                     return facadeUtils.getServerException();
@@ -62,7 +62,7 @@ public class TwoFactorFacade {
         }
 
     @Transactional(readOnly = true)
-    public Mono<QrCodeData> getQrCode(){
+    public Mono<QrCodeDataDto> getQrCode(){
         return facadeUtils.getPrincipal()
                 .flatMap(userRepository::getUserByUserCodeAndSecret)
                 .filter(Objects::nonNull)
@@ -78,20 +78,20 @@ public class TwoFactorFacade {
     }
 
     @Transactional
-    public Mono<TokensResponse> verifyCode(TwoFactorCode twoFactorCode, String token, String ipAddress, ServerHttpResponse serverHttpResponse){
+    public Mono<TokensResponseDto> verifyCode(TwoFactorCodeDto twoFactorCodeDto, String token, String ipAddress, ServerHttpResponse serverHttpResponse){
         return tokenService.get2FaTokenData(token)
                 .flatMap(deviceToken -> userRepository.getUserByTwoFactorDeviceToken(deviceToken)
                     .filter(Objects::nonNull)
                     .switchIfEmpty(tokenService.get2FaTokenException())
-                    .flatMap(user -> twoFactorService.verify(twoFactorCode.getCode(), user.getTwoFactorSecret())
+                    .flatMap(user -> twoFactorService.verify(twoFactorCodeDto.getCode(), user.getTwoFactorSecret())
                         .filter(res -> res)
                         .switchIfEmpty(Mono.error(new TwoFactorCodeException("Authentication code is incorrect")))
                         .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken))
-                        .then(facadeUtils.generatePairTokens(user, twoFactorCode.getDeviceData(), ipAddress)
+                        .then(facadeUtils.generatePairTokens(user, twoFactorCodeDto.getDeviceDataDto(), ipAddress)
                                         .flatMap(tokens -> facadeUtils.addRefCookie(serverHttpResponse, tokens.getT2())
                                         .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
-                                                .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDTO(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)))
-                                        .thenReturn(new TokensResponse(tokens.getT1(), tokens.getT2().getTokenId()))))))
+                                                .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDto(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)))
+                                        .thenReturn(new TokensResponseDto(tokens.getT1(), tokens.getT2().getTokenId()))))))
                 .onErrorResume(e -> {
                     if(!(e instanceof TwoFactorTokenException) && !(e instanceof TwoFactorCodeException)){
                         log.error(e.getMessage());

@@ -13,10 +13,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.exceptions_dto.ExceptionResponse;
-import tgc.plus.authservice.exceptions.exceptions_elements.AuthTokenExpiredException;
-import tgc.plus.authservice.exceptions.exceptions_elements.AuthTokenInvalidException;
-import tgc.plus.authservice.exceptions.exceptions_elements.ServerException;
+import tgc.plus.authservice.dto.exceptions_dto.ExceptionResponseDto;
+import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.AuthTokenExpiredException;
+import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.AuthTokenInvalidException;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.ServerException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,9 +39,9 @@ public class JwtAuthenticationHandler implements ServerAuthenticationFailureHand
         }
         response.getHeaders().add("Content-Type", "application/json");
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(request.getPath().value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+        ExceptionResponseDto exceptionResponseDto = new ExceptionResponseDto(request.getPath().value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
         try {
-            return response.writeWith(Mono.just(response.bufferFactory().wrap(objectMapper.writeValueAsBytes(exceptionResponse))));
+            return response.writeWith(Mono.just(response.bufferFactory().wrap(objectMapper.writeValueAsBytes(exceptionResponseDto))));
         } catch (JsonProcessingException e) {
                 log.error(e.getMessage());
                 return Mono.error(new ServerException("The server is currently unable to complete the request"));

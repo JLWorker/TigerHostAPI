@@ -1,13 +1,6 @@
 package tgc.plus.authservice.services;
 
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaims;
-
-import java.time.Instant;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TokenServiceTest {

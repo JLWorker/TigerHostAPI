@@ -9,10 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.user_dto.UserData;
+import tgc.plus.authservice.dto.user_dto.UserDataDto;
 import tgc.plus.authservice.entities.User;
 import tgc.plus.authservice.entities.UserDetail;
-import tgc.plus.authservice.exceptions.exceptions_elements.BanUserException;
+import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.BanUserException;
 import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.services.utils.utils_enums.RoleElem;
 
@@ -29,10 +29,10 @@ public class UserService implements ReactiveUserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public Mono<User> save(UserData userData) {
+    public Mono<User> save(UserDataDto userDataDto) {
         String userCode = UUID.randomUUID().toString();
-        String password = bCryptPasswordEncoder.encode(userData.getPassword());
-        return userRepository.save(new User(userCode, userData.getEmail(), password, RoleElem.USER.name()));
+        String password = bCryptPasswordEncoder.encode(userDataDto.getPassword());
+        return userRepository.save(new User(userCode, userDataDto.getEmail(), password, RoleElem.USER.name()));
     }
     @Override
     public Mono<UserDetails> findByUsername(String email) {

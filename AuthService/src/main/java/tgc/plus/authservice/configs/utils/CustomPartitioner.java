@@ -4,15 +4,13 @@ import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 import org.apache.kafka.common.InvalidRecordException;
 import org.apache.kafka.common.utils.Utils;
-import org.springframework.beans.factory.annotation.Value;
+import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 
 import java.util.Map;
 
 public class CustomPartitioner implements Partitioner {
 
-    @Value("${partition.strategy.change-message}")
-    private Integer changeMessagePartition;
-
+    private final Integer CHANGE_MESSAGE_PARTITION = 0;
     @Override
     public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
 
@@ -21,11 +19,11 @@ public class CustomPartitioner implements Partitioner {
 
         int partitionCounts = cluster.partitionCountForTopic(topic);
 
-        if (key.toString().equals("change"))
-            return changeMessagePartition;
+        if (key.toString().equals(PartitioningStrategy.MESSAGES_MAKING_CHANGES.getStrategy()))
+            return CHANGE_MESSAGE_PARTITION;
         else {
             int msgPartition = Math.abs(Utils.murmur2(valueBytes)) % partitionCounts;
-            return msgPartition==changeMessagePartition ? msgPartition+1 : msgPartition;
+            return msgPartition== CHANGE_MESSAGE_PARTITION ? msgPartition+1 : msgPartition;
         }
     }
 

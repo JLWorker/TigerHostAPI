@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.exceptions.exceptions_elements.CommandNotFoundException;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.CommandNotFoundException;
 import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 import tgc.plus.authservice.repository.UserRepository;
 

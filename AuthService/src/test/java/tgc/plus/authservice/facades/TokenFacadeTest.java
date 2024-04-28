@@ -10,12 +10,11 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.tokens_dto.TokenData;
-import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponse;
-import tgc.plus.authservice.dto.user_dto.DeviceData;
-import tgc.plus.authservice.dto.user_dto.TokensResponse;
-import tgc.plus.authservice.dto.user_dto.UserData;
-import tgc.plus.authservice.dto.user_dto.UserLogin;
+import tgc.plus.authservice.dto.tokens_dto.TokenDataDto;
+import tgc.plus.authservice.dto.user_dto.DeviceDataDto;
+import tgc.plus.authservice.dto.user_dto.TokensResponseDto;
+import tgc.plus.authservice.dto.user_dto.UserDataDto;
+import tgc.plus.authservice.dto.user_dto.UserLoginDto;
 
 import java.util.List;
 
@@ -38,6 +37,8 @@ public class TokenFacadeTest {
 
 
 
+
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 //    @Test
@@ -55,7 +56,7 @@ public class TokenFacadeTest {
 
     @Test
     public void deleteAllTokens(){
-        List<String> tokens = List.of("ID-2544834373027", "ID-4919640911169", "ID-6539091157185", "ID-7972283895082");
+        List<String> tokens = List.of("ID-2544834373027", "ID-1380106055148", "ID-6539091157185", "ID-7972283895082");
         Flux.range(0, 4).flatMap(num ->
              webClient.delete()
                     .uri("/all/{current_token}", tokens.get(num))
@@ -74,7 +75,7 @@ public class TokenFacadeTest {
                                 .uri("/all/{current_token}", tokens.get(num))
                                 .header("Device-Ip", "21.223.121.5")
                                 .retrieve()
-                                .toEntityList(TokenData.class)
+                                .toEntityList(TokenDataDto.class)
                                 .doOnError(e -> logger.error(e.getMessage()))
                                 .doOnSuccess(res -> res.getBody().forEach(el -> logger.info(el.toString()))))
                 .subscribe();
@@ -89,14 +90,14 @@ public class TokenFacadeTest {
         String currentToken2 = "ID-3509808405351";
 
 
-        Mono<TokensResponse> loginUser = webClient.mutate().baseUrl("http://localhost:8081/api/account").build()
+        Mono<TokensResponseDto> loginUser = webClient.mutate().baseUrl("http://localhost:8081/api/account").build()
                 .post()
                 .uri("/login")
                 .header("Device-Ip", "31.220.2.54")
-                .bodyValue(new UserLogin(new UserData("4357480@bk.ru", "Qwerasd1234", "Qwerasd1234"),
-                        new DeviceData("Xiaomi", "mobile")))
+                .bodyValue(new UserLoginDto(new UserDataDto("4357480@bk.ru", "Qwerasd1234", "Qwerasd1234"),
+                        new DeviceDataDto("Xiaomi", "mobile")))
                 .retrieve()
-                .bodyToMono(TokensResponse.class)
+                .bodyToMono(TokensResponseDto.class)
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnSuccess(res -> logger.info(res.getTokenId()));
 
@@ -122,11 +123,11 @@ public class TokenFacadeTest {
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnSuccess(res -> logger.info("Success deleted!"));
 
-        Mono<ResponseEntity<List<TokenData>>> getAllTokens =  webClient.get()
+        Mono<ResponseEntity<List<TokenDataDto>>> getAllTokens =  webClient.get()
                 .uri("/all/{currentTokenId}", currentToken1)
                 .header("Device-Ip", "31.220.2.54")
                 .retrieve()
-                .toEntityList(TokenData.class)
+                .toEntityList(TokenDataDto.class)
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnSuccess(res ->
                     res.getBody().forEach(el -> logger.info(el.toString())));

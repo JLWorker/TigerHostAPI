@@ -1,11 +1,7 @@
 package tgc.plus.authservice;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import tgc.plus.authservice.dto.tokens_dto.TokenData;
 import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

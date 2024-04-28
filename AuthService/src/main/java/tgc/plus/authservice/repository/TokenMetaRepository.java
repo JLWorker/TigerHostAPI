@@ -10,8 +10,6 @@ import tgc.plus.authservice.entities.TokenMeta;
 @Repository
 public interface TokenMetaRepository extends ReactiveCrudRepository<TokenMeta, Long> {
 
-    Mono<TokenMeta> getTokenMetaByTokenId(Long tokenId);
-
     @Modifying
     @Query("UPDATE token_meta SET device_ip= :ipAddress WHERE token_id= :tokenIdMeta")
     Mono<Void> updateIpAddress(String ipAddress, Long tokenIdMeta);

@@ -8,8 +8,6 @@ import tgc.plus.authservice.entities.TwoFactor;
 
 public interface TwoFactorRepository extends ReactiveCrudRepository<TwoFactor, Long> {
 
-    Mono<TwoFactor> getTwoFactorByDeviceToken(String deviceToken);
-
     Mono<Void> removeTwoFactorByDeviceToken(String deviceToken);
 
     @Modifying

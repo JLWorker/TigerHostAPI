@@ -10,7 +10,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 import tgc.plus.authservice.configs.utils.CustomPartitioner;
-import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
+import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessageDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,14 +49,14 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public SenderOptions<String, KafkaMessage> senderOptions(){
-        SenderOptions<String, KafkaMessage> senderOptions = SenderOptions.create(producerConfigs());
+    public SenderOptions<String, KafkaMessageDto> senderOptions(){
+        SenderOptions<String, KafkaMessageDto> senderOptions = SenderOptions.create(producerConfigs());
         senderOptions.scheduler(Schedulers.newBoundedElastic(schedulerResultThread, schedulerResultQueue, "sender-option-result"));
         return senderOptions;
     }
 
     @Bean
-    public KafkaSender<String, KafkaMessage> kafkaSender(){
+    public KafkaSender<String, KafkaMessageDto> kafkaSender(){
         return KafkaSender.create(senderOptions());
     }
 

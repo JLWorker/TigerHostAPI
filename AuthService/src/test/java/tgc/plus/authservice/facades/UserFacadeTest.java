@@ -3,23 +3,16 @@ package tgc.plus.authservice.facades;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import tgc.plus.authservice.api.UserController;
 import tgc.plus.authservice.dto.user_dto.*;
-
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserFacadeTest {
-
-    @Autowired
-    private UserController userController;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -43,7 +36,7 @@ public class UserFacadeTest {
 
         Flux<ResponseEntity<Void>> sendChangeEmailReq = Flux.range(0, 11).flatMap(num -> webClient.patch()
                 .uri("/email")
-                .bodyValue(new UserChangeContacts(null, "4357480@bk.ru"))
+                .bodyValue(new UserChangeContactsDto(null, "4357480@bk.ru"))
                 .retrieve()
                 .toBodilessEntity()
                 .doOnError(e->logger.info(e.getMessage()))
@@ -51,7 +44,7 @@ public class UserFacadeTest {
 
         Mono<ResponseEntity<Void>> sendChangePhoneReq = webClient.patch()
                 .uri("/phone")
-                .bodyValue(new UserChangeContacts("89254380811", null))
+                .bodyValue(new UserChangeContactsDto("89254380811", null))
                 .retrieve()
                 .toBodilessEntity()
                 .doOnError(e->logger.info(e.getMessage()))
@@ -59,7 +52,7 @@ public class UserFacadeTest {
 
         Mono<ResponseEntity<Void>> checkRecCode = webClient.patch()
                 .uri("/check")
-                .bodyValue(new RestorePassword("Qwerasd1234", "Qwerasd1234", "cc37a82b-620f-4765-8037-b9852f474cf3"))
+                .bodyValue(new RestorePasswordDto("Qwerasd1234", "Qwerasd1234", "cc37a82b-620f-4765-8037-b9852f474cf3"))
                 .retrieve()
                 .toBodilessEntity()
                 .doOnError(e->logger.info(e.getMessage()))
@@ -76,14 +69,14 @@ public class UserFacadeTest {
 //                .doOnSuccess(res -> logger.info("Refresh token num {} was updated", res.getRefreshToken())));
 
 
-        Flux<TokensResponse> loginUsers = Flux.range(0,3).flatMap(num ->
+        Flux<TokensResponseDto> loginUsers = Flux.range(0,3).flatMap(num ->
                 webClient.post()
                 .uri("/login")
                 .header("Device-Ip", "31.220.2.54")
-                .bodyValue(new UserLogin(new UserData("4357480@bk.ru", "Qazwsx1234", "Qazwsx1234"),
-                        new DeviceData("Xiaomi", "mobile")))
+                .bodyValue(new UserLoginDto(new UserDataDto("4357480@bk.ru", "Qazwsx1234", "Qazwsx1234"),
+                        new DeviceDataDto("Xiaomi", "mobile")))
                 .retrieve()
-                .bodyToMono(TokensResponse.class)
+                .bodyToMono(TokensResponseDto.class)
                 .doOnError(e -> logger.error(e.getMessage()))
                 .doOnSuccess(res -> logger.info(res.getTokenId())));
 

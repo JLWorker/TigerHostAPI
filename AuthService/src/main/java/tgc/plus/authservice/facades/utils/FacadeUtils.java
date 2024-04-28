@@ -14,14 +14,17 @@ import reactor.core.publisher.Mono;
 import reactor.kafka.sender.SenderRecord;
 import reactor.util.function.Tuple2;
 import tgc.plus.authservice.configs.KafkaProducerConfig;
-import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaims;
-import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessage;
-import tgc.plus.authservice.dto.kafka_message_dto.headers.KafkaHeadersDTO;
-import tgc.plus.authservice.dto.user_dto.DeviceData;
+import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaimsDto;
+import tgc.plus.authservice.dto.kafka_message_dto.KafkaMessageDto;
+import tgc.plus.authservice.dto.kafka_message_dto.headers.KafkaHeadersDto;
+import tgc.plus.authservice.dto.user_dto.DeviceDataDto;
 import tgc.plus.authservice.entities.TokenMeta;
 import tgc.plus.authservice.entities.User;
 import tgc.plus.authservice.entities.UserToken;
-import tgc.plus.authservice.exceptions.exceptions_elements.*;
+import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.RefreshTokenException;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.InvalidRequestException;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.NotFoundException;
+import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.ServerException;
 import tgc.plus.authservice.facades.utils.utils_enums.CookiePayload;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TokenMetaRepository;
@@ -60,18 +63,18 @@ public class FacadeUtils {
         return Mono.defer(() -> ReactiveSecurityContextHolder.getContext()
                 .map(securityContext -> securityContext.getAuthentication().getPrincipal().toString()));
     }
-    public Mono<Void> sendMessageInKafkaTopic(KafkaMessage message, String topic, KafkaHeadersDTO kafkaHeadersDTO, PartitioningStrategy strategy){
-        ProducerRecord<String, KafkaMessage> messageRecord = new ProducerRecord<>(topic, strategy.getStrategy(), message);
+    public Mono<Void> sendMessageInKafkaTopic(KafkaMessageDto message, String topic, KafkaHeadersDto kafkaHeadersDTO, PartitioningStrategy strategy){
+        ProducerRecord<String, KafkaMessageDto> messageRecord = new ProducerRecord<>(topic, strategy.getStrategy(), message);
         Map<String, String> headers = objectMapper.convertValue(kafkaHeadersDTO, new TypeReference<>() {});
         headers.forEach((key, value) -> messageRecord.headers().add(key, value.getBytes()));
-        SenderRecord<String, KafkaMessage, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
+        SenderRecord<String, KafkaMessageDto, String> senderRecord = SenderRecord.create(messageRecord, UUID.randomUUID().toString());
         return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord)).then();
     }
 
-        public Mono<Tuple2<String, UserToken>> generatePairTokens(User user, DeviceData deviceData, String ipAddr){
-        return tokenService.createAccessToken(new AccessTokenClaims(user.getUserCode(), user.getRole()), TokenType.SECURITY)
+        public Mono<Tuple2<String, UserToken>> generatePairTokens(User user, DeviceDataDto deviceDataDto, String ipAddr){
+        return tokenService.createAccessToken(new AccessTokenClaimsDto(user.getUserCode(), user.getRole()), TokenType.SECURITY)
                 .zipWith(tokenService.createRefToken(user.getId()))
-                .flatMap(tokens -> tokenMetaRepository.save(new TokenMeta(tokens.getT2().getId(), ipAddr, deviceData.getName(), deviceData.getApplicationType()))
+                .flatMap(tokens -> tokenMetaRepository.save(new TokenMeta(tokens.getT2().getId(), ipAddr, deviceDataDto.getName(), deviceDataDto.getApplicationType()))
                         .thenReturn(tokens));
     }
 
@@ -79,7 +82,7 @@ public class FacadeUtils {
         ResponseCookie cookie = ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name(), userToken.getRefreshToken())
                         .httpOnly(true)
                         .domain(refCookieDomain)
-                        .path("/api/tokens/")
+                        .path("/api/auth/tokens/")
                         .secure(true)
                         .sameSite("Lax")
                         .maxAge(Duration.between(userToken.getCreateDate(), userToken.getExpiredDate()))
