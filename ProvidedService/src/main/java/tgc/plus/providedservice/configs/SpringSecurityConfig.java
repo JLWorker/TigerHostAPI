@@ -12,6 +12,8 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -26,15 +28,19 @@ public class SpringSecurityConfig {
     private TokenService tokenService;
 
     @Bean
+    public ServerWebExchangeMatcher permitAllServerWebMatchers(){
+        return ServerWebExchangeMatchers.pathMatchers("/api/provided/**", "/v3/**", "/webjars/**", "/swagger-ui.html");
+    }
+
+    @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authorizeExchange(exchange ->
                         exchange
-//                                .pathMatchers("/api/provided/admin/**").hasAnyRole(RoleList.ADMIN.name())
-                                .pathMatchers("/api/provided/**").permitAll()
-                                .pathMatchers("/v3/**", "/webjars/**", "/swagger-ui.html").permitAll()
+                                .pathMatchers("/api/provided/admin/**").hasAuthority(RoleList.ADMIN.name())
+                                .matchers(permitAllServerWebMatchers()).permitAll()
                                 .anyExchange().denyAll()
                 )
                  .addFilterAt(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION);
@@ -56,7 +62,7 @@ public class SpringSecurityConfig {
     public AuthenticationWebFilter authenticationWebFilter() {
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(reactiveFilterAuthenticationManager());
         authenticationWebFilter.setServerAuthenticationConverter(new JwtServerAuthenticationConverter(tokenService));
-        authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher());
+        authenticationWebFilter.setRequiresAuthenticationMatcher(new JwtServerWebExchangeMatcher(permitAllServerWebMatchers()));
         authenticationWebFilter.setAuthenticationFailureHandler(new JwtAuthenticationHandler(new ObjectMapper()));
         return authenticationWebFilter;
     }

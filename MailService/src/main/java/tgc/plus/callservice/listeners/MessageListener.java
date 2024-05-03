@@ -12,13 +12,12 @@ import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.util.retry.Retry;
 import tgc.plus.callservice.configs.KafkaConsumerConfig;
-import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.dto.MailMessageDto;
 import org.springframework.stereotype.Component;
 import tgc.plus.callservice.listeners.utils.CommandsDispatcher;
 
 import java.time.Duration;
 import java.util.Collections;
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -43,10 +42,10 @@ public class MessageListener {
     }
 
     private Flux<Void> startListenerPartition(Integer partition) {
-        ReceiverOptions<String, MessageElement> receiverOptions = kafkaConsumerConfig.receiverOptions()
+        ReceiverOptions<String, MailMessageDto> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .assignment(Collections.singleton(new TopicPartition(topic, partition)));
 
-        KafkaReceiver<String, MessageElement> kafkaReceiver = KafkaReceiver.create(receiverOptions);
+        KafkaReceiver<String, MailMessageDto> kafkaReceiver = KafkaReceiver.create(receiverOptions);
 
         return kafkaReceiver.receive()
                 .concatMap(msg -> {

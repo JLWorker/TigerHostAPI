@@ -15,7 +15,7 @@ import reactor.kafka.receiver.ReceiverOptions;
 import reactor.util.retry.Retry;
 import tgc.plus.feedbackgateaway.configs.KafkaConsumerConfig;
 import tgc.plus.feedbackgateaway.configs.RedisConfig;
-import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessageDto;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class MessageListener {
     RedisConfig redisConfig;
 
     @Autowired
-    ReactiveRedisTemplate<String, EventKafkaMessage> redisTemplate;
+    ReactiveRedisTemplate<String, EventKafkaMessageDto> redisTemplate;
 
     @EventListener(value = ApplicationStartedEvent.class)
     public void kafkaConsumerStarter() {
@@ -51,10 +51,10 @@ public class MessageListener {
 
     private Flux<Void> startListenerPartition(Integer partition) {
 
-        ReceiverOptions<String, EventKafkaMessage> receiverOptions = kafkaConsumerConfig.receiverOptions()
+        ReceiverOptions<String, EventKafkaMessageDto> receiverOptions = kafkaConsumerConfig.receiverOptions()
                 .assignment(Collections.singleton(new TopicPartition(topic, partition)));
 
-        KafkaReceiver<String, EventKafkaMessage> kafkaReceiver = KafkaReceiver.create(receiverOptions);
+        KafkaReceiver<String, EventKafkaMessageDto> kafkaReceiver = KafkaReceiver.create(receiverOptions);
 
         return kafkaReceiver.receive()
                 .concatMap(msg -> {

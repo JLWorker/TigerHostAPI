@@ -3,11 +3,13 @@ package tgc.plus.authservice.facades;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.util.validation.metadata.NamedObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.PasswordRestorePayloadDto;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.PayloadDto;
 import tgc.plus.authservice.dto.kafka_message_dto.message_payloads.SaveUserPayloadDto;
+import tgc.plus.authservice.entities.UserDetail;
 import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.RecoveryCodeExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.InvalidRequestException;
 import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.NotFoundException;
@@ -37,6 +40,8 @@ import tgc.plus.authservice.facades.utils.utils_enums.MailServiceCommand;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;
+import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
+import tgc.plus.authservice.services.CookieService;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.UserService;
 import tgc.plus.authservice.services.utils.utils_enums.TokenType;
@@ -45,6 +50,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
+
+import static net.sf.jsqlparser.util.validation.metadata.NamedObject.user;
 
 @Service
 @Slf4j
@@ -61,6 +68,7 @@ public class UserFacade {
     private final TwoFactorRepository twoFactorRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ContactUserRepositoryFactory contactUserRepositoryFactory;
+    private final CookieService cookieService;
 
     @Value("${kafka.topic.mail-service}")
     private String mailTopic;
@@ -102,19 +110,19 @@ public class UserFacade {
                 .authenticate(new UsernamePasswordAuthenticationToken(userDataDto.getEmail(), userDataDto.getPassword()))
                 .then(userRepository.getUserByEmail(userDataDto.getEmail()))
                 .flatMap(user -> {
-                    if (user.getTwoAuthStatus()) {
+                    if (user.getTwoFactorStatus()) {
                         String deviceToken = UUID.randomUUID().toString();
                         TwoFactor twoFactor = new TwoFactor(user.getId(), deviceToken, Instant.now());
                         return twoFactorRepository.save(twoFactor)
                                 .then(tokenService.createAccessToken(new TwoFactorTokenClaimsDto(deviceToken), TokenType.TWO_FACTOR))
                                 .flatMap(token -> Mono.error(new TwoFactorActiveException(token)));
-                    } else {
-                        return facadeUtils.generatePairTokens(user, deviceDataDto, ipAddr)
-                                .flatMap(tokens -> facadeUtils.addRefCookie(serverHttpResponse, tokens.getT2())
-                                .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
-                                        .flatMap(feedbackMessage -> facadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDto(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)))
-                                        .then(Mono.just(new TokensResponseDto(tokens.getT1(), tokens.getT2().getTokenId()))));
-                    }
+                    } else
+                        return facadeUtils.checkTokensCount(user.getUserCode())
+                                .then(facadeUtils.generatePairTokens(user, deviceDataDto, ipAddr)
+                                        .flatMap(tokens -> cookieService.addRefCookie(serverHttpResponse, tokens.getT2())
+                                                .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
+                                                        .flatMap(feedbackMessage -> facadeUtils.sendMessageInKafkaTopic(feedbackMessage, feedbackTopic, new FeedbackHeadersDto(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)))
+                                                .then(Mono.just(new TokensResponseDto(tokens.getT1(), tokens.getT2().getTokenId())))));
                 })
                 .onErrorResume(e -> {
                     if (!(e instanceof AuthenticationException) && !(e instanceof TwoFactorActiveException) && !(e instanceof BanUserException)) {
@@ -205,7 +213,7 @@ public class UserFacade {
     public Mono<UserInfoResponseDto> getInfoAboutAccount(){
         return facadeUtils.getPrincipal()
                 .flatMap(userRepository::getUserByUserCode)
-                .flatMap(user -> Mono.just(new UserInfoResponseDto(user.getPhone(), user.getEmail(), user.getTwoAuthStatus())))
+                .flatMap(user -> Mono.just(new UserInfoResponseDto(user.getPhone(), user.getEmail(), user.getTwoFactorStatus())))
                 .onErrorResume(e -> {
                     log.error(e.getMessage());
                     return facadeUtils.getServerException();

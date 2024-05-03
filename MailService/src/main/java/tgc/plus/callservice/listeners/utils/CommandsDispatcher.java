@@ -4,10 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 import tgc.plus.callservice.configs.R2Config;
-import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.dto.MailMessageDto;
 import tgc.plus.callservice.exceptions.CommandNotFoundException;
 import tgc.plus.callservice.listeners.utils.commands.EditEmail;
 import tgc.plus.callservice.listeners.utils.commands.EditPhone;
@@ -41,13 +40,13 @@ public class CommandsDispatcher {
         commandMap.put(CommandsNames.SEND_EMAIL.getName(), new SendMail(emailSender, userRepository));
     }
 
-    public Mono<Void> execute(String method, MessageElement messageElement){
+    public Mono<Void> execute(String method, MailMessageDto mailMessageDto){
 
         return Mono.defer(()-> {
             if (method.startsWith("send")) {
-                return commandMap.get("send_em").executionForSender(method, messageElement);
+                return commandMap.get("send_em").executionForSender(method, mailMessageDto);
             } else if (commandMap.containsKey(method)) {
-                return commandMap.get(method).execution(messageElement);
+                return commandMap.get(method).execution(mailMessageDto);
             } else
                return Mono.error(new CommandNotFoundException(String.format("Command with name - %s not found " +
                        "::CommandsDispatcher", method)));

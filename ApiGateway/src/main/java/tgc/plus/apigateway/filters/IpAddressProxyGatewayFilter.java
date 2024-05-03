@@ -2,6 +2,7 @@ package tgc.plus.apigateway.filters;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Component
-public class IpAddressProxyGatewayFilter implements GatewayFilter {
+public class IpAddressProxyGatewayFilter implements GatewayFilter, Ordered {
 
     private final String[] headersList = {
             "X-Forwarded-For",
@@ -58,4 +59,8 @@ public class IpAddressProxyGatewayFilter implements GatewayFilter {
     }
 
 
+    @Override
+    public int getOrder() {
+        return 1;
+    }
 }

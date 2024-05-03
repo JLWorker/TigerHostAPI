@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -18,6 +19,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.tokens_dto.TokenDataDto;
+import tgc.plus.authservice.dto.tokens_dto.UpdateTokenDto;
 import tgc.plus.authservice.dto.tokens_dto.UpdateTokenResponseDto;
 import tgc.plus.authservice.facades.TokenFacade;
 
@@ -38,12 +40,13 @@ public class TokenController {
                     @Header(name = "Logout", description = "Refresh token not exist or expired, need logout", schema = @Schema(example = "true")),
                     @Header(name = "Set-Cookie", description = "This header contains cookies to reset", schema = @Schema(example = "REFRESH_TOKEN=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT"))
             },description = "Refresh token not exist or expired"),
+            @ApiResponse(responseCode = "409", content = @Content(), description = "Access token already update"),
             @ApiResponse(responseCode = "500", content = @Content(), description = "Server inside exception, for ex. - sql operation exception"),
             @ApiResponse(responseCode = "200", description = "Success tokens update", headers = {@Header(name = "Set-Cookie", schema = @Schema(example = "REFRESH_TOKEN=90b999f6-4989-4f96-9d6c-56c5cdbfe10c; Path=/api/auth/tokens/; Domain=localhost; Max-Age=864000; Expires=Wed, 08 May 2024 05:59:16 GMT; Secure; HttpOnly; SameSite=Lax"))})
     })
     @PatchMapping("/update")
-    public Mono<UpdateTokenResponseDto> updateToken(@CookieValue("REFRESH_TOKEN") String refreshToken, ServerHttpResponse serverHttpResponse){
-        return tokenFacade.updateAccessToken(refreshToken, serverHttpResponse);
+    public Mono<UpdateTokenResponseDto> updateToken(@CookieValue("REFRESH_TOKEN") String cookieData, @Valid @RequestBody UpdateTokenDto updateTokenDto, ServerHttpResponse serverHttpResponse){
+        return tokenFacade.updateAccessToken(cookieData, updateTokenDto, serverHttpResponse);
     }
 
 

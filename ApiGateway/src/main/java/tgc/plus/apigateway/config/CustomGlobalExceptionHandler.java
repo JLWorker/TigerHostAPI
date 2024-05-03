@@ -15,6 +15,7 @@ import tgc.plus.apigateway.config.utils.TokenResponseHeader;
 import tgc.plus.apigateway.dto.error_responses_dto.ResponseException;
 import tgc.plus.apigateway.exceptions.cookie_exceptions.InvalidCookieException;
 import tgc.plus.apigateway.exceptions.cookie_exceptions.MissingCookieException;
+import tgc.plus.apigateway.exceptions.service_exceptions.ServerException;
 import tgc.plus.apigateway.exceptions.token_exceptions.ExpiredAccessTokenException;
 import tgc.plus.apigateway.exceptions.token_exceptions.InvalidAccessTokenException;
 import tgc.plus.apigateway.filters.utils.utils_enums.CookiePayload;
@@ -23,7 +24,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Component
 @Slf4j
-@Order(-2)
 public class CustomGlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 
     /**
@@ -56,6 +56,8 @@ public class CustomGlobalExceptionHandler extends AbstractErrorWebExceptionHandl
             headers.add(TokenResponseHeader.LOGOUT.getName(), "true");
         else if (throwable instanceof MissingCookieException)
             status = HttpStatus.BAD_REQUEST;
+        else if (throwable instanceof ServerException)
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         ResponseException exception = new ResponseException(request.path(), status.getReasonPhrase(), status.value(), throwable.getMessage());
         return ServerResponse.status(status)
@@ -63,7 +65,7 @@ public class CustomGlobalExceptionHandler extends AbstractErrorWebExceptionHandl
                 .headers(httpHeaders -> httpHeaders.addAll(headers))
                 .bodyValue(exception)
                 .flatMap(serverResponse -> {
-                    if (throwable instanceof InvalidCookieException) {
+                    if (throwable instanceof InvalidCookieException || throwable instanceof InvalidAccessTokenException) {
                         ResponseCookie responseCookie = ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name()).maxAge(0).build();
                         return ServerResponse.from(serverResponse).cookie(responseCookie).bodyValue(exception);
                     }

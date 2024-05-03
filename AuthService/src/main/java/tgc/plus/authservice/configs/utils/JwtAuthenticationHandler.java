@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
@@ -17,6 +19,7 @@ import tgc.plus.authservice.dto.exceptions_dto.ExceptionResponseDto;
 import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.AuthTokenExpiredException;
 import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.AuthTokenInvalidException;
 import tgc.plus.authservice.exceptions.exceptions_elements.service_exceptions.ServerException;
+import tgc.plus.authservice.facades.utils.utils_enums.CookiePayload;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,6 +39,7 @@ public class JwtAuthenticationHandler implements ServerAuthenticationFailureHand
         }
         else if (exception instanceof AuthTokenInvalidException){
             response.getHeaders().add(TokenResponseHeader.LOGOUT.getName(), "true");
+            response.addCookie(ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name()).maxAge(0).build());
         }
         response.getHeaders().add("Content-Type", "application/json");
         response.setStatusCode(HttpStatus.UNAUTHORIZED);

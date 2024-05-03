@@ -1,6 +1,5 @@
 package tgc.plus.providedservice.api;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -15,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import tgc.plus.providedservice.dto.api_dto.admin_api.CharacteristicTypeDto;
-import tgc.plus.providedservice.dto.api_dto.admin_api.CharacteristicsTypesResponse;
+import tgc.plus.providedservice.dto.api_dto.admin_api.CharacteristicsTypesResponseDto;
 import tgc.plus.providedservice.entities.CpuType;
 import tgc.plus.providedservice.entities.MemoryType;
 import tgc.plus.providedservice.entities.RamType;
@@ -42,7 +41,7 @@ public class AdminCharacteristicTypeController {
             @ApiResponse(responseCode = "200", description = "Success operation")
     })
     @GetMapping("/all")
-    public Mono<CharacteristicsTypesResponse> getCharacteristicsTypes(){
+    public Mono<CharacteristicsTypesResponseDto> getCharacteristicsTypes(){
         return adminProvidedFacade.getCharacteristicsTypes();
     }
 

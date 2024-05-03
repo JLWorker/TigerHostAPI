@@ -13,13 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import reactor.core.publisher.Mono;
 import tgc.plus.callservice.configs.FreeMarkerConfig;
-import tgc.plus.callservice.dto.message_payloads.Payload;
+import tgc.plus.callservice.dto.message_payloads.PayloadDto;
 import tgc.plus.callservice.exceptions.CommandNotFoundException;
 import tgc.plus.callservice.services.utils.EmailSenderCommands;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -43,7 +42,7 @@ public class EmailSender {
         }
     }
 
-    public Mono<Void> sendMessage(Payload data, String email, String method){
+    public Mono<Void> sendMessage(PayloadDto data, String email, String method){
     return Mono.defer(()->{
         if(senderCommands.containsKey(method)){
 

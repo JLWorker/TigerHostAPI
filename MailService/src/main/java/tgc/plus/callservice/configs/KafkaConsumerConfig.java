@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import reactor.kafka.receiver.ReceiverOptions;
-import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.dto.MailMessageDto;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -51,8 +51,8 @@ public class KafkaConsumerConfig {
 
 
     @Bean
-    public ReceiverOptions<String, MessageElement> receiverOptions(){
-        ReceiverOptions<String, MessageElement> receiverOptions = ReceiverOptions.create(consumerProps());
+    public ReceiverOptions<String, MailMessageDto> receiverOptions(){
+        ReceiverOptions<String, MailMessageDto> receiverOptions = ReceiverOptions.create(consumerProps());
         receiverOptions.addAssignListener(receiverPartitions -> log.info("Partitions assign {}", receiverPartitions))
                 .addRevokeListener(revokeListener -> log.info("Partitions revoke {}", revokeListener))
                 .commitInterval(Duration.ofMillis(1000))

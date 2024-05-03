@@ -25,11 +25,10 @@ public class ApiGatewayConfig {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder){
         return builder.routes()
-
                 .route(r -> r.path("/api/auth/2fa/verify-code")
                         .filters(f -> {
-                            f.filter(twoFactorGatewayFilter);
                             f.filter(ipAddressProxyGatewayFilter);
+                            f.filter(twoFactorGatewayFilter);
                             return f;
                         })
                         .uri(ServicesUriList.AUTH_SERVICE.getUrl()))

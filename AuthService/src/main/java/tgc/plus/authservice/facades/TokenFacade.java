@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
+import tgc.plus.authservice.entities.UserToken;
+import tgc.plus.authservice.exceptions.exceptions_elements.auth_exceptions.ParallelAccessTokenUpdateException;
 import tgc.plus.authservice.facades.utils.annotations.IpValid;
 import tgc.plus.authservice.dto.jwt_claims_dto.AccessTokenClaimsDto;
 import tgc.plus.authservice.dto.kafka_message_dto.headers.FeedbackHeadersDto;
@@ -25,8 +27,10 @@ import tgc.plus.authservice.facades.utils.FacadeUtils;
 import tgc.plus.authservice.facades.utils.utils_enums.KafkaMessageType;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TokenMetaRepository;
+import tgc.plus.authservice.repository.UserRepository;
 import tgc.plus.authservice.repository.db_client_repository.CustomDatabaseClientRepository;
 import tgc.plus.authservice.repository.UserTokenRepository;
+import tgc.plus.authservice.services.CookieService;
 import tgc.plus.authservice.services.TokenService;
 
 import java.util.List;
@@ -44,20 +48,28 @@ public class TokenFacade {
     private final KafkaMessageFactory kafkaMessageFactory;
     private final TokenMetaRepository tokenMetaRepository;
     private final CustomDatabaseClientRepository customDatabaseClientRepository;
+    private final CookieService cookieService;
+    private final UserRepository userRepository;
 
     @Value("${kafka.topic.feedback-service}")
     private String feedbackTopic;
 
+    //проверить на параллельность обновления
     @Transactional
-    public Mono<UpdateTokenResponseDto> updateAccessToken(String refreshToken, ServerHttpResponse serverHttpResponse){
-        return customDatabaseClientRepository.getInfoForTokensUpdate(refreshToken)
-                .filter(Objects::nonNull)
+    public Mono<UpdateTokenResponseDto> updateAccessToken(String cookieData, UpdateTokenDto updateTokenDto, ServerHttpResponse serverHttpResponse){
+        return userTokenRepository.getBlockForUserTokenByTokenId(updateTokenDto.getTokenId())
+                .zipWith(cookieService.getRefreshFromCookie(cookieData))
+                .filter(result -> result.getT1().getId()!=null)
                 .switchIfEmpty(facadeUtils.getRefreshTokenException())
-                .flatMap(data -> tokenService.updatePairTokens(new AccessTokenClaimsDto(data.getUserCode(), data.getRole()), refreshToken,  data.getExpiredDate()))
-                .flatMap(tokens -> facadeUtils.addRefCookie(serverHttpResponse, tokens.getT2())
-                        .thenReturn(new UpdateTokenResponseDto(tokens.getT1())))
+                .filter(result -> result.getT2().equals(result.getT1().getRefreshToken()))
+                .switchIfEmpty(Mono.error(new ParallelAccessTokenUpdateException("Access token already update")))
+                .flatMap(result -> userRepository.getUserById(result.getT1().getUserId())
+                        .flatMap(user -> tokenService.updatePairTokens(new AccessTokenClaimsDto(user.getUserCode(), user.getRole()), result.getT2(), result.getT1().getExpiredDate()))
+                        .flatMap(tokens -> cookieService.addRefCookie(serverHttpResponse, tokens.getT2())
+                                .thenReturn(new UpdateTokenResponseDto(tokens.getT1())))
+                )
                 .onErrorResume(e->{
-                     if (!(e instanceof RefreshTokenException)){
+                     if (!(e instanceof RefreshTokenException) && !(e instanceof ParallelAccessTokenUpdateException)){
                         log.error(e.getMessage());
                         return facadeUtils.getServerException();
                     }
@@ -68,13 +80,14 @@ public class TokenFacade {
 
 
     @Transactional
-    public Mono<Void> logoutToken(String refreshToken, ServerHttpResponse serverHttpResponse){
+    public Mono<Void> logoutToken(String cookieData, ServerHttpResponse serverHttpResponse){
         return facadeUtils.getPrincipal()
-                .flatMap(userCode ->userTokenRepository.getBlockForUserTokenByRefreshToken(refreshToken)
+                .flatMap(userCode -> cookieService.getRefreshFromCookie(cookieData)
+                        .flatMap(refreshToken -> userTokenRepository.getBlockForUserTokenByRefreshToken(refreshToken)
                         .filter(Objects::nonNull)
                         .switchIfEmpty(facadeUtils.getRefreshTokenException())
                         .then(userTokenRepository.deleteUserTokenByRefreshToken(refreshToken)
-                                .doFinally(res -> serverHttpResponse.addCookie(ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name()).maxAge(0).build())))
+                                .doFinally(res -> serverHttpResponse.addCookie(ResponseCookie.from(CookiePayload.REFRESH_TOKEN.name()).maxAge(0).build()))))
                         .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null))
                         .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDto(userCode), PartitioningStrategy.BASIC_MESSAGES))
                 )
@@ -92,7 +105,7 @@ public class TokenFacade {
     public Mono<Void> deleteToken(String tokenId) {
         return ReactiveSecurityContextHolder.getContext().flatMap(securityContext -> {
             String userCode = securityContext.getAuthentication().getPrincipal().toString();
-            return userTokenRepository.getBlockForUserTokenById(tokenId)
+            return userTokenRepository.getBlockForUserTokenByTokenId(tokenId)
                     .filter(Objects::nonNull)
                     .switchIfEmpty(facadeUtils.getNotFoundException("Refresh token already removed"))
                     .then(userTokenRepository.removeUserTokenByTokenId(tokenId))

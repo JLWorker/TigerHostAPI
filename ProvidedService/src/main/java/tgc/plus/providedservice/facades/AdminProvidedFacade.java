@@ -207,11 +207,11 @@ public class AdminProvidedFacade {
     }
 
     @Transactional(readOnly = true)
-    public Mono<CharacteristicsTypesResponse> getCharacteristicsTypes(){
+    public Mono<CharacteristicsTypesResponseDto> getCharacteristicsTypes(){
         return Mono.zip(characteristicRepository.getCharacteristicTypes(CpuType.class).map(CharacteristicTypeDto::new).collectList(),
                         characteristicRepository.getCharacteristicTypes(RamType.class).map(CharacteristicTypeDto::new).collectList(),
                         characteristicRepository.getCharacteristicTypes(MemoryType.class).map(CharacteristicTypeDto::new).collectList())
-                .flatMap(result -> Mono.just(new CharacteristicsTypesResponse(result.getT1(), result.getT2(), result.getT3())))
+                .flatMap(result -> Mono.just(new CharacteristicsTypesResponseDto(result.getT1(), result.getT2(), result.getT3())))
                 .onErrorResume(e -> facadesUtils.getServerError());
     }
 

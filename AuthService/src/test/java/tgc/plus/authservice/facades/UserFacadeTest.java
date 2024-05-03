@@ -1,22 +1,31 @@
 package tgc.plus.authservice.facades;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.user_dto.*;
+import tgc.plus.authservice.entities.UserToken;
+import tgc.plus.authservice.repository.UserTokenRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserFacadeTest {
 
+    @Autowired
+    private TokenFacade tokenFacade;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     private final String accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2NvZGUiOiIwOGIyZDkxOS03NDQyLTQ5YjQtYjFkYi1lNWI3M2FmZDIwMGMiLCJyb2xlIjoiVVNFUiIsImV4cCI6MTcxMzcwOTE1NSwiaWF0IjoxNzEzNjQ5MTU1fQ.reo4eGdMgR2Fn4bT8Gy7zcw8l88LCCrKMNeBkWO6gdQ";
+    private final String userId = "263592eb-5fc4-4b06-b425-f1670f25b3a3";
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl("http://localhost:8081/api/account")
@@ -30,6 +39,16 @@ public class UserFacadeTest {
             .defaultHeader("Authorization", String.format("Bearer_%s", accessToken))
             .clientConnector(new ReactorClientHttpConnector())
             .build();
+
+
+//    @Test
+//    public void parallelLockTest() throws InterruptedException {
+//        tokenFacade.lockMinElem(1, 9000L, userId)
+//                .zipWith(tokenFacade.lockMinElem(2, 7000L, userId)).subscribe();
+//        Thread.sleep(20000);
+//
+//    }
+
 
     @Test
     public void checkParallelMethods(){

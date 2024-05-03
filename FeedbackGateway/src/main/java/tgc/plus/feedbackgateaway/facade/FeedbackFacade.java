@@ -8,8 +8,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import tgc.plus.feedbackgateaway.configs.RedisConfig;
-import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessageDto;
 import tgc.plus.feedbackgateaway.facade.utils.EventTypes;
 import tgc.plus.feedbackgateaway.facade.utils.FacadeUtils;
 import tgc.plus.feedbackgateaway.facade.utils.MessageAvailableList;
@@ -30,14 +29,14 @@ public class FeedbackFacade {
     private FacadeUtils facadeUtils;
 
     @Autowired
-    private ReactiveRedisTemplate<String, EventKafkaMessage> redisTemplate;
+    private ReactiveRedisTemplate<String, EventKafkaMessageDto> redisTemplate;
 
-    public Flux<ServerSentEvent<EventKafkaMessage>> getEventsForDevice(){
+    public Flux<ServerSentEvent<EventKafkaMessageDto>> getEventsForDevice(){
 
-        Flux<ServerSentEvent<EventKafkaMessage>> heartbeatsEvents = Flux.interval(Duration.ofSeconds(intervalHeartbeats))
+        Flux<ServerSentEvent<EventKafkaMessageDto>> heartbeatsEvents = Flux.interval(Duration.ofSeconds(intervalHeartbeats))
                 .flatMap(el -> facadeUtils.createEvent(EventTypes.HEARTBEATS, null));
 
-        Flux<ServerSentEvent<EventKafkaMessage>> messageEvents = Flux.interval(Duration.ofMillis(intervalEvent))
+        Flux<ServerSentEvent<EventKafkaMessageDto>> messageEvents = Flux.interval(Duration.ofMillis(intervalEvent))
                 .flatMap(el ->facadeUtils.getUserContext().flatMapMany(userCode -> redisTemplate.scan(ScanOptions.scanOptions().match(String.format("%s-*", userCode)).build()))
                         .mergeWith(redisTemplate.scan(ScanOptions.scanOptions().match(String.format("%s-*", MessageAvailableList.PUBLIC.getKey())).build())))
                         .flatMapSequential(key -> redisTemplate.opsForValue().get(key)

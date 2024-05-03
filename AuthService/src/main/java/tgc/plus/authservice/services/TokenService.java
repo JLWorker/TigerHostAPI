@@ -30,6 +30,7 @@ import tgc.plus.authservice.services.utils.factories.TokenDateFactory;
 import tgc.plus.authservice.services.utils.utils_enums.TokenType;
 
 import javax.crypto.SecretKey;
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;

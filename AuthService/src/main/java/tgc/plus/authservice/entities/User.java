@@ -3,7 +3,6 @@ package tgc.plus.authservice.entities;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
@@ -25,8 +24,8 @@ public class User {
     @Column("user_code")
     private String userCode;
 
-    @Column("two_auth_status")
-    private Boolean twoAuthStatus;
+    @Column("two_factor_status")
+    private Boolean twoFactorStatus;
 
     @Column("two_factor_secret")
     private String twoFactorSecret;
@@ -65,7 +64,7 @@ public class User {
         this.role = role;
         this.active = true;
         this.phone = null;
-        this.twoAuthStatus = false;
+        this.twoFactorStatus = false;
         this.codeExpiredDate = null;
         this.recoveryCode = null;
         this.registrationDate = Instant.now();

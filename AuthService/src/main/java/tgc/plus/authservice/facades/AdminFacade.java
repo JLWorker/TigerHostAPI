@@ -61,7 +61,7 @@ public class AdminFacade {
                 .flatMap(user -> {
                     user.setEmail(changeAccountDTO.getEmail());
                     user.setActive(changeAccountDTO.getActive());
-                    user.setTwoAuthStatus(changeAccountDTO.getTwoAuthStatus());
+                    user.setTwoFactorStatus(changeAccountDTO.getTwoAuthStatus());
                     user.setRole(changeAccountDTO.getRole());
                     return Mono.just(user);
                 })

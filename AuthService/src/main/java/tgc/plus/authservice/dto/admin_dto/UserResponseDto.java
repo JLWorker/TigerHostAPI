@@ -36,7 +36,7 @@ public class UserResponseDto {
         this.role=user.getRole();
         this.email=user.getEmail();
         this.active=user.getActive();
-        this.twoAuthStatus=user.getTwoAuthStatus();
+        this.twoAuthStatus=user.getTwoFactorStatus();
     }
 
 

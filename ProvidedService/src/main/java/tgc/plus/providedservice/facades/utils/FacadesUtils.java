@@ -1,18 +1,16 @@
 package tgc.plus.providedservice.facades.utils;
 
-import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.SenderRecord;
 import tgc.plus.providedservice.configs.KafkaProducerConfig;
-import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessage;
+import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessageDto;
 import tgc.plus.providedservice.entities.ProvidedServiceEntity;
 import tgc.plus.providedservice.exceptions.facade_exceptions.InvalidRequestException;
 import tgc.plus.providedservice.exceptions.facade_exceptions.RelatedElementsException;
@@ -21,7 +19,6 @@ import tgc.plus.providedservice.exceptions.facade_exceptions.ServerException;
 import tgc.plus.providedservice.repositories.TariffRepository;
 import tgc.plus.providedservice.repositories.custom_database_repository.CustomDatabaseRepository;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
@@ -57,10 +54,10 @@ public class FacadesUtils {
 
 
     public Mono<Void> sendMessageInFeedbackService(EventTypesList eventType, MessageAvailableList headerType){
-        FeedbackMessage newMessage = new FeedbackMessage(null, eventType.getCommand());
-        ProducerRecord<String, FeedbackMessage> producerRecord = new ProducerRecord<>(feedbackTopic, newMessage);
+        FeedbackMessageDto newMessage = new FeedbackMessageDto(null, eventType.getCommand());
+        ProducerRecord<String, FeedbackMessageDto> producerRecord = new ProducerRecord<>(feedbackTopic, newMessage);
         producerRecord.headers().add("user_code", headerType.getKey().getBytes());
-        SenderRecord<String, FeedbackMessage, String> senderRecord = SenderRecord.create(producerRecord, UUID.randomUUID().toString());
+        SenderRecord<String, FeedbackMessageDto, String> senderRecord = SenderRecord.create(producerRecord, UUID.randomUUID().toString());
         return kafkaProducerConfig.kafkaSender().send(Mono.just(senderRecord)).then();
     }
 

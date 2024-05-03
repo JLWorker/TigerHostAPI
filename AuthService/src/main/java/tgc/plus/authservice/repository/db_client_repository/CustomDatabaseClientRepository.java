@@ -5,7 +5,7 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 import tgc.plus.authservice.dto.database_dto.ChangeIpByTokenIdDto;
-import tgc.plus.authservice.dto.database_dto.UpdateTokensDto;
+import tgc.plus.authservice.dto.database_dto.UserInfoAndNumTokensDto;
 import tgc.plus.authservice.dto.tokens_dto.TokenDataDto;
 
 import java.util.List;
@@ -28,12 +28,12 @@ public class CustomDatabaseClientRepository {
                 .collectList();
     }
 
-    public Mono<UpdateTokensDto> getInfoForTokensUpdate(String refreshToken){
-        return databaseClient.sql(CustomRequests.GET_INFO_FOR_UPDATE_TOKENS)
-                .bind("refreshToken", refreshToken)
-                .map((row, metadata) ->  mappingR2dbcConverter.read(UpdateTokensDto.class, row))
-                .first();
-    }
+//    public Mono<UserInfoAndNumTokensDto> getUserInfoAndCountTokens(String email){
+//        return databaseClient.sql(CustomRequests.GET_USER_AND_COUNT_TOKENS)
+//                .bind("email", email)
+//                .map((row, metadata) -> mappingR2dbcConverter.read(UserInfoAndNumTokensDto.class, row))
+//                .first();
+//    }
 
     public Mono<ChangeIpByTokenIdDto> getBlockTokenAndMeta(String tokenId){
         return databaseClient.sql(CustomRequests.GET_INFO_ABOUT_USER_TOKEN_AND_META)

@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import tgc.plus.callservice.dto.MessageElement;
-import tgc.plus.callservice.dto.message_payloads.EditPhoneData;
+import tgc.plus.callservice.dto.MailMessageDto;
+import tgc.plus.callservice.dto.message_payloads.EditPhonePayloadDto;
 import tgc.plus.callservice.entities.User;
 import tgc.plus.callservice.exceptions.UserNotFoundException;
 import tgc.plus.callservice.listeners.utils.Command;
@@ -22,18 +22,18 @@ public class EditPhone implements Command {
 
     @Override
     @Transactional
-    public Mono<Void> execution(MessageElement messageElement) {
-        EditPhoneData editPhoneData = (EditPhoneData) messageElement.getPayload();
-        return userRepository.getUserByUserCodeForChange(messageElement.getUserCode())
+    public Mono<Void> execution(MailMessageDto mailMessageDto) {
+        EditPhonePayloadDto editPhonePayloadDto = (EditPhonePayloadDto) mailMessageDto.getPayload();
+        return userRepository.getUserByUserCodeForChange(mailMessageDto.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found",  messageElement.getUserCode()))))
-                .then(userRepository.updatePhoneUser(messageElement.getUserCode(), editPhoneData.getPhone())
-                        .doOnSuccess(success -> log.info(String.format("Phone for user with code - %s was updated", messageElement.getUserCode()))));
+                .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found",  mailMessageDto.getUserCode()))))
+                .then(userRepository.updatePhoneUser(mailMessageDto.getUserCode(), editPhonePayloadDto.getPhone())
+                        .doOnSuccess(success -> log.info(String.format("Phone for user with code - %s was updated", mailMessageDto.getUserCode()))));
     }
 
     @Override
-    public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+    public Mono<Void> executionForSender(String method, MailMessageDto mailMessageDto) {
         return Mono.empty();
     }
 

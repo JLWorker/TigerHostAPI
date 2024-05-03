@@ -21,6 +21,7 @@ import tgc.plus.authservice.facades.utils.utils_enums.KafkaMessageType;
 import tgc.plus.authservice.facades.utils.utils_enums.PartitioningStrategy;
 import tgc.plus.authservice.repository.TwoFactorRepository;
 import tgc.plus.authservice.repository.UserRepository;
+import tgc.plus.authservice.services.CookieService;
 import tgc.plus.authservice.services.TokenService;
 import tgc.plus.authservice.services.TwoFactorService;
 
@@ -37,6 +38,7 @@ public class TwoFactorFacade {
     private final UserRepository userRepository;
     private final KafkaMessageFactory kafkaMessageFactory;
     private final TwoFactorRepository twoFactorRepository;
+    private final CookieService cookieService;
 
     @Value("${kafka.topic.feedback-service}")
     private String feedbackTopic;
@@ -46,7 +48,7 @@ public class TwoFactorFacade {
         return facadeUtils.getPrincipal()
                 .flatMap(userCode -> userRepository.getBlockForUserByUserCode(userCode)
                 .flatMap(user -> {
-                    if(user.getTwoAuthStatus())
+                    if(user.getTwoFactorStatus())
                         return userRepository.switchTwoFactorStatus(user.getUserCode(), false);
                     else
                         return  (user.getTwoFactorSecret()!=null) ? userRepository.switchTwoFactorStatus(user.getUserCode(), true) :
@@ -87,8 +89,9 @@ public class TwoFactorFacade {
                         .filter(res -> res)
                         .switchIfEmpty(Mono.error(new TwoFactorCodeException("Authentication code is incorrect")))
                         .then(twoFactorRepository.removeTwoFactorByDeviceToken(deviceToken))
+                        .then(facadeUtils.checkTokensCount(user.getUserCode()))
                         .then(facadeUtils.generatePairTokens(user, twoFactorCodeDto.getDeviceDataDto(), ipAddress)
-                                        .flatMap(tokens -> facadeUtils.addRefCookie(serverHttpResponse, tokens.getT2())
+                                        .flatMap(tokens -> cookieService.addRefCookie(serverHttpResponse, tokens.getT2())
                                         .then(kafkaMessageFactory.createKafkaMessage(KafkaMessageType.FEEDBACK_MESSAGE, FeedbackEventType.UPDATE_TOKENS.getName(), null)
                                                 .flatMap(kafkaMessage -> facadeUtils.sendMessageInKafkaTopic(kafkaMessage, feedbackTopic, new FeedbackHeadersDto(user.getUserCode()), PartitioningStrategy.BASIC_MESSAGES)))
                                         .thenReturn(new TokensResponseDto(tokens.getT1(), tokens.getT2().getTokenId()))))))

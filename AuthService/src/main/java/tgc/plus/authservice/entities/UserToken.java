@@ -15,7 +15,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-public class UserToken {
+public class UserToken implements Comparable<UserToken> {
 
     @Id
     @Column("id")
@@ -45,5 +45,11 @@ public class UserToken {
         this.refreshToken = refreshToken;
         this.expiredDate = expiredDate;
         this.createDate = createDate;
+    }
+
+
+    @Override
+    public int compareTo(UserToken o) {
+        return this.expiredDate.compareTo(o.expiredDate);
     }
 }

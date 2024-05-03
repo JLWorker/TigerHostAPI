@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessageDto;
 import tgc.plus.feedbackgateaway.facade.FeedbackFacade;
 
 @RestController
@@ -43,7 +43,7 @@ public class FeedbackController {
             }) ,description = "Successful verify")
     })
     @GetMapping(value = "/events")
-    public Flux<ServerSentEvent<EventKafkaMessage>> getEvents(){
+    public Flux<ServerSentEvent<EventKafkaMessageDto>> getEvents(){
 
         return feedbackFacade.getEventsForDevice();
 

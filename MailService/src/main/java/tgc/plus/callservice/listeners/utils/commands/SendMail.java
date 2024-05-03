@@ -3,7 +3,7 @@ package tgc.plus.callservice.listeners.utils.commands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tgc.plus.callservice.dto.MessageElement;
+import tgc.plus.callservice.dto.MailMessageDto;
 import tgc.plus.callservice.entities.User;
 import tgc.plus.callservice.exceptions.UserNotFoundException;
 import tgc.plus.callservice.listeners.utils.Command;
@@ -24,18 +24,18 @@ public class SendMail implements Command {
     }
 
     @Override
-    public Mono<Void> execution(MessageElement messageElement) {
+    public Mono<Void> execution(MailMessageDto mailMessageDto) {
         return Mono.empty();
     }
 
     @Override
-    public Mono<Void> executionForSender(String method, MessageElement messageElement) {
+    public Mono<Void> executionForSender(String method, MailMessageDto mailMessageDto) {
 
-        return userRepository.getUserByUserCode(messageElement.getUserCode())
+        return userRepository.getUserByUserCode(mailMessageDto.getUserCode())
                 .defaultIfEmpty(new User())
                 .filter(user -> user.getId()!=null)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found", messageElement.getUserCode()))))
-                .flatMap(user -> emailSender.sendMessage(messageElement.getPayload(), user.getEmail(), method));
+                .switchIfEmpty(Mono.error(new UserNotFoundException(String.format("User with code - %s not found", mailMessageDto.getUserCode()))))
+                .flatMap(user -> emailSender.sendMessage(mailMessageDto.getPayload(), user.getEmail(), method));
     }
 
 }

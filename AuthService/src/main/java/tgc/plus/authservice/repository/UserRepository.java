@@ -16,6 +16,8 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
      Mono<User> getUserByEmail(String email);
 
+     Mono<User> getUserById(Long id);
+
      @Query("SELECT * FROM users WHERE users.registration_date between :startDate AND :finishDate LIMIT :limit")
      Flux<User> getAllByDateTimeAndCount(Instant startDate, Instant finishDate, Integer limit);
 
@@ -55,10 +57,10 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
      Mono<Long> clearRecoveryCode(String userCode);
 
      @Modifying
-     @Query("UPDATE users SET two_auth_status= :status WHERE user_code= :userCode")
+     @Query("UPDATE users SET two_factor_status= :status WHERE user_code= :userCode")
      Mono<Long> switchTwoFactorStatus(String userCode, Boolean status);
 
      @Modifying
-     @Query("UPDATE users SET two_auth_status= true, two_factor_secret= :secret WHERE user_code= :userCode")
+     @Query("UPDATE users SET two_factor_status= true, two_factor_secret= :secret WHERE user_code= :userCode")
      Mono<Void> updateTwoFactorSecret(String userCode, String secret);
 }

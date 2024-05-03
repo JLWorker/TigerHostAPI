@@ -5,7 +5,7 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tgc.plus.feedbackgateaway.dto.EventKafkaMessage;
+import tgc.plus.feedbackgateaway.dto.EventKafkaMessageDto;
 
 import java.time.Instant;
 
@@ -18,15 +18,15 @@ public class FacadeUtils {
                 .flatMap(securityContext -> Mono.just(securityContext.getAuthentication().getPrincipal().toString()));
     }
 
-    public Mono<ServerSentEvent<EventKafkaMessage>> createEvent(EventTypes type, EventKafkaMessage eventKafkaMessage){
+    public Mono<ServerSentEvent<EventKafkaMessageDto>> createEvent(EventTypes type, EventKafkaMessageDto eventKafkaMessageDto){
         if (type.equals(EventTypes.HEARTBEATS)){
-            return Mono.just(ServerSentEvent.<EventKafkaMessage>builder().event(EventTypes.HEARTBEATS.getName()).build());
+            return Mono.just(ServerSentEvent.<EventKafkaMessageDto>builder().event(EventTypes.HEARTBEATS.getName()).build());
         }
         else
-            return Mono.just(ServerSentEvent.<EventKafkaMessage>builder()
+            return Mono.just(ServerSentEvent.<EventKafkaMessageDto>builder()
                     .id(Instant.now().toString())
                     .event(type.getName())
-                    .data(eventKafkaMessage)
+                    .data(eventKafkaMessageDto)
                     .build());
     }
 

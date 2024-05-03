@@ -21,7 +21,6 @@ public class JwtServerAuthenticationConverter implements ServerAuthenticationCon
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
         return tokenService.getTokenFromRequest(exchange)
-                .flatMap(tokenService::getAuthentication)
-                .doOnError(e -> log.error(e.getMessage()));
+                .flatMap(tokenService::getAuthentication);
         }
 }

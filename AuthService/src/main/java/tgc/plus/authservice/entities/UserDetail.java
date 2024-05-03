@@ -1,5 +1,7 @@
 package tgc.plus.authservice.entities;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,13 +12,13 @@ public class UserDetail implements UserDetails {
     private final Collection<GrantedAuthority> authorities;
     private final String userCode;
     private final String password;
-    private final boolean active;
+    private final Boolean active;
 
-    public UserDetail(Collection<GrantedAuthority> authorities, String userCode, String password, boolean active) {
+    public UserDetail(Collection<GrantedAuthority> authorities, User user) {
         this.authorities = authorities;
-        this.userCode = userCode;
-        this.password = password;
-        this.active = active;
+        this.active = user.getActive();
+        this.password = user.getPassword();
+        this.userCode = user.getUserCode();
     }
 
     @Override
@@ -53,4 +55,6 @@ public class UserDetail implements UserDetails {
     public boolean isEnabled() {
         return this.active;
     }
+
+
 }

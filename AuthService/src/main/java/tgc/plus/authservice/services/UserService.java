@@ -41,6 +41,6 @@ public class UserService implements ReactiveUserDetailsService {
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException(String.format("User with email %s not exist", email))))
                 .filter(User::getActive)
                 .switchIfEmpty(Mono.error(new BanUserException("User was ban")))
-                .flatMap(user -> Mono.just(new UserDetail(List.of(new SimpleGrantedAuthority(user.getRole())), user.getUserCode(), user.getPassword(), user.getActive())));
+                .flatMap(user -> Mono.just(new UserDetail(List.of(new SimpleGrantedAuthority(user.getRole())), user)));
     }
 }

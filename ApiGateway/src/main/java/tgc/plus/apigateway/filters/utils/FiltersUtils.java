@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tgc.plus.apigateway.dto.jwt_claims_dto.TokenClaimsDTO;
+import tgc.plus.apigateway.dto.jwt_claims_dto.TokenClaimsDto;
 import tgc.plus.apigateway.exceptions.token_exceptions.InvalidAccessTokenException;
 import tgc.plus.apigateway.exceptions.token_exceptions.InvalidTwoFactorTokenException;
 
@@ -29,7 +29,7 @@ public class FiltersUtils {
         secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public <T extends TokenClaimsDTO> Mono<T> getTokenClaimsData(String token, Class<T> targetType) {
+    public <T extends TokenClaimsDto> Mono<T> getTokenClaimsData(String token, Class<T> targetType) {
         return Mono.defer(() -> {
             Jws<Claims> claimsJwt = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return Mono.just(objectMapper.convertValue(claimsJwt.getPayload(), targetType));

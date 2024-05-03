@@ -5,12 +5,11 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import reactor.core.scheduler.Schedulers;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
-import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessage;
+import tgc.plus.providedservice.dto.kafka_message_dto.FeedbackMessageDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,14 +47,14 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public SenderOptions<String, FeedbackMessage> senderOptions(){
-        SenderOptions<String, FeedbackMessage> senderOptions = SenderOptions.create(producerConfigs());
+    public SenderOptions<String, FeedbackMessageDto> senderOptions(){
+        SenderOptions<String, FeedbackMessageDto> senderOptions = SenderOptions.create(producerConfigs());
         senderOptions.scheduler(Schedulers.newBoundedElastic(schedulerResultThread, schedulerResultQueue, "sender-option-result"));
         return senderOptions;
     }
 
     @Bean
-    public KafkaSender<String, FeedbackMessage> kafkaSender(){
+    public KafkaSender<String, FeedbackMessageDto> kafkaSender(){
         return KafkaSender.create(senderOptions());
     }
 

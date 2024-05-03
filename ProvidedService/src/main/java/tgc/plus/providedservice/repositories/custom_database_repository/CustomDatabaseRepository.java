@@ -20,7 +20,7 @@ public class CustomDatabaseRepository {
     private MappingR2dbcConverter mappingR2dbcConverter;
 
     public Mono<List<TariffDataDto>> getTariffData(Integer hypervisorId){
-            return databaseClient.sql(SqlRequestsList.GET_TARIFFS_WITH_TYPES.getQuery())
+            return databaseClient.sql(SqlRequestsList.GET_TARIFFS_WITH_TYPES)
                     .bind("hypervisorId", hypervisorId)
                     .map((row, rowMetadata) -> mappingR2dbcConverter.read(TariffDataDto.class, row))
                     .all()
@@ -28,14 +28,14 @@ public class CustomDatabaseRepository {
     }
 
     public Mono<TariffDataDto> getTariffDataById(Integer id){
-        return databaseClient.sql(SqlRequestsList.GET_TARIFF_WITH_TYPES_BY_ID.getQuery())
+        return databaseClient.sql(SqlRequestsList.GET_TARIFF_WITH_TYPES_BY_ID)
                 .bind("tariffId", id)
                 .map((row, rowMetadata)-> mappingR2dbcConverter.read(TariffDataDto.class, row))
                 .first();
     }
 
     public Mono<Boolean> getBlockForElement(Integer elemId, String table){
-        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_ELEMENT.getQuery(), table);
+        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_ELEMENT, table);
         return databaseClient.sql(sqlRequest)
                 .bind("elemId", elemId)
                 .map(row -> row.get("active", Boolean.class))
@@ -45,7 +45,7 @@ public class CustomDatabaseRepository {
 
     public <T> Mono<T> getCallableBlockForElement(Integer elemId, Class<T> targetClass){
         String table = targetClass.getAnnotation(Table.class).value();
-        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_ELEMENT.getQuery(), table);
+        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_ELEMENT, table);
         return databaseClient.sql(sqlRequest)
                 .bind("elemId", elemId)
                 .map((row, rowMetadata) -> mappingR2dbcConverter.read(targetClass, row))
@@ -54,7 +54,7 @@ public class CustomDatabaseRepository {
     }
 
     public Mono<Integer> getBlockForNonActiveElement(Integer elemId, String table){
-        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_NOT_ACTIVE_ELEMENT.getQuery(), table);
+        String sqlRequest = String.format(SqlRequestsList.GET_BLOCK_FOR_NOT_ACTIVE_ELEMENT, table);
         return databaseClient.sql(sqlRequest)
                 .bind("elemId", elemId)
                 .map(row -> row.get("id", Integer.class))

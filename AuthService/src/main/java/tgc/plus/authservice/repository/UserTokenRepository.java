@@ -21,6 +21,9 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
 
     Mono<Void> deleteAllByUserId(Long userId);
 
+    @Query("SELECT * FROM user_tokens WHERE user_id= :userId AND expired_date = (SELECT MIN(expired_date) from user_tokens WHERE user_id=:userId) FOR UPDATE")
+    Mono<UserToken> getBlockMinElem(Integer userId);
+
     @Query("UPDATE user_tokens SET refresh_token=:newRefreshToken, expired_date=:expiredDate, create_date=:createDate WHERE refresh_token=:oldRefreshToken RETURNING *")
     Mono<UserToken> updateRefreshToken(String oldRefreshToken, String newRefreshToken, Instant expiredDate, Instant createDate);
 
@@ -28,9 +31,12 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
     @Query("DELETE FROM user_tokens WHERE user_id= :userId and token_id <> :tokenId")
     Mono<Integer> deleteUserTokensExceptTokenId(String tokenId, Long userId);
 
+    @Modifying
+    @Query("DELETE FROM user_tokens WHERE user_code= :userCode AND expired_date IN (SELECT MIN(expired_date) FROM user_tokens WHERE user_code= :userCode GROUP BY user_code)")
+    Mono<Void> deleteOldestUserToken(String userCode);
 
     @Query("SELECT * FROM user_tokens WHERE token_id= :tokenId FOR UPDATE")
-    Mono<UserToken> getBlockForUserTokenById(String tokenId);
+    Mono<UserToken> getBlockForUserTokenByTokenId(String tokenId);
 
     @Query("SELECT * FROM user_tokens WHERE refresh_token= :refreshToken FOR UPDATE")
     Mono<UserToken> getBlockForUserTokenByRefreshToken(String refreshToken);
@@ -38,7 +44,6 @@ public interface UserTokenRepository extends ReactiveCrudRepository<UserToken, L
     @Modifying
     @Query("DELETE FROM user_tokens WHERE expired_date < now()")
     Mono<Void> remoteUserTokenByTime();
-
 
     @Query("SELECT * FROM user_tokens JOIN users ON (user_tokens.user_id = users.id) WHERE users.user_code =:userCode FOR UPDATE")
     Flux<UserToken> getBlockForAllUserTokens(String userCode);

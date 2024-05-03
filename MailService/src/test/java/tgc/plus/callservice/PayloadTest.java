@@ -8,11 +8,11 @@ import tgc.plus.callservice.dto.message_payloads.*;
 @JsonTypeInfo(use= JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SaveUserDataTest.class, name = "SaveUserData"),
-        @JsonSubTypes.Type(value = VirtualMachineCreateData.class, name = "VirtualMachineCreateData"),
-        @JsonSubTypes.Type(value = VirtualMachineExpireData.class, name = "VirtualMachineExpireData"),
-        @JsonSubTypes.Type(value = PasswordRestoreData.class, name = "PasswordRecoveryData"),
-        @JsonSubTypes.Type(value = EditPhoneData.class, name = "EditPhoneData"),
-        @JsonSubTypes.Type(value = EditEmailData.class, name = "EditEmailData"),
+        @JsonSubTypes.Type(value = VirtualMachineCreatePayloadDto.class, name = "VirtualMachineCreateData"),
+        @JsonSubTypes.Type(value = VirtualMachineExpirePayloadDto.class, name = "VirtualMachineExpireData"),
+        @JsonSubTypes.Type(value = PasswordRestorePayloadDto.class, name = "PasswordRecoveryData"),
+        @JsonSubTypes.Type(value = EditPhonePayloadDto.class, name = "EditPhoneData"),
+        @JsonSubTypes.Type(value = EditEmailPayloadDto.class, name = "EditEmailData"),
 })
 public interface PayloadTest {
 
